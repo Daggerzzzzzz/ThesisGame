@@ -76,7 +76,7 @@ public class LevelGenerator : MonoBehaviour
         MoveGenerationPoint();
         GenerateMultipleRooms();
         ConvertToGraph();
-        //InitializeGeneticAlgorithm();
+        InitializeGeneticAlgorithm();
         PrintForDebug();
     }
 
@@ -378,28 +378,53 @@ public class LevelGenerator : MonoBehaviour
     
     private static void PopulateEnemyDifficulties()
     {
-        enemyDifficulties.Add("rat", 2);
-        enemyDifficulties.Add("zombie", 5);
+        enemyDifficulties.Add("slimes", 2);
+        enemyDifficulties.Add("skeletons", 5);
+        enemyDifficulties.Add("zombies", 7);
     }
 
     private int GetRandomDangerProfile()
     {
-        int randomLevel = random.Next(1, 4);
+        int randomLevel = random.Next(1, 11);
         return randomLevel;
     }
 
-    private float FitnessFunction(int roomId)
+    private float FitnessFunction(int index)
     {
-        return 0;
+        int score = 0;
+        DNA<int> dna = geneticAlgorithm.OnPopulation[index];
+        for (int i = 0; i < dna.OnGenes.Length; i++)
+        {
+            HashSet<string[]> enemyProfile = levelDangerProfiles[dna.OnGenes[i]];
+            foreach (var enemyArray in enemyProfile)
+            {
+                foreach (var enemy in enemyArray)
+                {
+                    score += enemyDifficulties[enemy];
+                }
+            }
+        }
+        return score;
     }
     
     private void InitializeGeneticAlgorithm()
     {
-        geneticAlgorithm = new GeneticAlgorithm<int>(populationSize, levelDangerProfiles.Count, random, GetRandomDangerProfile, FitnessFunction, elitism, mutationRate);
-        geneticAlgorithm.NewGeneration();
-        if (Math.Abs(geneticAlgorithm.BestFitness - 1) < epsilon)
+        int danger = 0;
+        for (int i = 0; i < roomInfos.Count + 1; i++)
         {
-            enabled = false;
+            foreach (var room in distanceSet)
+            {
+                if (room.Item1 == i)
+                {
+                    danger = room.Item2;
+                    break;
+                }
+            }
+            geneticAlgorithm = new GeneticAlgorithm<int>(populationSize, levelDangerProfiles.Count * 3, random, GetRandomDangerProfile, FitnessFunction, elitism, mutationRate);
+            for (int j = 0; i < numberOfGenerations; i++)
+            {
+                geneticAlgorithm.NewGeneration();
+            }
         }
     }
     
