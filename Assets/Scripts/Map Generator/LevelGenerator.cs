@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
@@ -30,11 +31,13 @@ public class LevelGenerator : MonoBehaviour
 
     [Header("Genetic Algorithm Setup")] 
     [SerializeField]
-    private int populationSize = 200;
+    private int populationSize = 50;
     [SerializeField]
     private float mutationRate = 0.01f;
     [SerializeField]
     private int elitism = 5;
+    [SerializeField]
+    private int numberOfGenerations = 50;
     private System.Random random = new();
     
     
@@ -49,6 +52,7 @@ public class LevelGenerator : MonoBehaviour
     private GeneticAlgorithm<int> geneticAlgorithm;
     
     private enum Direction {UP, DOWN, RIGHT, LEFT};
+    private string[] enemyTypes = { "zombies", "skeletons", "slimes" };
 
     private const float XOffset = 29;
     private const float YOffset = 19;
@@ -72,19 +76,10 @@ public class LevelGenerator : MonoBehaviour
         MoveGenerationPoint();
         GenerateMultipleRooms();
         ConvertToGraph();
+        //InitializeGeneticAlgorithm();
+        PrintForDebug();
+    }
 
-        geneticAlgorithm = new GeneticAlgorithm<int>(populationSize, levelDangerProfiles.Count, random, GetRandomDangerProfile, FitnessFunction, elitism, mutationRate);
-    }
-    
-    void Update()
-    {
-        geneticAlgorithm.NewGeneration();
-        if (Math.Abs(geneticAlgorithm.BestFitness - 1) < epsilon)
-        {
-            enabled = false;
-        }
-    }
-    
     private void MoveGenerationPoint()
     {
         switch(selectedDirection)
@@ -310,7 +305,7 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
-        graphTraversal.PrintAdjacencyMatrix();
+        //graphTraversal.PrintAdjacencyMatrix();
         graphTraversal.BFS(0);
         graphTraversal.SortByDistance();
         
@@ -321,28 +316,63 @@ public class LevelGenerator : MonoBehaviour
     {
         levelDangerProfiles.Add(1, new HashSet<string[]>
         {
-            new[] { "rat" },
-            new[] { "zombie" },
-            new[] { "zombie" }
+            new[] { "zombies" },
+            new[] { "zombies" },
+            new[] { "zombies" }
         });
-
         levelDangerProfiles.Add(2, new HashSet<string[]>
         {
-            new[] { "rat", "rat" },
-            new[] { "zombie", "zombie", "rat" },
-            new[] { "zombie", "zombie" },
-            new[] { "zombie", "zombie" },
-            new[] { "zombie", "zombie", "zombie" }
+            new[] { "skeletons" },
+            new[] { "zombies" },
+            new[] { "zombies" }
         });
-
         levelDangerProfiles.Add(3, new HashSet<string[]>
         {
-            new[] { "rat", "rat", "rat" },
-            new[] { "zombie", "zombie", "rat", "rat" },
-            new[] { "zombie", "zombie", "zombie", "rat" },
-            new[] { "zombie", "zombie", "zombie" },
-            new[] { "zombie", "zombie", "zombie" },
-            new[] { "zombie", "zombie", "zombie", "rat" }
+            new[] { "slimes" },
+            new[] { "zombies" },
+            new[] { "zombies" }
+        });
+        levelDangerProfiles.Add(4, new HashSet<string[]>
+        {
+            new[] { "skeletons" },
+            new[] { "skeletons" },
+            new[] { "zombies" }
+        });
+        levelDangerProfiles.Add(5, new HashSet<string[]>
+        {
+            new[] { "skeletons" },
+            new[] { "slimes" },
+            new[] { "zombies" }
+        });
+        levelDangerProfiles.Add(6, new HashSet<string[]>
+        {
+            new[] { "slimes" },
+            new[] { "slimes" },
+            new[] { "zombies" }
+        });
+        levelDangerProfiles.Add(7, new HashSet<string[]>
+        {
+            new[] { "skeletons" },
+            new[] { "skeletons" },
+            new[] { "skeletons" }
+        });
+        levelDangerProfiles.Add(8, new HashSet<string[]>
+        {
+            new[] { "skeletons" },
+            new[] { "skeletons" },
+            new[] { "slimes" }
+        });
+        levelDangerProfiles.Add(9, new HashSet<string[]>
+        {
+            new[] { "skeletons" },
+            new[] { "slimes" },
+            new[] { "slimes" }
+        });
+        levelDangerProfiles.Add(10, new HashSet<string[]>
+        {
+            new[] { "slimes" },
+            new[] { "slimes" },
+            new[] { "slimes" }
         });
     }
     
@@ -361,6 +391,29 @@ public class LevelGenerator : MonoBehaviour
     private float FitnessFunction(int roomId)
     {
         return 0;
+    }
+    
+    private void InitializeGeneticAlgorithm()
+    {
+        geneticAlgorithm = new GeneticAlgorithm<int>(populationSize, levelDangerProfiles.Count, random, GetRandomDangerProfile, FitnessFunction, elitism, mutationRate);
+        geneticAlgorithm.NewGeneration();
+        if (Math.Abs(geneticAlgorithm.BestFitness - 1) < epsilon)
+        {
+            enabled = false;
+        }
+    }
+    
+    private void PrintForDebug()
+    {
+        foreach (var kvp in levelDangerProfiles)
+        {
+            Debug.Log("Level " + kvp.Key + ":");
+            foreach (var enemyArray in kvp.Value)
+            {
+                string enemies = string.Join(", ", enemyArray);
+                Debug.Log("- " + enemies);
+            }
+        }
     }
 }
 

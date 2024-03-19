@@ -44,6 +44,7 @@ public class Room : MonoBehaviour
             closeWhenEntered = false;
         } 
     }
+    
     private IEnumerator DoorDelay()
     {
         yield return new WaitForSeconds(0.5f);
