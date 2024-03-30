@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-public class LevelGenerator : MonoBehaviour
+public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
 {
     [Header("Room Layout")]
     [SerializeField]
@@ -45,11 +43,10 @@ public class LevelGenerator : MonoBehaviour
     private readonly List<GameObject> roomObjects = new();
     private readonly List<RoomInfo> roomInfos = new();
     
-    private static Dictionary<int, HashSet<string[]>> levelDangerProfiles = new();
-    private static Dictionary<string, int> enemyDifficulties = new();
+    private Dictionary<int, HashSet<string[]>> levelDangerProfiles = new();
+    private Dictionary<string, float> enemyDifficulties = new();
     
     private HashSet<(int, int)> distanceSet;
-    private GeneticAlgorithm<int> geneticAlgorithm;
     
     private enum Direction {UP, DOWN, RIGHT, LEFT};
     private string[] enemyTypes = { "zombies", "skeletons", "slimes" };
@@ -77,7 +74,6 @@ public class LevelGenerator : MonoBehaviour
         GenerateMultipleRooms();
         ConvertToGraph();
         InitializeGeneticAlgorithm();
-        PrintForDebug();
     }
 
     private void MoveGenerationPoint()
@@ -312,7 +308,7 @@ public class LevelGenerator : MonoBehaviour
         distanceSet = graphTraversal.GetDistancesAsHashSet();
     }
     
-    private static void PopulateTheDangerProfiles()
+    private void PopulateTheDangerProfiles()
     {
         levelDangerProfiles.Add(1, new HashSet<string[]>
         {
@@ -376,68 +372,55 @@ public class LevelGenerator : MonoBehaviour
         });
     }
     
-    private static void PopulateEnemyDifficulties()
+    private void PopulateEnemyDifficulties()
     {
-        enemyDifficulties.Add("slimes", 2);
-        enemyDifficulties.Add("skeletons", 5);
-        enemyDifficulties.Add("zombies", 7);
+        enemyDifficulties.Add("slimes", 0.25f);
+        enemyDifficulties.Add("skeletons", 0.5f);
+        enemyDifficulties.Add("zombies", 0.75f);
     }
 
-    private int GetRandomDangerProfile()
-    {
-        int randomLevel = random.Next(1, 11);
-        return randomLevel;
-    }
-
-    private float FitnessFunction(int index)
-    {
-        int score = 0;
-        DNA<int> dna = geneticAlgorithm.OnPopulation[index];
-        for (int i = 0; i < dna.OnGenes.Length; i++)
-        {
-            HashSet<string[]> enemyProfile = levelDangerProfiles[dna.OnGenes[i]];
-            foreach (var enemyArray in enemyProfile)
-            {
-                foreach (var enemy in enemyArray)
-                {
-                    score += enemyDifficulties[enemy];
-                }
-            }
-        }
-        return score;
-    }
-    
     private void InitializeGeneticAlgorithm()
     {
-        int danger = 0;
-        for (int i = 0; i < roomInfos.Count + 1; i++)
-        {
-            foreach (var room in distanceSet)
-            {
-                if (room.Item1 == i)
-                {
-                    danger = room.Item2;
-                    break;
-                }
-            }
-            geneticAlgorithm = new GeneticAlgorithm<int>(populationSize, levelDangerProfiles.Count * 3, random, GetRandomDangerProfile, FitnessFunction, elitism, mutationRate);
-            for (int j = 0; i < numberOfGenerations; i++)
-            {
-                geneticAlgorithm.NewGeneration();
-            }
-        }
-    }
-    
-    private void PrintForDebug()
-    {
+        List<int> levels = new ();
+        List<float> difficultyScores = new ();
+        List<List<string[]>> monsterLists = new ();
+        int distance = 20;
+        
         foreach (var kvp in levelDangerProfiles)
         {
-            Debug.Log("Level " + kvp.Key + ":");
-            foreach (var enemyArray in kvp.Value)
+            levels.Add(kvp.Key);
+            monsterLists.Add(new List<string[]>(kvp.Value));
+        }
+        
+        foreach (List<string[]> monsters in monsterLists)
+        {
+            float totalDifficulty = 0;
+            
+            foreach (string[] monsterArray in monsters)
             {
-                string enemies = string.Join(", ", enemyArray);
-                Debug.Log("- " + enemies);
+                foreach (string monster in monsterArray)
+                {
+                    if (enemyDifficulties.ContainsKey(monster))
+                    {
+                        totalDifficulty += enemyDifficulties[monster];
+                    }
+                }
             }
+            difficultyScores.Add(totalDifficulty);
+        }
+
+        DNA instance1 = new DNA(levels, difficultyScores, distance);
+        DNA instance2 = new DNA(levels, difficultyScores, distance);
+
+        DNA mut = instance1.Mutation(1f);
+        
+        instance1.CalculateFitness();
+        instance2.CalculateFitness();
+
+        List<DNA> children = instance1.Crossover(instance2);
+        foreach (var child in children)
+        {
+            child.CalculateFitness();
         }
     }
 }
