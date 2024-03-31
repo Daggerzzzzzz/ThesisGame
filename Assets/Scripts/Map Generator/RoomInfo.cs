@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class RoomInfo
 {
-    public int roomID;
-    public Vector3 position;
+    public int RoomID { get; set; }
+    public int dangerLevel { get; set; }
+    public Vector3 Position { get; set; }
+    public List<string[]> MonsterBatch { get; set; }
     
     public RoomInfo(Vector3 pos, int id)
     {
-        roomID = id;
-        position = pos;
+        RoomID = id;
+        Position = pos;
     }
 }

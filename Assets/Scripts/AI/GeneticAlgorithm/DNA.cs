@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class DNA
 {
-    private List<int> batch;
-    private List<float> difficulty;
-    private List<int> chromosome;
+    public List<int> Batch { get; private set; }
+    public List<float> Difficulty { get; private set; }
+    public List<int> Chromosome { get; private set; }
     
-    private int distance;
-    private int generation;
-    private float scoreEvaluation;
+    public int Distance { get; private set; }
+    public int Generation { get; private set; }
+    public float ScoreEvaluation { get; private set; }
 
     public DNA(List<int> batch, List<float> difficulty, int distance, int generation = 0)
     {
-        this.batch = batch;
-        this.difficulty = difficulty;
-        this.distance = distance;
-        this.generation = generation;
-        chromosome = new List<int>();
+        Batch = batch;
+        Difficulty = difficulty;
+        Distance = distance;
+        Generation = generation;
+        Chromosome = new List<int>();
 
         System.Random rand = new();
         for (int i = 0; i < batch.Count; i++)
         {
-            if (rand.NextDouble() < 0.5)
-                chromosome.Add(0);
+            if (rand.NextDouble() < 0.95)
+                Chromosome.Add(0);
             else
-                chromosome.Add(1);
+                Chromosome.Add(1);
         }
     }
     
@@ -34,57 +34,61 @@ public class DNA
     {
         float score = 0;
         
-        for (int i = 0; i < chromosome.Count; i++)
+        for (int i = 0; i < Chromosome.Count; i++)
         {
-            if (chromosome[i] == 1)
+            if (Chromosome[i] == 1)
             {
-                score += difficulty[i];
+                score += Difficulty[i];
             }
         }
-        if (score > distance)
+        if (score > Distance)
             score = 0;
-        scoreEvaluation = score;
+        ScoreEvaluation = score;
     }
     
     public List<DNA> Crossover(DNA otherDna)
     {
         System.Random rand = new ();
-        int middleRangeStart = chromosome.Count / 3;
-        int middleRangeEnd = (chromosome.Count * 2) / 3;
+        int middleRangeStart = Chromosome.Count / 3;
+        int middleRangeEnd = (Chromosome.Count * 2) / 3;
         int cutoff = rand.Next(middleRangeStart + 1, middleRangeEnd + 1);
-        
-        Debug.Log(cutoff);
 
-        List<int> child1 = new List<int>(otherDna.chromosome.GetRange(0, cutoff));
-        child1.AddRange(chromosome.GetRange(cutoff, chromosome.Count - cutoff));
+        List<int> child1 = new List<int>(otherDna.Chromosome.GetRange(0, cutoff));
+        child1.AddRange(Chromosome.GetRange(cutoff, Chromosome.Count - cutoff));
 
-        List<int> child2 = new List<int>(this.chromosome.GetRange(0, cutoff));
-        child2.AddRange(otherDna.chromosome.GetRange(cutoff, otherDna.chromosome.Count - cutoff));
+        List<int> child2 = new List<int>(this.Chromosome.GetRange(0, cutoff));
+        child2.AddRange(otherDna.Chromosome.GetRange(cutoff, otherDna.Chromosome.Count - cutoff));
 
         List<DNA> children = new List<DNA>
         {
-            new DNA(batch, difficulty, distance, generation + 1),
-            new DNA(batch, difficulty, distance, generation + 1)
+            new DNA(Batch, Difficulty, Distance, Generation + 1),
+            new DNA(Batch, Difficulty, Distance, Generation + 1)
         };
 
-        children[0].chromosome = child1;
-        children[1].chromosome = child2;
+        children[0].Chromosome = child1;
+        children[1].Chromosome = child2;
         return children;
     }
 
     public DNA Mutation(double rate)
     {
         System.Random rand = new ();
-        for (int i = 0; i < chromosome.Count; i++)
+        List<int> mutatedChromosome = new List<int>(Chromosome);
+        
+        for (int i = 0; i < Chromosome.Count; i++)
         {
             if (rand.NextDouble() < rate)
             {
-                if (chromosome[i] == 1)
-                    chromosome[i] = 0;
+                if (Chromosome[i] == 1)
+                    Chromosome[i] = 0;
                 else
-                    chromosome[i] = 1;
+                    Chromosome[i] = 1;
             }
         }
-        return this;
+        
+        return new DNA(Batch, Difficulty, Distance, Generation)
+        {
+            Chromosome = mutatedChromosome
+        };
     }
 }

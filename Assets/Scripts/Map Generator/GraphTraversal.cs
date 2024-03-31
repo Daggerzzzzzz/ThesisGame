@@ -38,7 +38,6 @@ public class GraphTraversal
         while (queue.Count != 0)
         {
             int current = queue.Dequeue();
-            //Debug.Log("Visited: " + current + " Distance: " + distances[current].Item2);
 
             foreach (int neighbor in adjacency[current])
             {
@@ -65,10 +64,5 @@ public class GraphTraversal
     public void SortByDistance()
     {
         distances = distances.OrderBy(d => d.Item2).ToArray();
-    }
-    
-    public void PrintAdjacencyMatrix()
-    {
-        for (int i = 0; i < vertex; i++) { Debug.Log(i + ":[ " + string.Join(", ", adjacency[i]) + "]"); }
     }
 }

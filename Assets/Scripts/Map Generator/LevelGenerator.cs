@@ -29,11 +29,9 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
 
     [Header("Genetic Algorithm Setup")] 
     [SerializeField]
-    private int populationSize = 50;
+    private int populationSize = 200;
     [SerializeField]
     private float mutationRate = 0.01f;
-    [SerializeField]
-    private int elitism = 5;
     [SerializeField]
     private int numberOfGenerations = 50;
     private System.Random random = new();
@@ -49,12 +47,10 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
     private HashSet<(int, int)> distanceSet;
     
     private enum Direction {UP, DOWN, RIGHT, LEFT};
-    private string[] enemyTypes = { "zombies", "skeletons", "slimes" };
 
     private const float XOffset = 29;
     private const float YOffset = 19;
     private int currentRoomID = 0;
-    private double epsilon = 0.0001;
     private GameObject endRoom;
 
     void Start()
@@ -73,7 +69,16 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
         MoveGenerationPoint();
         GenerateMultipleRooms();
         ConvertToGraph();
-        InitializeGeneticAlgorithm();
+        
+        foreach (var room in roomInfos)
+        {
+            if (room.RoomID == 0 || room.RoomID == distanceToEnd)
+            {
+                continue;
+            }
+            List<string[]> dangerProfiles = InitializeGeneticAlgorithm(room.dangerLevel + 1);
+            room.MonsterBatch = dangerProfiles;
+        }
     }
 
     private void MoveGenerationPoint()
@@ -279,18 +284,18 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
             }
             foreach (var roomInfo in roomInfos)
             {
-                if (roomInfo.position == vertex)
+                if (roomInfo.Position == vertex)
                 {
-                    tempVertex = roomInfo.roomID;
+                    tempVertex = roomInfo.RoomID;
                     visitedVertex.Add(tempVertex);
                 }
             }
 
             foreach (var roomInfo in roomInfos)
             {
-                if (edges.Contains(roomInfo.position))
+                if (edges.Contains(roomInfo.Position))
                 {
-                    tempEdges.Add(roomInfo.roomID);
+                    tempEdges.Add(roomInfo.RoomID);
                 }
             }
             foreach (var edge in tempEdges)
@@ -306,6 +311,17 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
         graphTraversal.SortByDistance();
         
         distanceSet = graphTraversal.GetDistancesAsHashSet();
+
+        foreach (var room in roomInfos)
+        {
+            foreach ((int id, int danger) in distanceSet)
+            {
+                if (room.RoomID == id)
+                {
+                    room.dangerLevel = danger;
+                }
+            }
+        }
     }
     
     private void PopulateTheDangerProfiles()
@@ -379,12 +395,12 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
         enemyDifficulties.Add("zombies", 0.75f);
     }
 
-    private void InitializeGeneticAlgorithm()
+    private List<string[]> InitializeGeneticAlgorithm(int distance)
     {
         List<int> levels = new ();
         List<float> difficultyScores = new ();
         List<List<string[]>> monsterLists = new ();
-        int distance = 20;
+        List<string[]> dangerProfiles = new List<string[]>();
         
         foreach (var kvp in levelDangerProfiles)
         {
@@ -409,19 +425,23 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
             difficultyScores.Add(totalDifficulty);
         }
 
-        DNA instance1 = new DNA(levels, difficultyScores, distance);
-        DNA instance2 = new DNA(levels, difficultyScores, distance);
-
-        DNA mut = instance1.Mutation(1f);
+        GeneticAlgorithm solution = new GeneticAlgorithm(populationSize);
+        List<int> result = solution.Solve(mutationRate, numberOfGenerations, levels, difficultyScores, distance);
         
-        instance1.CalculateFitness();
-        instance2.CalculateFitness();
-
-        List<DNA> children = instance1.Crossover(instance2);
-        foreach (var child in children)
+        for (int i = 0; i < result.Count; i++)
         {
-            child.CalculateFitness();
+            int levelIndex = i + 1;
+            if (result[i] == 1)
+            {
+                HashSet<string[]> profiles = levelDangerProfiles[levelIndex];
+                foreach (string[] profile in profiles)
+                {
+                    dangerProfiles.Add(profile);
+                }
+            }
         }
+        
+        return dangerProfiles;
     }
 }
 
