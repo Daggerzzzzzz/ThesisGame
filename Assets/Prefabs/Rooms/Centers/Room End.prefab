@@ -73,9 +73,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018afcd163d40dd438a3bbb4cd47976b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <TheRoom>k__BackingField: {fileID: 0}
   enemies: []
   openWhenEnemiesCleared: 0
-  theRoom: {fileID: 0}
 --- !u!1 &246118923979313890
 GameObject:
   m_ObjectHideFlags: 0

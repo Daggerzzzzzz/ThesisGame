@@ -9,4 +9,9 @@ public class EnemyDataSO : ScriptableObject
     public int MaxHealth { get; set; } = 3;
     [field: SerializeField]
     public int Damage { get; set; } = 1;
+    
+    [SerializeField]
+    public float enemyMaterializeTime;
+    [SerializeField]
+    public Material enemyStandardMaterial;
 }

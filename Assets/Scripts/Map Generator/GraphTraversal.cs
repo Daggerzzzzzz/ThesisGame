@@ -65,4 +65,14 @@ public class GraphTraversal
     {
         distances = distances.OrderBy(d => d.Item2).ToArray();
     }
+    
+    public void PrintTraversal()
+    {
+        for (int i = 0; i < vertex; i++)
+        {
+            List<int> neighbors = adjacency[i];
+            string neighborsList = string.Join(", ", neighbors);
+            Debug.Log($"{i + 1}: {neighborsList}");
+        }
+    }
 }

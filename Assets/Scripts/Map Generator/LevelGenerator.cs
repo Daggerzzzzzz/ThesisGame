@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
+public class LevelGenerator : MonoBehaviour
 {
-    [Header("Room Layout")]
+    [Header("Room Layout Setup")]
     [SerializeField]
     private GameObject layoutRoom;
     [SerializeField]
@@ -25,7 +25,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
     [SerializeField]
     private RoomCenter centerEnd;
     [SerializeField]
-    private RoomCenter[] potentialCenters;
+    private RoomCenter roomCenter;
 
     [Header("Genetic Algorithm Setup")] 
     [SerializeField]
@@ -34,13 +34,20 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
     private float mutationRate = 0.01f;
     [SerializeField]
     private int numberOfGenerations = 50;
-    private System.Random random = new();
     
+    [Header("Monsters")]
+    [SerializeField] 
+    private GameObject slime;
+    [SerializeField] 
+    private GameObject skeleton;
+    [SerializeField] 
+    private GameObject zombie;
     
     private readonly List<GameObject> generatedOutlines = new();
     private readonly List<GameObject> roomObjects = new();
     private readonly List<RoomInfo> roomInfos = new();
-    
+    private readonly List<RoomCenter> roomCenterDatas = new();
+
     private Dictionary<int, HashSet<string[]>> levelDangerProfiles = new();
     private Dictionary<string, float> enemyDifficulties = new();
     
@@ -52,6 +59,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
     private const float YOffset = 19;
     private int currentRoomID = 0;
     private GameObject endRoom;
+    private RoomCenter roomCenterDetails;
 
     void Start()
     {
@@ -59,28 +67,15 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
         
         selectedDirection = (Direction)Random.Range(0, 4);
         
-        RoomInfo roomInfo = new RoomInfo(new Vector3(0, 0, 0), currentRoomID);
-        roomInfos.Add(roomInfo);
-        
-        currentRoomID++;
-
         PopulateTheDangerProfiles();
         PopulateEnemyDifficulties();
         MoveGenerationPoint();
         GenerateMultipleRooms();
         ConvertToGraph();
-        
-        foreach (var room in roomInfos)
-        {
-            if (room.RoomID == 0 || room.RoomID == distanceToEnd)
-            {
-                continue;
-            }
-            List<string[]> dangerProfiles = InitializeGeneticAlgorithm(room.dangerLevel + 1);
-            room.MonsterBatch = dangerProfiles;
-        }
+        PopulateRoomInfos();
+        PopulateRoomCenters();
     }
-
+    
     private void MoveGenerationPoint()
     {
         switch(selectedDirection)
@@ -106,12 +101,6 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
         {
             GameObject newRoom = Instantiate(layoutRoom, generatorPoint.position, generatorPoint.rotation);
             roomObjects.Add(newRoom);
-            
-            RoomInfo roomInfo = new RoomInfo(newRoom.transform.position, currentRoomID);
-            roomInfos.Add(roomInfo);
-        
-            currentRoomID++;
-
 
             if(i + 1 == distanceToEnd)
             {
@@ -140,19 +129,42 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
         foreach(GameObject outline in generatedOutlines)
         {
             bool generateCenter = false;
+            
             if(outline.transform.position == Vector3.zero)
             {
-                Instantiate(centerStart, outline.transform.position, transform.rotation).theRoom = outline.GetComponent<Room>();
+                roomCenterDetails = Instantiate(centerStart, outline.transform.position, transform.rotation);
+                roomCenterDetails.TheRoom = outline.GetComponent<Room>();
+                roomCenterDetails.name = "Starting Center";
+                RoomInfo roomInfo = new RoomInfo(new Vector3(0, 0, 0), currentRoomID, centerStart);
+                roomInfos.Add(roomInfo);
+                roomCenterDatas.Add(roomCenterDetails);
+                
+                currentRoomID++;
                 generateCenter = true;
             }
+            
+            if(!generateCenter && outline.transform.position != endRoom.transform.position)
+            {
+                roomCenterDetails = Instantiate(roomCenter, outline.transform.position, transform.rotation);
+                roomCenterDetails.TheRoom = outline.GetComponent<Room>();
+                roomCenterDetails.name = "Battle Center";
+                RoomInfo roomInfo = new RoomInfo(outline.transform.position, currentRoomID, roomCenter);
+                roomInfos.Add(roomInfo);
+                roomCenterDatas.Add(roomCenterDetails);
+                
+                currentRoomID++;
+            }
+            
             if(outline.transform.position == endRoom.transform.position)
             {
-                Instantiate(centerEnd, outline.transform.position, transform.rotation).theRoom = outline.GetComponent<Room>();
-            }
-            if(!generateCenter)
-            {
-                int centerSelect = Random.Range(0, potentialCenters.Length);
-                Instantiate(potentialCenters[centerSelect], outline.transform.position, transform.rotation).theRoom = outline.GetComponent<Room>();
+                roomCenterDetails = Instantiate(centerEnd, outline.transform.position, transform.rotation);
+                roomCenterDetails.TheRoom = outline.GetComponent<Room>();
+                roomCenterDetails.name = "End Center";
+                RoomInfo roomInfo = new RoomInfo(outline.transform.position, currentRoomID, centerEnd);
+                roomInfos.Add(roomInfo);
+                roomCenterDatas.Add(roomCenterDetails);
+                
+                currentRoomID++;
             }
         }
     }
@@ -306,7 +318,8 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
                 }
             }
         }
-        //graphTraversal.PrintAdjacencyMatrix();
+
+        graphTraversal.PrintTraversal();
         graphTraversal.BFS(0);
         graphTraversal.SortByDistance();
         
@@ -318,7 +331,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
             {
                 if (room.RoomID == id)
                 {
-                    room.dangerLevel = danger;
+                    room.DangerLevel = danger;
                 }
             }
         }
@@ -391,11 +404,11 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
     private void PopulateEnemyDifficulties()
     {
         enemyDifficulties.Add("slimes", 0.25f);
-        enemyDifficulties.Add("skeletons", 0.5f);
+        enemyDifficulties.Add("skeletons", 0.50f);
         enemyDifficulties.Add("zombies", 0.75f);
     }
 
-    private List<string[]> InitializeGeneticAlgorithm(int distance)
+    private List<string[]> InitializeGeneticAlgorithm(int distance, out float passMonsterBatchDangerLevel)
     {
         List<int> levels = new ();
         List<float> difficultyScores = new ();
@@ -426,12 +439,12 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
         }
 
         GeneticAlgorithm solution = new GeneticAlgorithm(populationSize);
-        List<int> result = solution.Solve(mutationRate, numberOfGenerations, levels, difficultyScores, distance);
+        DNA result = solution.Solve(mutationRate, numberOfGenerations, levels, difficultyScores, distance);
         
-        for (int i = 0; i < result.Count; i++)
+        for (int i = 0; i < result.Chromosome.Count; i++)
         {
             int levelIndex = i + 1;
-            if (result[i] == 1)
+            if (result.Chromosome[i] == 1)
             {
                 HashSet<string[]> profiles = levelDangerProfiles[levelIndex];
                 foreach (string[] profile in profiles)
@@ -440,8 +453,82 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>
                 }
             }
         }
-        
+
+        passMonsterBatchDangerLevel = result.ScoreEvaluation;
         return dangerProfiles;
+    }
+    
+    private void PopulateRoomInfos()
+    {
+        foreach (var room in roomInfos)
+        {
+            if (room.RoomID == 0 || room.RoomID == distanceToEnd)
+            {
+                continue;
+            }
+            List<string[]> dangerProfiles = InitializeGeneticAlgorithm(room.DangerLevel + 1, out float monsterBatchDangerLevel);
+            room.MonsterBatch = dangerProfiles;
+            room.MonsterBatchDangerLevel = monsterBatchDangerLevel;
+        }
+    }
+    
+    private void PopulateRoomCenters()
+    {
+        foreach (var room in roomInfos)
+        {
+            foreach (var center in roomCenterDatas)
+            {
+                if (center.transform.position == room.Position)
+                {
+                    int counter = 0;
+                    if (room.MonsterBatch == null)
+                    {
+                        center.NumberOfEnemies = 0;
+                        continue;
+                    }
+                    center.NumberOfEnemies = room.MonsterBatch.Count;
+                    foreach (var monsters in room.MonsterBatch)
+                    {
+                        foreach (var monster in monsters)
+                        {
+                            float randomX = Random.Range(-9f, 7.5f);
+                            float randomY = Random.Range(-3.5f, 3f);
+                            Vector3 randomPosition = new Vector3(randomX, randomY, 0f);
+                            
+                            if (monster == "slimes")
+                            {
+                                GameObject slimeInstance = Instantiate(slime, center.transform);
+                                slimeInstance.transform.localPosition = randomPosition;
+                                slimeInstance.name = "Slime Enemy " + counter;
+                                slimeInstance.tag = "Enemy";
+                                center.Enemies.Add(slimeInstance);
+                                slimeInstance.SetActive(false);
+                            }
+                            if (monster == "skeletons")
+                            {
+                                GameObject skeletonInstance = Instantiate(skeleton, center.transform);
+                                skeletonInstance.transform.localPosition = randomPosition;
+                                skeletonInstance.name = "Skeleton Enemy " + counter;
+                                skeletonInstance.tag = "Enemy";
+                                center.Enemies.Add(skeletonInstance);
+                                skeletonInstance.SetActive(false);
+                            }
+                            if (monster == "zombies")
+                            {
+                                GameObject zombieInstance = Instantiate(zombie, center.transform);
+                                zombieInstance.transform.localPosition = randomPosition;
+                                zombieInstance.name = "Zombie Enemy " + counter;
+                                zombieInstance.tag = "Enemy";
+                                center.Enemies.Add(zombieInstance);
+                                zombieInstance.SetActive(false);
+                            }
+                        }
+
+                        counter++;
+                    }
+                }
+            }
+        }
     }
 }
 

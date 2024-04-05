@@ -95,11 +95,12 @@ GameObject:
   - component: {fileID: 3223229283606060283}
   - component: {fileID: 1681606686326433492}
   - component: {fileID: 2533841401438268240}
+  - component: {fileID: 413474813214161917}
   - component: {fileID: 5983352578835428326}
   - component: {fileID: 483854840276694893}
   m_Layer: 9
   m_Name: Chasing Enemy
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -188,6 +189,7 @@ MonoBehaviour:
   thrust: 10
   moveSpeed: 5
   idleTime: 0
+  enemyDataSo: {fileID: 11400000, guid: b110da029850053458ae324a75bc74b9, type: 2}
 --- !u!114 &3223229283606060283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +276,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 2100000, guid: e219f0f867111324986053c63303258e, type: 2}
+--- !u!114 &413474813214161917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3355808302312118835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 312b29621fd4d514089a7d07a10b2d6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &5983352578835428326
 Rigidbody2D:
   serializedVersion: 4
@@ -808,7 +822,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 2cb1a4e3b0ac2e04898ab03c19df8c4c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -887,7 +901,7 @@ MonoBehaviour:
   - {x: 0.05029416, y: -0.07057181, z: 0}
   m_ShapePathHash: 1973608341
   m_Mesh: {fileID: 0}
-  m_InstanceId: 53014
+  m_InstanceId: -1316
   m_LocalBounds:
     m_Center: {x: 0.00010201335, y: -0.010157958, z: 0}
     m_Extent: {x: 0.050192147, y: 0.060413852, z: 0}

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2905722160149220852}
   - component: {fileID: 792005837112765338}
-  - component: {fileID: 5635303963755098131}
   m_Layer: 0
   m_Name: Level Generation
   m_TagString: Untagged
@@ -73,21 +72,13 @@ MonoBehaviour:
     allFourSides: {fileID: 3153408828398289912, guid: 637902c35bf06f44182efbcec76e185a, type: 3}
   centerStart: {fileID: 8209837192795938260, guid: c4853ebfb5769bf45923dec99a80f3ae, type: 3}
   centerEnd: {fileID: 8117930989855263925, guid: 92fcdd2a9631f2244a6bdee790bdf09f, type: 3}
-  potentialCenters:
-  - {fileID: 4097814691731279419, guid: aeb52f633552388419add3c26915d75a, type: 3}
-  - {fileID: 8209837192795938260, guid: c4853ebfb5769bf45923dec99a80f3ae, type: 3}
---- !u!114 &5635303963755098131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060574983528982896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c093fced7880e043ae77a98774aba1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  roomCenter: {fileID: 4097814691731279419, guid: aeb52f633552388419add3c26915d75a, type: 3}
+  populationSize: 200
+  mutationRate: 0.01
+  numberOfGenerations: 50
+  slime: {fileID: 3355808302312118835, guid: edfbcc500642229409e6c3620dc19df6, type: 3}
+  skeleton: {fileID: 3355808302312118835, guid: edfbcc500642229409e6c3620dc19df6, type: 3}
+  zombie: {fileID: 3355808302312118835, guid: edfbcc500642229409e6c3620dc19df6, type: 3}
 --- !u!1 &7264807182483813799
 GameObject:
   m_ObjectHideFlags: 0

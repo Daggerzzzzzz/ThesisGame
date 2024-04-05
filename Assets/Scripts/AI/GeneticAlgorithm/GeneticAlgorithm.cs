@@ -69,7 +69,7 @@ public class GeneticAlgorithm
         return parent;
     }
     
-    public List<int> Solve(float mutationProbability, int numberOfGenerations, List<int> batch, List<float> difficulty, int distance)
+    public DNA Solve(float mutationProbability, int numberOfGenerations, List<int> batch, List<float> difficulty, int distance)
     {
         InitializePopulation(batch, difficulty, distance);
 
@@ -109,7 +109,7 @@ public class GeneticAlgorithm
         {
             result[i] = bestSolution.Chromosome[i];
         }
-    
-        return bestSolution.Chromosome;
+
+        return bestSolution;
     }
 }

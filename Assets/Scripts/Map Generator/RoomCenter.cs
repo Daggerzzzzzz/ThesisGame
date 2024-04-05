@@ -1,41 +1,79 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoomCenter : MonoBehaviour
 {
-    [SerializeField]
-    private List<GameObject> enemies = new();
+    [field:SerializeField]
+    public Room TheRoom { get; set; }
+    [field: SerializeField] 
+    public int NumberOfEnemies { get; set; }
+    [field:SerializeField]
+    public List<GameObject> Enemies { get; set; } = new();
+    
     [SerializeField]
     private bool openWhenEnemiesCleared;
-    [HideInInspector]
-    public Room theRoom;
 
+    private bool canSummonTheNextBatch = true;
+    private int batchSize = 3;
+    private int destroyedCount = 0;
+    
     private void Start() 
     {
         if(openWhenEnemiesCleared)
         {
-            theRoom.closeWhenEntered = true;
+            TheRoom.closeWhenEntered = true;
         }
     }
 
     void Update()
     {
-        if(enemies.Count > 0 && theRoom.roomActive && openWhenEnemiesCleared)
+        if(Enemies.Count > 0 && TheRoom.roomActive && openWhenEnemiesCleared)
         {
-            for(int i = 0; i < enemies.Count; i++)
+            SummonNextBatch(); 
+            
+            Debug.Log(destroyedCount);
+            Debug.Log(canSummonTheNextBatch);
+            
+            for(int i = 0; i < Enemies.Count; i++)
             {
-                if(enemies[i] == null)
+                if(Enemies[i] == null)
                 {
-                    enemies.RemoveAt(i);
+                    Enemies.RemoveAt(i);
                     i--;
+                    destroyedCount++;
                 }
             }
 
-            if(enemies.Count == 0)
+            if(Enemies.Count == 0)
             {
-               theRoom.OpenDoors();
+               TheRoom.OpenDoors();
+            }
+            
+            if (destroyedCount == batchSize) 
+            {
+                if (Enemies.Count != 0)
+                {
+                    canSummonTheNextBatch = true;
+                    SummonNextBatch(); 
+                }
             }
         }
     }
+    
+    private void SummonNextBatch()
+    {
+        if (canSummonTheNextBatch)
+        {
+            for (int i = 0; i < batchSize; i++)
+            {
+                Enemies[i].SetActive(true);
+            }
+
+            canSummonTheNextBatch = false;
+            destroyedCount = 0;
+        }
+    }
 }
+
