@@ -18,7 +18,7 @@ public class PlayerState
    protected bool triggerCalled;
    protected float distanceBetweenImages = 0.025f;
    
-   PlayerInputs playerInputs;
+   protected PlayerInputs playerInputs;
    
 
    protected PlayerState(Player playerState, PlayerStateMachine stateMachineState, string animationNameState)
@@ -41,6 +41,11 @@ public class PlayerState
       if (playerInputs.Player.Fire.IsPressed())
       {
          stateMachine.ChangeState(player.OnPrimaryAttackState);
+      }
+
+      if (playerInputs.Player.ThrowSword.WasPressedThisFrame() && HasNoSword())
+      {
+         stateMachine.ChangeState(player.OnPlayerAimState);
       }
       stateTimer -= Time.deltaTime;
       xInput = Input.GetAxisRaw("Horizontal");
@@ -79,5 +84,16 @@ public class PlayerState
       {
          attackDirection = new Vector2(0f, -0.15f);
       }
+   }
+
+   private bool HasNoSword()
+   {
+      if (!player.OnSword)
+      {
+         return true;
+      }
+
+      player.OnSword.GetComponent<SwordSkillController>().ReturnSword();
+      return false;
    }
 }

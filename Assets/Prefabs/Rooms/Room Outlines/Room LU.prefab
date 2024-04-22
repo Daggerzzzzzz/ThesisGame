@@ -803,7 +803,7 @@ GameObject:
   - component: {fileID: 8123507331404645455}
   - component: {fileID: 2369807833908361870}
   - component: {fileID: 6760895699192816792}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Walls LU
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1949,7 +1949,7 @@ GameObject:
   - component: {fileID: 6959938597459512940}
   - component: {fileID: 4215052125397157214}
   - component: {fileID: 3572715749683959803}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Walls Top LU
   m_TagString: Untagged
   m_Icon: {fileID: 0}

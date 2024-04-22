@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerTrigger : MonoBehaviour
@@ -33,5 +34,10 @@ public class PlayerTrigger : MonoBehaviour
     private void ResetColliders()
     {
         attackedEnemies.Clear();
+    }
+
+    private void ThrowSword()
+    {
+        SkillManager.Instance.sword.CreateSword();
     }
 }

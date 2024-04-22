@@ -1248,7 +1248,7 @@ GameObject:
   - component: {fileID: 783794344239889821}
   - component: {fileID: 4566644054573538898}
   - component: {fileID: 2209466963267883042}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Walls Top DLU
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1850,7 +1850,7 @@ GameObject:
   - component: {fileID: 9001369977580363241}
   - component: {fileID: 8228405544703972358}
   - component: {fileID: 1292754732366555670}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Walls DLU
   m_TagString: Untagged
   m_Icon: {fileID: 0}

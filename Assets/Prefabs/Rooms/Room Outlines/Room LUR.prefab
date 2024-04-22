@@ -1003,7 +1003,7 @@ GameObject:
   - component: {fileID: 7148912118898400491}
   - component: {fileID: 3882151741351030436}
   - component: {fileID: 6939091428130867653}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Walls LUR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2014,7 +2014,7 @@ GameObject:
   - component: {fileID: 4260039769782198557}
   - component: {fileID: 8274905502154479622}
   - component: {fileID: 8294265327531822697}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Walls Top LUR
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -9,6 +9,13 @@ public class Skill : MonoBehaviour
     protected float cooldown;
     protected float cooldownTimer;
 
+    protected Player player;
+
+    protected virtual void Start()
+    {
+        player = PlayerManager.Instance.player;
+    }
+
     protected void Update()
     {
         cooldownTimer -= Time.deltaTime;

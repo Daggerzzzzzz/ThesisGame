@@ -1157,7 +1157,7 @@ GameObject:
   - component: {fileID: 8161325190321573739}
   - component: {fileID: 2622255417339443082}
   - component: {fileID: 4839403562681706303}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Walls UDLR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2700,7 +2700,7 @@ GameObject:
   - component: {fileID: 7721357148077036256}
   - component: {fileID: 3798279550827550673}
   - component: {fileID: 5615246805881048951}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Walls Top UDLR
   m_TagString: Untagged
   m_Icon: {fileID: 0}

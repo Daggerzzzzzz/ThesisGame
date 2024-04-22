@@ -28,13 +28,17 @@ public class Player : Entity
     
     public static Transform OnTransformPosition { get; private set; }
     public SkillManager OnSkill { get; private set; }
-    
+    public GameObject OnSword;// { get; private set; }
+
     #region States
     public PlayerStateMachine OnStateMachine { get; private set; } 
     public PlayerIdleState OnIdleState { get; private set; }
     public PlayerMoveState OnMoveState { get; private set; }
     public PlayerDashState OnDashState { get; private set; }
     public PlayerPrimaryAttackState OnPrimaryAttackState { get; private set; }
+    public PlayerAimState OnPlayerAimState { get; private set; }
+    public PlayerCatchState OnPlayerCatchState { get; private set; }
+
     #endregion
     
     public float lastImageXpos;
@@ -51,6 +55,8 @@ public class Player : Entity
         OnMoveState = new PlayerMoveState(this, OnStateMachine, "walk");
         OnDashState = new PlayerDashState(this, OnStateMachine, "dash");
         OnPrimaryAttackState = new PlayerPrimaryAttackState(this, OnStateMachine, "attack");
+        OnPlayerAimState = new PlayerAimState(this, OnStateMachine, "aimSword");
+        OnPlayerCatchState = new PlayerCatchState(this, OnStateMachine, "catchSword");
     }
 
     public void OnEnable()
@@ -77,10 +83,21 @@ public class Player : Entity
     {
         OnPlayerInputs.Disable();
     }
+    
+    public void NewSwordAssignment(GameObject newSword)
+    {
+        OnSword = newSword;
+    }
+
+    public void ClearNewSword()
+    {
+        OnStateMachine.ChangeState(OnPlayerCatchState);
+        Destroy(OnSword);
+    }
 
     private void CheckForDashInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && SkillManager.Instance.dash.CanUseSkill())
+        if (OnPlayerInputs.Player.Dash.IsPressed() && SkillManager.Instance.dash.CanUseSkill())
         {
             isDashing = true;
             if (transform != null)

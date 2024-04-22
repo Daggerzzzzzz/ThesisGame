@@ -9,7 +9,7 @@ public class Entity : MonoBehaviour
     public Animator OnAnim { get; private set; }
     public Rigidbody2D OnRb { get; set; }
     #endregion
-    
+
     protected Vector2 movementDirection;
 
     [Header("Collision Info")] 
@@ -26,8 +26,10 @@ public class Entity : MonoBehaviour
     private Vector2 difference;
 
     public EntityFx entityFx { get; private set; }
-    private static readonly int MoveX = Animator.StringToHash("moveX");
-    private static readonly int MoveY = Animator.StringToHash("moveY");
+    public int MoveX = Animator.StringToHash("moveX");
+    public static readonly int MoveY = Animator.StringToHash("moveY");
+    public Vector2 animatorDirection;
+    
     protected virtual void Awake()
     {
         
@@ -61,9 +63,15 @@ public class Entity : MonoBehaviour
         OnRb.velocity = new Vector2(movementDirection.x, movementDirection.y);
         if (movementDirection != Vector2.zero)
         {
-            OnAnim.SetFloat(MoveX, movementDirection.x);
-            OnAnim.SetFloat(MoveY, movementDirection.y);
+            SetAnimator(movementDirection);
         }
+    }
+
+    public void SetAnimator(Vector2 movementInput)
+    {
+        OnAnim.SetFloat(MoveX, movementInput.x);
+        OnAnim.SetFloat(MoveY, movementInput.y);
+        animatorDirection = movementInput;
     }
 
     public void SetZeroVelocity()

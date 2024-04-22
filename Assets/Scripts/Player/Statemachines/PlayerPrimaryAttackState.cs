@@ -9,8 +9,8 @@ public class PlayerPrimaryAttackState : PlayerState
     private int comboCounter;
     private float lastTimeAttack;
     private float comboWindow = 2;
-    private float loopDuration = 0.7f; // Initial duration of the loop
-    private bool isInLoop = true; // Flag to control the loop
+    private float loopDuration = 0.7f; 
+    private bool isInLoop = true;
     
     PlayerInputs playerInputs;
         

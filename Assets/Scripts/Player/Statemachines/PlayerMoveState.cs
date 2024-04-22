@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class PlayerMoveState : PlayerState
 {
-    private static readonly int MoveX = Animator.StringToHash("moveX");
-    private static readonly int MoveY = Animator.StringToHash("moveY");
-    
     public PlayerMoveState(Player playerState, PlayerStateMachine stateMachineState, string animationNameState) : base(playerState, stateMachineState, animationNameState)
     {
         
