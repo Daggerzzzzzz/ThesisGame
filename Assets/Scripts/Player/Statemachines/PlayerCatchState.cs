@@ -41,6 +41,11 @@ public class PlayerCatchState : PlayerState
             player.OnAnim.SetBool(Back, true);
             rb.velocity = new Vector2(rb.velocity.x, 10 * -1);
         }
+        else
+        {
+            player.OnAnim.SetBool(Front, true);
+            rb.velocity = new Vector2(rb.velocity.x, 10 * 1);
+        }
     }
 
     public override void Update()

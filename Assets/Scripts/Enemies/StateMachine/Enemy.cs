@@ -8,6 +8,7 @@ public class Enemy : Entity
     [Header("Movement Inputs")]
     public float moveSpeed = 5f;
     public float idleTime;
+    private float defaultMovementSpeed;
 
     [Header("Enemy Details")] 
     public EnemyDataSO enemyDataSo;
@@ -26,6 +27,7 @@ public class Enemy : Entity
         enemyAI = GetComponent<EnemyAI>();
         boxCollider2D = GetComponent<BoxCollider2D>();
         capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+        defaultMovementSpeed = moveSpeed;
     }
 
     protected override void Start()
@@ -52,5 +54,26 @@ public class Enemy : Entity
         boxCollider2D.enabled = check;
         capsuleCollider2D.enabled = check;
         enemyAI.enabled = check;
+    }
+
+    public virtual void TimeFreeze(bool timeFrozen)
+    {
+        if (timeFrozen)
+        {
+            moveSpeed = 0;
+            OnAnim.speed = 0;
+        }
+        else
+        {
+            moveSpeed = defaultMovementSpeed;
+            OnAnim.speed = 1;
+        }
+    }
+
+    protected virtual IEnumerator FreezeTimeFor(float seconds)
+    {
+        TimeFreeze(true);
+        yield return new WaitForSeconds(seconds);
+        TimeFreeze(false);
     }
 }
