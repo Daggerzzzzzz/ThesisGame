@@ -137,8 +137,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 60bd37b7ebe75ca48be9b51162ec98c2
-      internalID: -345644850
+      spriteID: 008ee05f2dff807439a3f2a37496a211
+      internalID: 1829081890
       vertices: []
       indices: 
       edges: []
@@ -158,8 +158,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 33c4493a22a703c4d898fdd29d82ccbb
-      internalID: 45316437
+      spriteID: 99a929bc905dfbb409c8c3c26f877b85
+      internalID: 1100278826
       vertices: []
       indices: 
       edges: []
@@ -179,8 +179,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7b875e451756f8c40a230e7e32907c85
-      internalID: 1526147209
+      spriteID: 1bae1a677c5efcd44b1b8854c5259d6c
+      internalID: 2083183954
       vertices: []
       indices: 
       edges: []
@@ -200,8 +200,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5fc4c0590c33907438ebd50d0ca9e02a
-      internalID: -1488770394
+      spriteID: 4a37827034316534eb6dfe35ba46e60e
+      internalID: -1298153670
       vertices: []
       indices: 
       edges: []
@@ -217,10 +217,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      SwordStuck_0: -345644850
-      SwordStuck_1: 45316437
-      SwordStuck_2: 1526147209
-      SwordStuck_3: -1488770394
+      SwordStuck_0: 1829081890
+      SwordStuck_1: 1100278826
+      SwordStuck_2: 2083183954
+      SwordStuck_3: -1298153670
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

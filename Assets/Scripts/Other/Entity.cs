@@ -10,7 +10,7 @@ public class Entity : MonoBehaviour
     public Rigidbody2D OnRb { get; set; }
     #endregion
 
-    protected Vector2 movementDirection;
+    public Vector2 MovementDirection { get; set; }
 
     [Header("Collision Info")] 
     public Transform attackCheck;
@@ -26,9 +26,10 @@ public class Entity : MonoBehaviour
     private Vector2 difference;
 
     public EntityFx entityFx { get; private set; }
-    public int MoveX = Animator.StringToHash("moveX");
-    public static readonly int MoveY = Animator.StringToHash("moveY");
     public Vector2 animatorDirection;
+    
+    private static readonly int MoveX = Animator.StringToHash("moveX");
+    private static readonly int MoveY = Animator.StringToHash("moveY");
     
     protected virtual void Awake()
     {
@@ -59,11 +60,11 @@ public class Entity : MonoBehaviour
         {
             return;
         }
-        movementDirection = new Vector2(xInput, yInput) * entitySpeed;
-        OnRb.velocity = new Vector2(movementDirection.x, movementDirection.y);
-        if (movementDirection != Vector2.zero)
+        MovementDirection = new Vector2(xInput, yInput) * entitySpeed;
+        OnRb.velocity = new Vector2(MovementDirection.x, MovementDirection.y);
+        if (MovementDirection != Vector2.zero)
         {
-            SetAnimator(movementDirection);
+            SetAnimator(MovementDirection);
         }
     }
 

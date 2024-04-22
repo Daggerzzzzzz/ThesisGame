@@ -6,56 +6,35 @@ using UnityEngine;
 public class SwordSkillController : MonoBehaviour
 {
     private Animator anim;
-    private CircleCollider2D CircleCollider;
-    private BoxCollider2D BoxCollider;
+    private CircleCollider2D circleCollider;
     private Rigidbody2D rigidbody;
     private Player player;
 
     private bool canRotate;
     private bool isReturning;
+    private bool canChangeSwordPosition;
     
     private Vector2 playerFacingDirection;
     
     private float throwSword;
     private float swordSpeed;
+    
     private static readonly int Rotation = Animator.StringToHash("rotation");
-    private static readonly int Back = Animator.StringToHash("back");
-    private static readonly int Front = Animator.StringToHash("front");
-    private static readonly int Left = Animator.StringToHash("left");
-    private static readonly int Right = Animator.StringToHash("right");
+    private static readonly int MoveX = Animator.StringToHash("moveX");
+    private static readonly int MoveY = Animator.StringToHash("moveY");
+    private static readonly int Stuck = Animator.StringToHash("stuck");
 
     private void Awake()
     {
         anim = GetComponentInChildren<Animator>();
-        CircleCollider = GetComponentInChildren<CircleCollider2D>();
-        BoxCollider = GetComponentInChildren<BoxCollider2D>();
+        circleCollider = GetComponentInChildren<CircleCollider2D>();
         rigidbody = GetComponent<Rigidbody2D>();
         canRotate = true;
     }
 
     private void Start()
     {
-        Debug.Log("Start");
-        if (player.transform.position.x > transform.position.x)
-        {
-            Debug.Log("Left");
-            player.OnAnim.SetBool(Left, true);
-        }
-        else if (player.transform.position.x < transform.position.x)
-        {
-            Debug.Log("Right");
-            player.OnAnim.SetBool(Right, true);
-        }
-        else if (player.transform.position.y > transform.position.y)
-        {
-            Debug.Log("Front");
-            player.OnAnim.SetBool(Front, true);
-        }
-        else if (player.transform.position.y < transform.position.y)
-        {
-            Debug.Log("Back");
-            player.OnAnim.SetBool(Back, true);
-        }
+        canChangeSwordPosition = true;
     }
 
     private void Update()
@@ -64,6 +43,17 @@ public class SwordSkillController : MonoBehaviour
         {
             rigidbody.velocity = playerFacingDirection.normalized * throwSword;
         }
+
+        if (canChangeSwordPosition)
+        {
+            if (player.animatorDirection != Vector2.zero)
+            {
+                anim.SetFloat(MoveX, player.animatorDirection.x);
+                anim.SetFloat(MoveY, player.animatorDirection.y);
+                canChangeSwordPosition = false;
+            }
+        }
+        
         
         if (isReturning)
         {
@@ -81,15 +71,16 @@ public class SwordSkillController : MonoBehaviour
         {
             return;
         }
+        
         canRotate = false;
-        CircleCollider.enabled = false;
-        BoxCollider.enabled = false;
+        circleCollider.enabled = false;
         
         rigidbody.isKinematic = true;
         rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
-
+        
         transform.parent = other.transform;
         anim.SetBool(Rotation, false);
+        anim.SetBool(Stuck, true);
     }
     
     public void SetupSword(Vector2 movementDirection, float throwForce, float returnSpeed, Player player)
@@ -107,14 +98,12 @@ public class SwordSkillController : MonoBehaviour
         rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         transform.parent = null;
         isReturning = true;
+        anim.SetBool(Stuck, false);
         ResetAnimator();
     }
     
     private void ResetAnimator()
     {
-        player.OnAnim.SetBool(Left, false);
-        player.OnAnim.SetBool(Right, false);
-        player.OnAnim.SetBool(Front, false);
-        player.OnAnim.SetBool(Back, false);
+        canChangeSwordPosition = true;
     }
 }

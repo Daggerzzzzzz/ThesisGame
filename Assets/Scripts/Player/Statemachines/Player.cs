@@ -102,7 +102,7 @@ public class Player : Entity
             isDashing = true;
             if (transform != null)
             {
-                dashDirection = new Vector2(movementDirection.x, movementDirection.y).normalized;
+                dashDirection = new Vector2(MovementDirection.x, MovementDirection.y).normalized;
                 PlayerAfterImagePool.Instance.GetFromPool();
                 lastImageXpos = transform.position.x;
                 lastImageYpos = transform.position.y;

@@ -7,7 +7,7 @@ public class SwordSkill : Skill
     [SerializeField]
     private GameObject swordPrefab;
     [SerializeField] 
-    private float throwForce = 10;
+    private float throwForce = 15;
     [SerializeField] 
     private float returnSpeed = 15;
 
