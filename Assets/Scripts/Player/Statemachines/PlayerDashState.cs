@@ -13,7 +13,7 @@ public class PlayerDashState : PlayerState
         player.OnPlayerInputs.Player.Move.Disable();
         if (player.OnCanCreateClone)
         {
-            player.OnSkill.clone.CreateClone(player.OnEnemyDashedCollider.transform.position);
+            player.OnSkill.Clone.CreateClone(player.OnEnemyDashedCollider.transform.position);
             //player.skill.clone.CreateClone(player.transform.position);
         }
         stateTimer = player.dashDuration;

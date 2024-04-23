@@ -28,7 +28,7 @@ public class Player : Entity
     
     public static Transform OnTransformPosition { get; private set; }
     public SkillManager OnSkill { get; private set; }
-    public GameObject OnSword;// { get; private set; }
+    public GameObject OnSword { get; private set; }
 
     #region States
     public PlayerStateMachine OnStateMachine { get; private set; } 
@@ -38,6 +38,7 @@ public class Player : Entity
     public PlayerPrimaryAttackState OnPrimaryAttackState { get; private set; }
     public PlayerAimState OnPlayerAimState { get; private set; }
     public PlayerCatchState OnPlayerCatchState { get; private set; }
+    public PlayerBlackholeState OnPlayerBlackholeState { get; private set; }
 
     #endregion
     
@@ -57,6 +58,7 @@ public class Player : Entity
         OnPrimaryAttackState = new PlayerPrimaryAttackState(this, OnStateMachine, "attack");
         OnPlayerAimState = new PlayerAimState(this, OnStateMachine, "aimSword");
         OnPlayerCatchState = new PlayerCatchState(this, OnStateMachine, "catchSword");
+        OnPlayerBlackholeState = new PlayerBlackholeState(this, OnStateMachine, "idle");
     }
 
     public void OnEnable()
@@ -95,9 +97,14 @@ public class Player : Entity
         Destroy(OnSword);
     }
 
+    public void ExitBlackhole()
+    {
+        OnStateMachine.ChangeState(OnIdleState);
+    }
+
     private void CheckForDashInput()
     {
-        if (OnPlayerInputs.Player.Dash.IsPressed() && SkillManager.Instance.dash.CanUseSkill())
+        if (OnPlayerInputs.Player.Dash.IsPressed() && SkillManager.Instance.Dash.CanUseSkill())
         {
             isDashing = true;
             if (transform != null)

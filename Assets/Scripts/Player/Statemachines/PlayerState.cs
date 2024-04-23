@@ -47,6 +47,12 @@ public class PlayerState
       {
          stateMachine.ChangeState(player.OnPlayerAimState);
       }
+
+      if (playerInputs.Player.Ultimate.IsPressed())
+      {
+         stateMachine.ChangeState(player.OnPlayerBlackholeState);
+      }
+      
       stateTimer -= Time.deltaTime;
       xInput = Input.GetAxisRaw("Horizontal");
       yInput = Input.GetAxisRaw("Vertical");
@@ -58,7 +64,7 @@ public class PlayerState
       player.OnAnim.SetBool(animationName, false);
    }
 
-   public void PlayerAnimationFinishTrigger()
+   public virtual void PlayerAnimationFinishTrigger()
    {
       triggerCalled = true;
    }

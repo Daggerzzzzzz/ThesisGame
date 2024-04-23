@@ -38,6 +38,6 @@ public class PlayerTrigger : MonoBehaviour
 
     private void ThrowSword()
     {
-        SkillManager.Instance.sword.CreateSword();
+        SkillManager.Instance.Sword.CreateSword();
     }
 }

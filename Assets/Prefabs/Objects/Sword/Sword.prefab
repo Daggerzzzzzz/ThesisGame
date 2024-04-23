@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5b2a2bd4af145a459bbc8fe3b43cc9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bounceSpeed: 10
+  spinSwordEnemyTargets: []
 --- !u!50 &5698360004095510377
 Rigidbody2D:
   serializedVersion: 4

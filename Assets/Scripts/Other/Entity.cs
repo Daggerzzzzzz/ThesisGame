@@ -51,7 +51,7 @@ public class Entity : MonoBehaviour
     public void Damage()
     {
         entityFx.StartCoroutine("FlashEffects");
-        StartCoroutine("HitKnockback");
+        //StartCoroutine("HitKnockback");
     }
     
     public void SetVelocity(float xInput, float yInput, float entitySpeed)

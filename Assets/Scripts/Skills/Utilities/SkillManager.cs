@@ -5,14 +5,16 @@ using UnityEngine;
 
 public class SkillManager : SingletonMonoBehavior<SkillManager>
 {
-    public DashSkill dash { get; private set; }
-    public CloneSkill clone { get; private set; }
-    public SwordSkill sword { get; private set; }
+    public DashSkill Dash { get; private set; }
+    public CloneSkill Clone { get; private set; }
+    public SwordSkill Sword { get; private set; }
+    public BlackholeSkill Blackhole { get; private set; }
 
     private void Start()
     {
-        dash = GetComponent<DashSkill>();
-        clone = GetComponent<CloneSkill>();
-        sword = GetComponent<SwordSkill>();
+        Dash = GetComponent<DashSkill>();
+        Clone = GetComponent<CloneSkill>();
+        Sword = GetComponent<SwordSkill>();
+        Blackhole = GetComponent<BlackholeSkill>();
     }
 }
