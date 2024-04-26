@@ -33,9 +33,6 @@ public class RoomCenter : MonoBehaviour
         {
             SummonNextBatch(); 
             
-            Debug.Log(destroyedCount);
-            Debug.Log(canSummonTheNextBatch);
-            
             for(int i = 0; i < Enemies.Count; i++)
             {
                 if(Enemies[i] == null)

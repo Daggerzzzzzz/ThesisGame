@@ -46,7 +46,6 @@ public class PlayerDashState : PlayerState
         player.SetVelocity(0, 0, player.moveSpeed);
         player.dashDirection = Vector2.zero;
         player.OnCanCreateClone = false;
-        player.isDashing = false;
     }
 }
 

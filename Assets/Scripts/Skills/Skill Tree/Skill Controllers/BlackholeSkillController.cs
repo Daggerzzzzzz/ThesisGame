@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 
 public class BlackholeSkillController : MonoBehaviour
@@ -9,25 +9,27 @@ public class BlackholeSkillController : MonoBehaviour
     private GameObject swordPrefab;
     [SerializeField]
     private List<GameObject> slashesList;
+
+    public bool PlayerCanExitUltimate { get; private set; }
     
     private float maximumSize;
     private float speedOfGrowth;
-    
-    private bool canGrow = true;
-    private bool canShrink;
-    
-    private int amountOfSwords;
     private float swordAttackCooldown;
     private float amountOfAttacks;
     private float swordAttackTimer;
-    private bool canAttack;
-    private int swordsSummoned; 
     private float summonTimer; 
-    
     private float angleIncrement;
     private float circleRadius;
     private float angleIncrementRad;
     private float currentAngleRad;
+    
+    private bool canGrow = true;
+    private bool canShrink;
+    private bool canAttack;
+    private bool allSwordsSummoned;
+    
+    private int amountOfSwords;
+    private int swordsSummoned; 
     
     private readonly List<Transform> targets = new();
     private readonly List<GameObject> slashes = new();
@@ -46,28 +48,29 @@ public class BlackholeSkillController : MonoBehaviour
         currentAngleRad = 0f;
         angleIncrementRad = angleIncrement * Mathf.Deg2Rad;
         amountOfAttacks = amountOfSwords / 2;
+        allSwordsSummoned = false;
     }
 
     private void Update()
     {
         swordAttackTimer -= Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (allSwordsSummoned)
         {
-            canAttack = true;
-            
+            canAttack = true;   
         }
         
         if (swordAttackTimer < 0 && canAttack)
         {
+            swordAttackTimer = swordAttackCooldown;
+            
             if (targets.Count == 0)
             {
+                PlayerCanExitUltimate = true;
                 canAttack = false;
                 canShrink = true;
-                PlayerManager.Instance.player.ExitBlackhole();
+                return;
             }
-            
-            swordAttackTimer = swordAttackCooldown;
             
             int randomSlash = UnityEngine.Random.Range(0, slashesList.Count);
             int randomTarget = UnityEngine.Random.Range(0, targets.Count);
@@ -78,15 +81,16 @@ public class BlackholeSkillController : MonoBehaviour
 
             if (amountOfAttacks <= 0)
             {
+                PlayerCanExitUltimate = true;
                 canAttack = false;
                 canShrink = true;
-                PlayerManager.Instance.player.ExitBlackhole();
             }
         }
         
         if (canGrow && !canShrink)
         {
             transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(maximumSize, maximumSize), speedOfGrowth * Time.deltaTime);
+            StartCoroutine(SlashAnimationDelay());
             BulkSwordSummon();
         }
         
@@ -164,12 +168,18 @@ public class BlackholeSkillController : MonoBehaviour
         {
             transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(-1, -1), speedOfGrowth * Time.deltaTime);
 
-            if (transform.localScale.x < 0)
+            if (transform.localScale.x <= 0)
             {
-                DestroySword();
                 Destroy(gameObject);
             }
         }
+    }
+
+    private IEnumerator SlashAnimationDelay()
+    {
+        yield return new WaitForSeconds(swordAttackCooldown * amountOfSwords + 1);
+        allSwordsSummoned = true;
+        DestroySword();
     }
 
     public void SetupBlackhole(float maximumSize, float speedOfGrowth, int amountOfSwords, float swordAttackCooldown, float angleIncrement)

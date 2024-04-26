@@ -48,9 +48,18 @@ public class Room : MonoBehaviour
     private IEnumerator DoorDelay()
     {
         yield return new WaitForSeconds(0.5f);
+        CheckForKunaiExistence();
         foreach(GameObject door in doors)
         {
             door.SetActive(true);
+        }
+    }
+
+    private void CheckForKunaiExistence()
+    {
+        if (SkillManager.Instance.Kunai.CurrentKunai != null)
+        {
+            SkillManager.Instance.Kunai.currentKunaiSkillController.KunaiDestroy();
         }
     }
 }

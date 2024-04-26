@@ -233,7 +233,7 @@ public class SwordSkillController : MonoBehaviour
                 {
                     onHitTimer = onHitCooldown;
                     
-                    Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1);
+                    Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.75f);
                     foreach (var hit in colliders)
                     {
                         if (hit.CompareTag("Enemy"))
@@ -285,10 +285,10 @@ public class SwordSkillController : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, 1);
+        Gizmos.DrawWireSphere(transform.position, 0.75f);
     }
 }

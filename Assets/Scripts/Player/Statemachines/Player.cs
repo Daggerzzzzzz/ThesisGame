@@ -12,7 +12,6 @@ public class Player : Entity
     private const float DashCheckRadius = 1f;
     public float dashSpeed;
     public float dashDuration;
-    public bool isDashing;
     public Vector2 dashDirection;
     
     [Header("Clone Inputs")] 
@@ -79,6 +78,16 @@ public class Player : Entity
         OnStateMachine.OnCurrentState.Update();
         CheckForDashInput();
         OnTransformPosition = playerTransform;
+
+        if (OnPlayerInputs.Player.Teleport.IsPressed())
+        {
+            OnPlayerInputs.Player.Teleport.Disable();
+            OnSkill.Kunai.CanUseSkill();
+            if (OnSkill.Kunai.CanMultiStack)
+            {
+                OnPlayerInputs.Player.Teleport.Enable();
+            }
+        }
     }
 
     public void OnDisable()
@@ -97,16 +106,10 @@ public class Player : Entity
         Destroy(OnSword);
     }
 
-    public void ExitBlackhole()
-    {
-        OnStateMachine.ChangeState(OnIdleState);
-    }
-
     private void CheckForDashInput()
     {
         if (OnPlayerInputs.Player.Dash.IsPressed() && SkillManager.Instance.Dash.CanUseSkill())
         {
-            isDashing = true;
             if (transform != null)
             {
                 dashDirection = new Vector2(MovementDirection.x, MovementDirection.y).normalized;
@@ -118,7 +121,6 @@ public class Player : Entity
                 
                 if (dashHit.collider != null && dashHit.collider.CompareTag("Movement Collider"))
                 {
-                    Debug.Log("Enemy Hit");
                     OnCanCreateClone = true;
                     OnEnemyDashedCollider = dashHit.collider;
                 }

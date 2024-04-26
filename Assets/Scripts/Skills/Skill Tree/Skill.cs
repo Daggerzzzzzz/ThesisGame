@@ -7,6 +7,7 @@ public class Skill : MonoBehaviour
 {
     [SerializeField] 
     protected float cooldown;
+    
     protected float cooldownTimer;
 
     protected Player player;
@@ -29,8 +30,7 @@ public class Skill : MonoBehaviour
             cooldownTimer = cooldown;
             return true;
         }
-        
-        //Debug.Log("Skill is on cooldown");
+        Debug.Log("Skill is on cooldown");
         return false;
     }
 

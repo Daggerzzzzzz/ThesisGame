@@ -49,6 +49,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Teleport",
+                    "type": "Button",
+                    "id": "096c8a51-5204-4616-a8cf-70d2f4c5ce50",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -192,6 +201,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Ultimate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4484b7d3-7bbc-4a89-bb14-65f81737ac9b",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Teleport",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

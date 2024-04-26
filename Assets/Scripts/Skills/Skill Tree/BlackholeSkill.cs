@@ -17,7 +17,8 @@ public class BlackholeSkill : Skill
     private float swordAttackCooldown;
     [SerializeField]
     private float angleIncrement;
-    
+
+    private BlackholeSkillController currentBlackhole;
     
     protected override void Start()
     {
@@ -40,8 +41,24 @@ public class BlackholeSkill : Skill
         
         GameObject newBlackhole = Instantiate(blackholePrefab, player.transform.position, quaternion.identity);
 
-        BlackholeSkillController newBlackholeSkillController = newBlackhole.GetComponent<BlackholeSkillController>();
+        currentBlackhole = newBlackhole.GetComponent<BlackholeSkillController>();
         
-        newBlackholeSkillController.SetupBlackhole( maximumSize, speedOfGrowth, amountOfSwords, swordAttackCooldown, angleIncrement);
+        currentBlackhole.SetupBlackhole( maximumSize, speedOfGrowth, amountOfSwords, swordAttackCooldown, angleIncrement);
+    }
+
+    public bool BlackholeIsFinished()
+    {
+        if (currentBlackhole == null)
+        {
+            return false;
+        }
+        
+        if (currentBlackhole.PlayerCanExitUltimate)
+        {
+            currentBlackhole = null;
+            return true;
+        }
+
+        return false;
     }
 }
