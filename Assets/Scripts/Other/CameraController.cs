@@ -16,7 +16,7 @@ public class CameraController : SingletonMonoBehavior<CameraController>
         {
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(
                                                     target.position.x - 0.95f, 
-                                                    target.position.y - 0.2f, 
+                                                    target.position.y - 0.4f, 
                                                     transform.position.z),
                                                     cameraSpeed * Time.deltaTime);
         }

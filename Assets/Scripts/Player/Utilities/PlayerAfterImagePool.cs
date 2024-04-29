@@ -16,13 +16,12 @@ public class PlayerAfterImagePool : SingletonMonoBehavior<PlayerAfterImagePool>
     {
         for(int i = 0; i < 10; i++)
         {
-            var instanceToAdd = Instantiate(afterImagePrefab);
-            instanceToAdd.transform.SetParent(transform); //set this gameobject as a child to the gameobject where the scrip is attached to
+            var instanceToAdd = Instantiate(afterImagePrefab, transform, true);
             AddToPool(instanceToAdd);
         }
     }
 
-    public void AddToPool(GameObject instance) //public to access this function by singleton
+    public void AddToPool(GameObject instance) 
     {
         instance.SetActive(false);
         availableObjects.Enqueue(instance);

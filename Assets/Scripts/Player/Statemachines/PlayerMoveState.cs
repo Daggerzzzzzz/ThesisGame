@@ -22,8 +22,8 @@ public class PlayerMoveState : PlayerState
         }
         else
         {
-            AttackDirection();
-            player.attackCheck.transform.localPosition = attackDirection;
+            player.AttackDirection(movementInput);
+            player.attackCheck.transform.localPosition = player.OnAttackDirection;
         }
     }
 

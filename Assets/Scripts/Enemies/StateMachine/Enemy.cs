@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Enemy : Entity
 {
@@ -10,14 +9,22 @@ public class Enemy : Entity
     public float idleTime;
     private float defaultMovementSpeed;
 
+    [Header("Attack Inputs")] 
+    public float attackCooldown;
+    [HideInInspector]
+    public float lastTimeAttacked;
+
     [Header("Enemy Details")] 
     public EnemyDataSO enemyDataSo;
     private MaterializeEffect materializeEffect;
     private BoxCollider2D boxCollider2D;
     private CapsuleCollider2D capsuleCollider2D;
     private EnemyAI enemyAI;
-    
-    public EnemyStateMachine OnStateMachine { get; private set; }
+
+    protected EnemyStateMachine OnStateMachine { get; private set; }
+    public bool OnIsPlayerFollowing { get; private set; }
+    public bool OnIsPlayerAttacking { get; private set; }
+    public Vector2 EnemyDirection { get; private set; }
 
     protected override void Awake()
     {
@@ -75,5 +82,39 @@ public class Enemy : Entity
         TimeFreeze(true);
         yield return new WaitForSeconds(seconds);
         TimeFreeze(false);
+    }
+    
+    public void PlayerFollowCheck(bool isFollowing)
+    {
+        OnIsPlayerFollowing = isFollowing;
+    }
+    
+    public void PlayerAttackCheck(bool isAttacking)
+    {
+        OnIsPlayerAttacking = isAttacking;
+    }
+    
+    public void EnemyMovement(Vector2 movementInput)
+    {
+        EnemyDirection = movementInput;
+    }
+    
+    public void AnimationTriggerForEnemy()
+    {
+        OnStateMachine.OnCurrentState.EnemyAnimationFinishTrigger();
+    }
+
+    public override void SlowEntityBy(float slowPercent, float slowDuration)
+    {
+        moveSpeed *= (1 - slowPercent);
+        OnAnim.speed *= (1 - slowPercent);
+        
+        Invoke(nameof(returnToNormalSpeed), slowDuration);
+    }
+
+    protected override void returnToNormalSpeed()
+    {
+        base.returnToNormalSpeed();
+        moveSpeed = defaultMovementSpeed;
     }
 }

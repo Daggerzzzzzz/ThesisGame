@@ -8,10 +8,10 @@ public class Player : Entity
     [Header("Dash Inputs")] 
     [SerializeField]
     private float distance;
-
     private const float DashCheckRadius = 1f;
     public float dashSpeed;
     public float dashDuration;
+    private float normalDashSpeed;
     public Vector2 dashDirection;
     
     [Header("Clone Inputs")] 
@@ -24,6 +24,7 @@ public class Player : Entity
     public float moveSpeed = 10f;
     [SerializeField]
     private Transform playerTransform;
+    private float normalMoveSpeed;
     
     public static Transform OnTransformPosition { get; private set; }
     public SkillManager OnSkill { get; private set; }
@@ -38,6 +39,7 @@ public class Player : Entity
     public PlayerAimState OnPlayerAimState { get; private set; }
     public PlayerCatchState OnPlayerCatchState { get; private set; }
     public PlayerBlackholeState OnPlayerBlackholeState { get; private set; }
+    public PlayerDeathState OnDeathState { get; private set; }
 
     #endregion
     
@@ -58,6 +60,7 @@ public class Player : Entity
         OnPlayerAimState = new PlayerAimState(this, OnStateMachine, "aimSword");
         OnPlayerCatchState = new PlayerCatchState(this, OnStateMachine, "catchSword");
         OnPlayerBlackholeState = new PlayerBlackholeState(this, OnStateMachine, "idle");
+        OnDeathState = new PlayerDeathState(this, OnStateMachine, "death");
     }
 
     public void OnEnable()
@@ -70,6 +73,9 @@ public class Player : Entity
         base.Start();
         OnSkill = SkillManager.Instance;
         OnStateMachine.Initialize(OnIdleState);
+
+        normalMoveSpeed = moveSpeed;
+        normalDashSpeed = dashSpeed;
     }
 
     protected override void Update()
@@ -112,7 +118,7 @@ public class Player : Entity
         {
             if (transform != null)
             {
-                dashDirection = new Vector2(MovementDirection.x, MovementDirection.y).normalized;
+                dashDirection = new Vector2(OnMovementDirection.x, OnMovementDirection.y).normalized;
                 PlayerAfterImagePool.Instance.GetFromPool();
                 lastImageXpos = transform.position.x;
                 lastImageYpos = transform.position.y;
@@ -140,8 +146,34 @@ public class Player : Entity
         OnIsBusy = false;
     }
 
-    public void AnimationTriggerForPlayer() => OnStateMachine.OnCurrentState.PlayerAnimationFinishTrigger();
-    
+    public void AnimationTriggerForPlayer()
+    {
+        OnStateMachine.OnCurrentState.PlayerAnimationFinishTrigger();
+    }
+
+    public override void EntityDeath()
+    {
+        base.EntityDeath();
+        OnStateMachine.ChangeState(OnDeathState);
+    }
+
+    public override void SlowEntityBy(float slowPercent, float slowDuration)
+    {
+        moveSpeed *= (1 - slowPercent);
+        dashSpeed *= (1 - slowPercent);
+        OnAnim.speed *= (1 - slowPercent);
+        
+        Invoke(nameof(returnToNormalSpeed), slowDuration);
+    }
+
+    protected override void returnToNormalSpeed()
+    {
+        base.returnToNormalSpeed();
+
+        moveSpeed = normalMoveSpeed;
+        dashSpeed = normalDashSpeed;
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {

@@ -8,9 +8,14 @@ public class Entity : MonoBehaviour
     #region Components
     public Animator OnAnim { get; private set; }
     public Rigidbody2D OnRb { get; set; }
+    public EntityFx OnEntityFx { get; private set; }
+    public EntityStats OnEntityStats { get; private set; }
+    public BoxCollider2D OnBoxCollider2D { get; private set; }
+    public CapsuleCollider2D OnCapsuleCollider2D { get; private set; }
     #endregion
 
-    public Vector2 MovementDirection { get; set; }
+    public Vector2 OnMovementDirection { get; private set; }
+    public Vector2 OnAttackDirection { get; private set; }
 
     [Header("Collision Info")] 
     public Transform attackCheck;
@@ -24,8 +29,7 @@ public class Entity : MonoBehaviour
     [SerializeField] 
     protected float thrust;
     private Vector2 difference;
-
-    public EntityFx entityFx { get; private set; }
+    
     public Vector2 animatorDirection;
     
     private static readonly int MoveX = Animator.StringToHash("moveX");
@@ -33,14 +37,17 @@ public class Entity : MonoBehaviour
     
     protected virtual void Awake()
     {
-        
+        OnAnim = GetComponentInChildren<Animator>();
+        OnRb = GetComponent<Rigidbody2D>();
+        OnEntityFx = GetComponent<EntityFx>();
+        OnEntityStats = GetComponent<EntityStats>();
+        OnBoxCollider2D = GetComponent<BoxCollider2D>();
+        OnCapsuleCollider2D = GetComponent<CapsuleCollider2D>();
     }
 
     protected virtual void Start()
     {
-        OnAnim = GetComponentInChildren<Animator>();
-        OnRb = GetComponent<Rigidbody2D>();
-        entityFx = GetComponent<EntityFx>();
+        
     }
     
     protected virtual void Update()
@@ -48,9 +55,9 @@ public class Entity : MonoBehaviour
         
     }
 
-    public void Damage()
+    public void DamageEffect()
     {
-        entityFx.StartCoroutine("FlashEffects");
+        OnEntityFx.StartCoroutine("FlashEffects");
         //StartCoroutine("HitKnockback");
     }
     
@@ -60,11 +67,11 @@ public class Entity : MonoBehaviour
         {
             return;
         }
-        MovementDirection = new Vector2(xInput, yInput) * entitySpeed;
-        OnRb.velocity = new Vector2(MovementDirection.x, MovementDirection.y);
-        if (MovementDirection != Vector2.zero)
+        OnMovementDirection = new Vector2(xInput, yInput) * entitySpeed;
+        OnRb.velocity = new Vector2(OnMovementDirection.x, OnMovementDirection.y);
+        if (OnMovementDirection != Vector2.zero)
         {
-            SetAnimator(MovementDirection);
+            SetAnimator(OnMovementDirection);
         }
     }
 
@@ -100,12 +107,53 @@ public class Entity : MonoBehaviour
         Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
     }
 
+    public void AttackDirection(Vector2 movementInput)
+    {
+        if (Mathf.Abs(movementInput.x) > Mathf.Abs(movementInput.y))
+        {
+            if (movementInput.x > 0)
+            {
+                OnAttackDirection = new Vector2(1.2f, -0.3f);
+            }
+            if (movementInput.x < 0)
+            {
+                OnAttackDirection = new Vector2(-1.2f, -0.3f);
+            }
+        }
+        if (Mathf.Abs(movementInput.x) < Mathf.Abs(movementInput.y))
+        {
+            if (movementInput.y > 0)
+            {
+                OnAttackDirection = new Vector2(0f, 0.6f);
+            }
+            if (movementInput.y < 0)
+            {
+                OnAttackDirection = new Vector2(0f, -1f);
+            }
+        }
+    }
+
+    public virtual void EntityDeath()
+    {
+        
+    }
+    
+    public virtual void SlowEntityBy(float slowPercent, float slowDuration)
+    {
+        
+    }
+
+    protected virtual void returnToNormalSpeed()
+    {
+        OnAnim.speed = 1;
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
         HelperUtilities.ValidateCheckNullValue(this, nameof(OnAnim), OnAnim);
         HelperUtilities.ValidateCheckNullValue(this, nameof(OnRb), OnRb);
-        HelperUtilities.ValidateCheckNullValue(this, nameof(entityFx), entityFx);
+        HelperUtilities.ValidateCheckNullValue(this, nameof(OnEntityFx), OnEntityFx);
     }
 #endif
 }

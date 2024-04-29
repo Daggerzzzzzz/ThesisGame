@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MaxHealth>k__BackingField: 3
   <Damage>k__BackingField: 1
-  enemyMaterializeTime: 3
+  enemyMaterializeTime: 2
   enemyStandardMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}

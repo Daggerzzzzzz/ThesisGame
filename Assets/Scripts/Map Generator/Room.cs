@@ -12,6 +12,8 @@ public class Room : MonoBehaviour
     
     public bool roomActive;
     
+    private static readonly int Close = Animator.StringToHash("close");
+
     private void OnTriggerEnter2D(Collider2D collision) 
     {
         if(collision.CompareTag("Player"))
@@ -40,7 +42,7 @@ public class Room : MonoBehaviour
     {
         foreach(GameObject door in doors)
         {
-            door.SetActive(false);
+            door.GetComponent<Animator>().SetBool(Close, false);
             closeWhenEntered = false;
         } 
     }
@@ -51,7 +53,7 @@ public class Room : MonoBehaviour
         CheckForKunaiExistence();
         foreach(GameObject door in doors)
         {
-            door.SetActive(true);
+            door.GetComponent<Animator>().SetBool(Close, true);
         }
     }
 

@@ -11,7 +11,6 @@ public class PlayerState
    private string animationName;
    private float xInput;
    private float yInput;
-   protected Vector2 attackDirection;
    
    protected Vector2 movementInput;
    protected float stateTimer;
@@ -67,29 +66,6 @@ public class PlayerState
    public virtual void PlayerAnimationFinishTrigger()
    {
       triggerCalled = true;
-   }
-
-   protected void AttackDirection()
-   {
-      if (movementInput.x != 0)
-      {
-         if (movementInput.x > 0)
-         {
-            attackDirection = new Vector2(0.19f, -0.025f);
-         }
-         if (movementInput.x < 0)
-         {
-            attackDirection = new Vector2(-0.19f, -0.025f);
-         }
-      }
-      else if (movementInput.y > 0)
-      {
-         attackDirection = new Vector2(0f, 0.1f);
-      }
-      else
-      {
-         attackDirection = new Vector2(0f, -0.15f);
-      }
    }
 
    private bool HasNoSword()

@@ -13,7 +13,7 @@ public class SwordSlash3 : MonoBehaviour
         {
             if (!targets.Contains(other.transform))
             {
-                other.GetComponent<Enemy>().Damage();
+                other.GetComponent<Enemy>().DamageEffect();
             }
         }
     }

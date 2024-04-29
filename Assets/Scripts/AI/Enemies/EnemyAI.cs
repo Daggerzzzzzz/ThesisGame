@@ -22,10 +22,11 @@ public class EnemyAI : MonoBehaviour
 
     private bool following;
     private bool playerDetected;
+    private bool attackPlayer;
 
     [Header("Events")]
     //Inputs sent from the Enemy AI to the Enemy controller
-    public UnityEvent OnAttackPressed;
+    public UnityEvent<bool> OnAttackPressed;
     public UnityEvent<Vector2> OnMovementInput;
     public UnityEvent<bool> OnPlayerDetected;
 
@@ -72,26 +73,26 @@ public class EnemyAI : MonoBehaviour
             following = false;
             yield break;
         }
+        
+        float distance = Vector2.Distance(aiData.currentTarget.position, transform.position);
+
+        if (distance < attackDistance)
+        {
+            //Attack logic
+            attackPlayer = true;
+            movementInput = Vector2.zero;
+            yield return new WaitForSeconds(attackDelay);
+            StartCoroutine(ChaseAndAttack());
+        }
         else
         {
-            float distance = Vector2.Distance(aiData.currentTarget.position, transform.position);
-
-            if (distance < attackDistance)
-            {
-                //Attack logic
-                movementInput = Vector2.zero;
-                OnAttackPressed?.Invoke();
-                yield return new WaitForSeconds(attackDelay);
-                StartCoroutine(ChaseAndAttack());
-            }
-            else
-            {
-                //Chase logic
-                movementInput = movementDirectionSolver.GetDirectionToMove(steeringBehaviors, aiData);
-                yield return new WaitForSeconds(aiUpdateDelay);
-                StartCoroutine(ChaseAndAttack());
-            }
+            //Chase logic
+            attackPlayer = false;
+            movementInput = movementDirectionSolver.GetDirectionToMove(steeringBehaviors, aiData);
+            yield return new WaitForSeconds(aiUpdateDelay);
+            StartCoroutine(ChaseAndAttack());
         }
+        OnAttackPressed?.Invoke(attackPlayer);
     }
 }
 

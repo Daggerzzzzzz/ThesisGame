@@ -58,11 +58,11 @@ TagManager:
   - name: Foreground
     uniqueID: 3786753885
     locked: 0
-  - name: Player
-    uniqueID: 3017537019
-    locked: 0
   - name: Enemy
     uniqueID: 3458580087
+    locked: 0
+  - name: Player
+    uniqueID: 3017537019
     locked: 0
   - name: CameraSortingLayer
     uniqueID: 4133994073

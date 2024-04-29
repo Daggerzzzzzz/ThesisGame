@@ -94,7 +94,7 @@ public class CloneSkillController : MonoBehaviour
             {
                 if (!attackedEnemies.Contains(enemy))
                 {
-                    enemy.Damage();
+                    enemy.DamageEffect();
                     attackedEnemies.Add(enemy);
                 }
             }

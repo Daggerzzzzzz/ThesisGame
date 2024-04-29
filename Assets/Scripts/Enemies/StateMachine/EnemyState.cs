@@ -5,15 +5,13 @@ using UnityEngine;
 public class EnemyState
 {
    protected EnemyStateMachine stateMachine;
-   protected Enemy enemy;
+   private Enemy enemy;
 
    protected bool triggerCalled;
    protected float stateTimer;
-   protected Vector2 attackDirection;
-   protected Vector2 enemyMovementInput;
    private string animationName;
 
-   public EnemyState(Enemy enemyBase, EnemyStateMachine stateMachineState, string animationNameState)
+   protected EnemyState(Enemy enemyBase, EnemyStateMachine stateMachineState, string animationNameState)
    {
       enemy = enemyBase;
       stateMachine = stateMachineState;
@@ -36,29 +34,8 @@ public class EnemyState
       enemy.OnAnim.SetBool(animationName, false);
    }
    
-   protected void AttackDirection()
+   public virtual void EnemyAnimationFinishTrigger()
    {
-      if (Mathf.Abs(enemyMovementInput.x) > Mathf.Abs(enemyMovementInput.y))
-      {
-         if (enemyMovementInput.x > 0)
-         {
-            attackDirection = new Vector2(0.15f, 0f);
-         }
-         if (enemyMovementInput.x < 0)
-         {
-            attackDirection = new Vector2(-0.15f, 0f);
-         }
-      }
-      if (Mathf.Abs(enemyMovementInput.x) < Mathf.Abs(enemyMovementInput.y))
-      {
-         if (enemyMovementInput.y > 0)
-         {
-            attackDirection = new Vector2(0f, 0.14f);
-         }
-         if (enemyMovementInput.y < 0)
-         {
-            attackDirection = new Vector2(0f, -0.14f);
-         }
-      }
+      triggerCalled = true;
    }
 }

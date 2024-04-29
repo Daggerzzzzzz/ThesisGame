@@ -103,7 +103,7 @@ public class KunaiSkillController : MonoBehaviour
         {
             if (collider.CompareTag("Enemy"))
             {
-                collider.GetComponent<Enemy>().Damage();
+                collider.GetComponent<Enemy>().DamageEffect();
             }
         }
     }

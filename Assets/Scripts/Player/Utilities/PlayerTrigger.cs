@@ -24,7 +24,8 @@ public class PlayerTrigger : MonoBehaviour
             {
                 if (!attackedEnemies.Contains(enemy))
                 {
-                    enemy.Damage();
+                    EnemyStats target = hit.GetComponent<EnemyStats>();
+                    OnPlayer.OnEntityStats.DoDamage(target);
                     attackedEnemies.Add(enemy);
                 }
             }
