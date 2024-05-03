@@ -1,13 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 
 public class KunaiSkillController : MonoBehaviour
 {
     private Animator anim;
-    private CircleCollider2D collider;
+    private CircleCollider2D circleCollider;
+    private Player player;
 
     private bool canExplode;
     private bool canGrow;
@@ -16,14 +13,14 @@ public class KunaiSkillController : MonoBehaviour
     
     private float speedOfGrowth = 3;
 
-    public bool pressedTwice { get; set; }
+    private bool pressedTwice;
 
     private static readonly int CanExplode = Animator.StringToHash("canExplode");
     
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        collider = GetComponent<CircleCollider2D>();
+        circleCollider = GetComponent<CircleCollider2D>();
     }
 
     private void Start()
@@ -31,12 +28,13 @@ public class KunaiSkillController : MonoBehaviour
         canTeleport = true;
     }
 
-    public void SetupCrystal(bool canExplode, bool canTeleport,bool pressedTwice, bool canMultiStack)
+    public void SetupKunai(bool canExplode, bool canTeleport,bool pressedTwice, bool canMultiStack, Player player)
     {
         this.canExplode = canExplode;
         this.canTeleport = canTeleport;
         this.pressedTwice = pressedTwice;
         this.canMultiStack = canMultiStack;
+        this.player = player;
     }
 
     private void Update()
@@ -97,20 +95,15 @@ public class KunaiSkillController : MonoBehaviour
 
     public void ExplodeEvent()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, collider.radius);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, circleCollider.radius);
 
-        foreach (var collider in colliders)
+        foreach (var hit in colliders)
         {
-            if (collider.CompareTag("Enemy"))
+            if (hit.CompareTag("Enemy"))
             {
-                collider.GetComponent<Enemy>().DamageEffect();
+                Debug.Log(hit.name);
+                player.OnEntityStats.StatusAilments(hit.GetComponent<EntityStats>());
             }
         }
-    }
-    
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, 1);
     }
 }

@@ -1,10 +1,24 @@
-using System;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
+public enum StatType
+{
+    STRENGTH,
+    AGILITY,
+    VITALITY,
+    INTELLIGENCE,
+    DAMAGE,
+    CRITCHANCE,
+    CRITICALDAMAGE,
+    HEALTH,
+    ARMOR,
+    EVASION,
+    BURNDAMAGE,
+    FREEZEDAMAGE,
+    SHOCKDAMAGE
+}
+    
 public class EntityStats : MonoBehaviour
 {
     [SerializeField] 
@@ -16,6 +30,7 @@ public class EntityStats : MonoBehaviour
     public Stats strength; //1 point increase damage by 1 and crit damage by 1%
     public Stats agility; //1 point increase dodge by 1% and crit chance by 1%
     public Stats vitality; //1 point increase health by 3 or 5 points, can decrease damage from status ailments
+    public Stats intelligence; //1 point increase damage of status effects
     
     [Header("Offensive Stats")] 
     public Stats damage;
@@ -46,6 +61,8 @@ public class EntityStats : MonoBehaviour
     private int lightningDamage;
     
     public int currentHealth;
+    public int currentDamage;
+    private bool isDead;
     
     public UnityEvent onHealthChanged;
     private EntityFx entityFx;
@@ -53,6 +70,7 @@ public class EntityStats : MonoBehaviour
     protected virtual void Start()
     {
         currentHealth = CalculateMaxHealthValue();
+        currentDamage = damage.GetValue();
         criticalDamage.SetDefaultValue(150);
         entityFx = GetComponent<EntityFx>();
     }
@@ -84,7 +102,7 @@ public class EntityStats : MonoBehaviour
         {
             DecreaseHealthBy(burnDamageOverTime);
 
-            if (currentHealth < 0)
+            if (currentHealth < 0 && !isDead)
             {
                 EntityDeath();
             }
@@ -108,9 +126,8 @@ public class EntityStats : MonoBehaviour
         }
 
         totalDamage = CalculateTargetsArmor(entityStats, totalDamage);
-
-        //entityStats.TakeDamage(totalDamage);
-        StatusAilments(entityStats);
+        entityStats.TakeDamage(totalDamage);
+        //StatusAilments(entityStats);
     }
 
     private int CalculateTargetsArmor(EntityStats entityStats, int totalDamage)
@@ -147,18 +164,28 @@ public class EntityStats : MonoBehaviour
     {
         DecreaseHealthBy(damage);
         
-        Debug.Log(damage);
-
-        if (currentHealth < 0)
+        if (currentHealth < 0 && !isDead)
         {
             EntityDeath();
         }
     }
 
-    protected virtual void DecreaseHealthBy(int damage)
+    private void DecreaseHealthBy(int damage)
     {
         currentHealth -= damage;
 
+        onHealthChanged?.Invoke();
+    }
+
+    public void IncreaseHealthBy(int amount)
+    {
+        currentHealth += amount;
+
+        if (currentHealth > CalculateMaxHealthValue())
+        {
+            currentHealth += CalculateMaxHealthValue();
+        }
+        
         onHealthChanged?.Invoke();
     }
 
@@ -188,13 +215,13 @@ public class EntityStats : MonoBehaviour
         return maxHealth.GetValue() + vitality.GetValue() * 5;
     }
 
-    protected virtual void StatusAilments(EntityStats target)
+    public virtual void StatusAilments(EntityStats target)
     {
         int fireDamage = burnDamage.GetValue();
         int iceDamage = freezeDamage.GetValue();
         int electricDamage = shockDamage.GetValue();
 
-        int totalDamage = fireDamage + iceDamage + electricDamage + strength.GetValue();
+        int totalDamage = fireDamage + iceDamage + electricDamage + intelligence.GetValue();
         totalDamage -= target.vitality.GetValue() * 3;
         totalDamage = Mathf.Clamp(totalDamage, 0, int.MaxValue);
         
@@ -300,6 +327,27 @@ public class EntityStats : MonoBehaviour
     
     protected virtual void EntityDeath()
     {
-        
+        isDead = true;
+    }
+
+    public Stats StatToGet(StatType statType)
+    {
+        return statType switch
+        {
+            StatType.STRENGTH => strength,
+            StatType.AGILITY => agility,
+            StatType.VITALITY => vitality,
+            StatType.INTELLIGENCE => intelligence,
+            StatType.DAMAGE => damage,
+            StatType.CRITCHANCE => criticalChance,
+            StatType.CRITICALDAMAGE => criticalDamage,
+            StatType.HEALTH => maxHealth,
+            StatType.ARMOR => armor,
+            StatType.EVASION => dodge,
+            StatType.BURNDAMAGE => burnDamage,
+            StatType.FREEZEDAMAGE => freezeDamage,
+            StatType.SHOCKDAMAGE => shockDamage,
+            _ => null
+        };
     }
 }

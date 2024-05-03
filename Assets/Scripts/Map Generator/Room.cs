@@ -20,6 +20,7 @@ public class Room : MonoBehaviour
         {
             if(closeWhenEntered)
             {
+                CheckForKunaiExistence();
                 StartCoroutine(DoorDelay());
             }
 
@@ -50,7 +51,7 @@ public class Room : MonoBehaviour
     private IEnumerator DoorDelay()
     {
         yield return new WaitForSeconds(0.5f);
-        CheckForKunaiExistence();
+        
         foreach(GameObject door in doors)
         {
             door.GetComponent<Animator>().SetBool(Close, true);

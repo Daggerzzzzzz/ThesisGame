@@ -20,7 +20,6 @@ public class ZombieDeathState : EnemyState
     {
         base.Update();
         enemy.SetZeroVelocity();
-        enemy.OnBoxCollider2D.enabled = false;
         enemy.OnCapsuleCollider2D.enabled = false;
     }
 

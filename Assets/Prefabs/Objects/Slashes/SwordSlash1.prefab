@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7844232039627768715}
   - component: {fileID: 232307556336894848}
   - component: {fileID: 5117030864166185997}
-  - component: {fileID: 7013412589512779564}
-  m_Layer: 0
+  - component: {fileID: 678545506228134058}
+  m_Layer: 12
   m_Name: SwordSlash1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -160,7 +160,7 @@ PolygonCollider2D:
       - {x: -0.089999996, y: 0.13}
       - {x: -0.12, y: 0.13}
   m_UseDelaunayMesh: 0
---- !u!114 &7013412589512779564
+--- !u!114 &678545506228134058
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,7 +169,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1483990769713242330}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d10c92f3bf8cf674e906ded589fd29ea, type: 3}
+  m_Script: {fileID: 11500000, guid: 79bc041fa578e994789a91bae6bc5b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <targets>k__BackingField: []

@@ -5,35 +5,31 @@ using UnityEngine;
 public class ZombieTrigger : MonoBehaviour
 {
     private EnemyZombie OnEnemyZombie => GetComponentInParent<EnemyZombie>();
-    private HashSet<Player> playerColliders = new();
-    private bool alreadyDamaged = false;
+    private bool attackOnce;
     
     private void EnemyAnimation()
     {
         OnEnemyZombie.AnimationTriggerForEnemy();
-        playerColliders.Clear();
+        ResetAttack();
     }
     
     private void AttackTrigger()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(OnEnemyZombie.attackCheck.position, OnEnemyZombie.attackCheckRadius);
+        
         foreach (var hit in colliders)
         {
-            Player player = hit.GetComponent<Player>();
-            if (player != null)
+            if (hit.CompareTag("Player") && !attackOnce)
             {
-                if (!playerColliders.Contains(player))
-                {
-                    PlayerStats target = hit.GetComponent<PlayerStats>();
-                    OnEnemyZombie.OnEntityStats.DoDamage(target);
-                    playerColliders.Add(player);
-                }
+                PlayerStats target = hit.GetComponent<PlayerStats>();
+                OnEnemyZombie.OnEntityStats.DoDamage(target);
+                attackOnce = true;
             }
         }
     }
-    
-    private void ResetColliders()
+
+    private void ResetAttack()
     {
-        playerColliders.Clear();
+        attackOnce = false;
     }
 }

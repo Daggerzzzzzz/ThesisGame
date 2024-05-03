@@ -6,8 +6,8 @@ TagManager:
   tags:
   - Enemy
   - Sword
-  - Player Sprite
   - Camera Zone
+  - Player Sprite
   - Movement Collider
   layers:
   - Default
@@ -20,10 +20,10 @@ TagManager:
   - Obstacle
   - Map
   - Enemy
-  - Enemy Collider
   - Room
   - Walls
   - Sword
+  - Item
   - 
   - 
   - 
@@ -57,6 +57,9 @@ TagManager:
     locked: 0
   - name: Foreground
     uniqueID: 3786753885
+    locked: 0
+  - name: Objects
+    uniqueID: 786107415
     locked: 0
   - name: Enemy
     uniqueID: 3458580087

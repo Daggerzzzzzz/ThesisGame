@@ -33,7 +33,7 @@ public class KunaiSkill : Skill
     private bool pressedTwice = false;
     [SerializeField]
     private bool firstEntered = true;
-    
+    [field:SerializeField]
     public GameObject CurrentKunai { get; private set; }
     
     protected override void Update()
@@ -71,7 +71,7 @@ public class KunaiSkill : Skill
                 CurrentKunai.transform.position = playerBeforePos;
 
                 pressedTwice = true;
-                currentKunaiSkillController.SetupCrystal(canExplode, canTeleport, pressedTwice, CanMultiStack);
+                currentKunaiSkillController.SetupKunai(canExplode, canTeleport, pressedTwice, CanMultiStack, player);
                 currentKunaiSkillController.KunaiExplosion();
                 StartCoroutine(ExplosionAnimationDelay());
             }
@@ -92,7 +92,7 @@ public class KunaiSkill : Skill
             {
                 cooldown = 0;
                 
-                GameObject kunaiToSpawn = kunaiLeft[kunaiLeft.Count - 1];
+                GameObject kunaiToSpawn = kunaiLeft[^1];
                 GameObject newKunai = Instantiate(kunaiToSpawn, player.transform.position, Quaternion.identity);
                 summonedKunais.Add(newKunai);
                 kunaiLeft.Remove(kunaiToSpawn);
@@ -122,7 +122,7 @@ public class KunaiSkill : Skill
         foreach (GameObject kunai in summonedKunais)
         {
             currentKunaiSkillController = kunai.GetComponent<KunaiSkillController>();
-            currentKunaiSkillController.SetupCrystal(canExplode, canTeleport, pressedTwice, CanMultiStack);
+            currentKunaiSkillController.SetupKunai(canExplode, canTeleport, pressedTwice, CanMultiStack, player);
         }
     }
 

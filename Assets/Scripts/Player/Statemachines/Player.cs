@@ -163,12 +163,12 @@ public class Player : Entity
         dashSpeed *= (1 - slowPercent);
         OnAnim.speed *= (1 - slowPercent);
         
-        Invoke(nameof(returnToNormalSpeed), slowDuration);
+        Invoke(nameof(ReturnToNormalSpeed), slowDuration);
     }
 
-    protected override void returnToNormalSpeed()
+    protected override void ReturnToNormalSpeed()
     {
-        base.returnToNormalSpeed();
+        base.ReturnToNormalSpeed();
 
         moveSpeed = normalMoveSpeed;
         dashSpeed = normalDashSpeed;

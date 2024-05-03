@@ -19,7 +19,6 @@ public class PlayerDeathState : PlayerState
     {
         base.Update();
         player.SetZeroVelocity();
-        player.OnBoxCollider2D.enabled = false;
         player.OnCapsuleCollider2D.enabled = false;
     }
 

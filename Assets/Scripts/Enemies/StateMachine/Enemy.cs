@@ -17,8 +17,6 @@ public class Enemy : Entity
     [Header("Enemy Details")] 
     public EnemyDataSO enemyDataSo;
     private MaterializeEffect materializeEffect;
-    private BoxCollider2D boxCollider2D;
-    private CapsuleCollider2D capsuleCollider2D;
     private EnemyAI enemyAI;
 
     protected EnemyStateMachine OnStateMachine { get; private set; }
@@ -32,8 +30,6 @@ public class Enemy : Entity
         OnStateMachine = new EnemyStateMachine();
         materializeEffect = GetComponent<MaterializeEffect>();
         enemyAI = GetComponent<EnemyAI>();
-        boxCollider2D = GetComponent<BoxCollider2D>();
-        capsuleCollider2D = GetComponent<CapsuleCollider2D>();
         defaultMovementSpeed = moveSpeed;
     }
 
@@ -58,9 +54,8 @@ public class Enemy : Entity
 
     private void EnemyEnable(bool check)
     {
-        boxCollider2D.enabled = check;
-        capsuleCollider2D.enabled = check;
-        enemyAI.enabled = check;
+        OnCapsuleCollider2D.enabled = check;
+        //enemyAI.enabled = check;
     }
 
     public virtual void TimeFreeze(bool timeFrozen)
@@ -109,12 +104,12 @@ public class Enemy : Entity
         moveSpeed *= (1 - slowPercent);
         OnAnim.speed *= (1 - slowPercent);
         
-        Invoke(nameof(returnToNormalSpeed), slowDuration);
+        Invoke(nameof(ReturnToNormalSpeed), slowDuration);
     }
 
-    protected override void returnToNormalSpeed()
+    protected override void ReturnToNormalSpeed()
     {
-        base.returnToNormalSpeed();
+        base.ReturnToNormalSpeed();
         moveSpeed = defaultMovementSpeed;
     }
 }

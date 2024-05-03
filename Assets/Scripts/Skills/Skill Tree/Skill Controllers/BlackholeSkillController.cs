@@ -15,7 +15,6 @@ public class BlackholeSkillController : MonoBehaviour
     private float maximumSize;
     private float speedOfGrowth;
     private float swordAttackCooldown;
-    private float amountOfAttacks;
     private float swordAttackTimer;
     private float summonTimer; 
     private float angleIncrement;
@@ -29,13 +28,13 @@ public class BlackholeSkillController : MonoBehaviour
     private bool allSwordsSummoned;
     
     private int amountOfSwords;
+    private int amountOfAttacks;
     private int swordsSummoned; 
     
     private readonly List<Transform> targets = new();
-    private readonly List<GameObject> slashes = new();
     private readonly List<GameObject> swords = new();
     private CircleCollider2D collider;
-    private Animator anim;
+    private Player player;
 
     private void Awake()
     {
@@ -75,7 +74,7 @@ public class BlackholeSkillController : MonoBehaviour
             int randomSlash = UnityEngine.Random.Range(0, slashesList.Count);
             int randomTarget = UnityEngine.Random.Range(0, targets.Count);
             GameObject newSlash = Instantiate(slashesList[randomSlash], targets[randomTarget].transform.position, Quaternion.identity);
-            slashes.Add(newSlash);
+            newSlash.GetComponent<SlashController>().SetupSwordSlash(player);
             
             amountOfAttacks--;
 
@@ -121,14 +120,13 @@ public class BlackholeSkillController : MonoBehaviour
         }
     }
 
-    private void SummonSwords()
+    private void SummonSword()
     {
         float x = transform.position.x + circleRadius * Mathf.Cos(currentAngleRad);
         float y = transform.position.y + circleRadius * Mathf.Sin(currentAngleRad);
         Vector3 spawnPosition = new Vector3(x, y, 0f);
 
         GameObject newSword = Instantiate(swordPrefab, spawnPosition, Quaternion.identity);
-        anim = newSword.GetComponent<Animator>();
         swords.Add(newSword);
             
         currentAngleRad += angleIncrementRad;
@@ -143,7 +141,7 @@ public class BlackholeSkillController : MonoBehaviour
                 
             if (summonTimer <= 0)
             {
-                SummonSwords();
+                SummonSword();
                 summonTimer = swordAttackCooldown;
             }
         }
@@ -182,12 +180,13 @@ public class BlackholeSkillController : MonoBehaviour
         DestroySword();
     }
 
-    public void SetupBlackhole(float maximumSize, float speedOfGrowth, int amountOfSwords, float swordAttackCooldown, float angleIncrement)
+    public void SetupBlackhole(float maximumSize, float speedOfGrowth, int amountOfSwords, float swordAttackCooldown, float angleIncrement, Player player)
     {
         this.maximumSize = maximumSize;
         this.speedOfGrowth = speedOfGrowth;
         this.amountOfSwords = amountOfSwords;
         this.swordAttackCooldown = swordAttackCooldown;
         this.angleIncrement = angleIncrement;
+        this.player = player;
     }
 }

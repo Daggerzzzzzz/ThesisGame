@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BlackholeSkill : Skill
 {
+    [Header("Blackhole Info")]
     [SerializeField] 
     private GameObject blackholePrefab;
     [SerializeField] 
@@ -12,11 +13,20 @@ public class BlackholeSkill : Skill
     [SerializeField]
     private float speedOfGrowth;
     [SerializeField]
-    private int amountOfSwords;
-    [SerializeField]
     private float swordAttackCooldown;
+    
+    [Header("Blackhole Upgrades")]
+    [SerializeField] 
+    private bool baseUpgrade;
     [SerializeField]
-    private float angleIncrement;
+    private bool secondUpgrade;
+    [SerializeField]
+    private bool thirdUpgrade;
+    
+    [SerializeField]
+    private int angleIncrement;
+    [SerializeField]
+    private int amountOfSwords;
 
     private BlackholeSkillController currentBlackhole;
     
@@ -39,11 +49,13 @@ public class BlackholeSkill : Skill
     {
         base.UseSkill();
         
+        BlackholeUpgrades(baseUpgrade, secondUpgrade, thirdUpgrade);
+        
         GameObject newBlackhole = Instantiate(blackholePrefab, player.transform.position, quaternion.identity);
 
         currentBlackhole = newBlackhole.GetComponent<BlackholeSkillController>();
         
-        currentBlackhole.SetupBlackhole( maximumSize, speedOfGrowth, amountOfSwords, swordAttackCooldown, angleIncrement);
+        currentBlackhole.SetupBlackhole( maximumSize, speedOfGrowth, amountOfSwords, swordAttackCooldown, angleIncrement, player);
     }
 
     public bool BlackholeIsFinished()
@@ -60,5 +72,24 @@ public class BlackholeSkill : Skill
         }
 
         return false;
+    }
+
+    private void BlackholeUpgrades(bool baseUpgrade, bool secondUpgrade, bool thirdUpgrade)
+    {
+        if (baseUpgrade)
+        {
+            angleIncrement = 60;
+            amountOfSwords = 360 / 60;
+        }
+        else if (secondUpgrade)
+        {
+            angleIncrement = 45;
+            amountOfSwords = 360 / 45;
+        }
+        else
+        {
+            angleIncrement = 30;
+            amountOfSwords = 360 / 30;
+        }
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7329831168749235102}
   - component: {fileID: 1620486945965469728}
   - component: {fileID: 1927217752084190169}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Sword Ultimate
   m_TagString: Untagged
   m_Icon: {fileID: 0}

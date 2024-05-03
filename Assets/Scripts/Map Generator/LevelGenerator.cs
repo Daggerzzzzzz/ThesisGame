@@ -523,7 +523,7 @@ public class LevelGenerator : MonoBehaviour
                                 zombieInstance.SetActive(false);
                             }
                         }
-
+                        
                         counter++;
                     }
                 }

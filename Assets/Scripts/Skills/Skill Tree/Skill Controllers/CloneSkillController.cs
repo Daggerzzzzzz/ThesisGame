@@ -25,7 +25,6 @@ public class CloneSkillController : MonoBehaviour
     private static readonly int AttackNumber = Animator.StringToHash("attackNumber");
     private static readonly int MoveX = Animator.StringToHash("moveX");
     private static readonly int MoveY = Animator.StringToHash("moveY");
-    private readonly HashSet<Enemy> attackedEnemies = new();
 
     private void Awake()
     {
@@ -92,19 +91,11 @@ public class CloneSkillController : MonoBehaviour
             Enemy enemy = hit.GetComponent<Enemy>();
             if (enemy != null)
             {
-                if (!attackedEnemies.Contains(enemy))
-                {
-                    enemy.DamageEffect();
-                    attackedEnemies.Add(enemy);
-                }
+                player.OnEntityStats.StatusAilments(hit.GetComponent<EntityStats>());
             }
         }
     }
-
-    private void ResetColliders()
-    {
-        attackedEnemies.Clear();
-    }
+    
 
     private void AttackDirection()
     {

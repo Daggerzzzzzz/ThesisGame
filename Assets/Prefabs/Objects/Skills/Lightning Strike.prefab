@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8359275113842843740}
   - component: {fileID: 8283827293757613683}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Lightning Strike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityStats: {fileID: 0}
-  lightningSpeed: 10
+  lightningSpeed: 15
 --- !u!1 &6709840393138090230
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,7 +119,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -836387209
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 10
   m_Sprite: {fileID: 2118875591, guid: 522c6bf76974ffe4a83e64c08f83c851, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

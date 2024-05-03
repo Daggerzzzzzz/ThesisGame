@@ -41,7 +41,6 @@ public class SwordSkillController : MonoBehaviour
     private int amountOfBounce;
     
     private List<Transform> enemyTargets;
-    public List<GameObject> spinSwordEnemyTargets;
     
     private static readonly int Rotation = Animator.StringToHash("rotation");
     private static readonly int MoveX = Animator.StringToHash("moveX");
@@ -118,7 +117,7 @@ public class SwordSkillController : MonoBehaviour
         rigidbody.velocity = movementDirection;
         anim.SetBool(Rotation, true);
         targetPosition = playerFacingDirection * 20f;
-        Invoke("DestroySword", 10f);
+        Invoke(nameof(DestroySword), 10f);
     }
 
     public void InitializeSpin(bool isSpinning, float maxDistance, float spinDuration, float onHitCooldown)
@@ -187,6 +186,7 @@ public class SwordSkillController : MonoBehaviour
         if (isBouncing && enemyTargets.Count > 0)
         {
             transform.position = Vector2.MoveTowards(transform.position, enemyTargets[targetIndex].position, bounceSpeed * Time.deltaTime);
+            
             if (Vector2.Distance(transform.position, enemyTargets[targetIndex].position) < .1f)
             {
                 SwordSkillDamage(enemyTargets[targetIndex].GetComponent<Enemy>());
@@ -238,15 +238,7 @@ public class SwordSkillController : MonoBehaviour
                     {
                         if (hit.CompareTag("Enemy"))
                         {
-                            if (!spinSwordEnemyTargets.Contains(hit.gameObject))
-                            {
-                                spinSwordEnemyTargets.Add(hit.gameObject);
-                            }
-                        }
-
-                        foreach (GameObject enemy in spinSwordEnemyTargets)
-                        {
-                            SwordSkillDamage(enemy.GetComponent<Enemy>());
+                            SwordSkillDamage(hit.GetComponent<Enemy>());
                         }
                     }
                 }
@@ -277,7 +269,7 @@ public class SwordSkillController : MonoBehaviour
 
     private void SwordSkillDamage(Enemy enemy)
     {
-        enemy.DamageEffect();
+        player.OnEntityStats.StatusAilments(enemy.GetComponent<EntityStats>());
         enemy.StartCoroutine("FreezeTimeFor", freezeTimeDuration);
     }
 

@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2533321594333013001}
   - component: {fileID: 468446077731288713}
   - component: {fileID: 6596170153605005267}
-  - component: {fileID: 4762682664280610738}
-  m_Layer: 0
+  - component: {fileID: 4495129061670355832}
+  m_Layer: 12
   m_Name: SwordSlash4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,13 +137,13 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.005, y: 0}
   m_Size: {x: 0.04, y: 0.3}
   m_Direction: 0
---- !u!114 &4762682664280610738
+--- !u!114 &4495129061670355832
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,7 +152,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 416543143749510787}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8ac95df7f3739245ab0c05c982ba0ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 79bc041fa578e994789a91bae6bc5b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <targets>k__BackingField: []

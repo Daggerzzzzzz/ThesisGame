@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 3828062509494750915}
   - component: {fileID: 8239924364765568693}
   - component: {fileID: 3815015677979619840}
-  m_Layer: 12
+  m_Layer: 11
   m_Name: Walls RD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1123,7 +1123,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.5, y: -0.48}
+  m_Offset: {x: -1.6, y: -0.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1134,7 +1134,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 19.38, y: 9.45}
+  m_Size: {x: 19, y: 9.25}
   m_EdgeRadius: 0
 --- !u!1 &5745504002891435215
 GameObject:
@@ -1596,7 +1596,7 @@ GameObject:
   - component: {fileID: 6206140924704154774}
   - component: {fileID: 720432624788252776}
   - component: {fileID: 7983414795946636782}
-  m_Layer: 12
+  m_Layer: 11
   m_Name: Walls Top RD
   m_TagString: Untagged
   m_Icon: {fileID: 0}

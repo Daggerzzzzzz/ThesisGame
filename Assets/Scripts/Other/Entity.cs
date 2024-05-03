@@ -10,7 +10,6 @@ public class Entity : MonoBehaviour
     public Rigidbody2D OnRb { get; set; }
     public EntityFx OnEntityFx { get; private set; }
     public EntityStats OnEntityStats { get; private set; }
-    public BoxCollider2D OnBoxCollider2D { get; private set; }
     public CapsuleCollider2D OnCapsuleCollider2D { get; private set; }
     #endregion
 
@@ -41,7 +40,6 @@ public class Entity : MonoBehaviour
         OnRb = GetComponent<Rigidbody2D>();
         OnEntityFx = GetComponent<EntityFx>();
         OnEntityStats = GetComponent<EntityStats>();
-        OnBoxCollider2D = GetComponent<BoxCollider2D>();
         OnCapsuleCollider2D = GetComponent<CapsuleCollider2D>();
     }
 
@@ -143,7 +141,7 @@ public class Entity : MonoBehaviour
         
     }
 
-    protected virtual void returnToNormalSpeed()
+    protected virtual void ReturnToNormalSpeed()
     {
         OnAnim.speed = 1;
     }

@@ -10,6 +10,7 @@ public class EntityFx : MonoBehaviour
     [Header("Flash Effects")] 
     [SerializeField]
     private Material hitEffect;
+    [SerializeField]
     private Material spriteLitDefault;
 
     [Header("Status Effects Colors")] 
@@ -23,7 +24,6 @@ public class EntityFx : MonoBehaviour
     private void Start()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
-        spriteLitDefault = sr.material;
     }
 
     private IEnumerator FlashEffects()

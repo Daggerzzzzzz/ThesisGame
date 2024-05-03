@@ -6,12 +6,12 @@ using UnityEngine;
 public class PlayerTrigger : MonoBehaviour
 {
     private Player OnPlayer => GetComponentInParent<Player>();
-    
-    private readonly HashSet<Enemy> attackedEnemies = new();
+    private bool attackOnce;
     
     private void PlayerAnimation()
     {
         OnPlayer.AnimationTriggerForPlayer();
+        ResetAttack();
     }
 
     private void AttackTrigger()
@@ -19,22 +19,18 @@ public class PlayerTrigger : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(OnPlayer.attackCheck.position, OnPlayer.attackCheckRadius);
         foreach (var hit in colliders)
         {
-            Enemy enemy = hit.GetComponent<Enemy>();
-            if (enemy != null)
+            if (hit.CompareTag("Enemy") && !attackOnce)
             {
-                if (!attackedEnemies.Contains(enemy))
-                {
-                    EnemyStats target = hit.GetComponent<EnemyStats>();
-                    OnPlayer.OnEntityStats.DoDamage(target);
-                    attackedEnemies.Add(enemy);
-                }
+                EnemyStats target = hit.GetComponent<EnemyStats>();
+                OnPlayer.OnEntityStats.DoDamage(target);
+                attackOnce = true;
             }
         }
     }
 
-    private void ResetColliders()
+    private void ResetAttack()
     {
-        attackedEnemies.Clear();
+        attackOnce = false;
     }
 
     private void ThrowSword()

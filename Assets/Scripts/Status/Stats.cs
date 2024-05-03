@@ -8,7 +8,7 @@ public class Stats
 {
     [SerializeField]
     private int baseValue;
-
+    [HideInInspector]
     public List<int> modifiers;
     
     public int GetValue()
