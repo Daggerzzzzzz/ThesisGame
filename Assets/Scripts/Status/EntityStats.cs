@@ -29,7 +29,7 @@ public class EntityStats : MonoBehaviour
     [Header("Main Stats")]
     public Stats strength; //1 point increase damage by 1 and crit damage by 1%
     public Stats agility; //1 point increase dodge by 1% and crit chance by 1%
-    public Stats vitality; //1 point increase health by 3 or 5 points, can decrease damage from status ailments
+    public Stats vitality; //1 point increase health by 5 points, can decrease damage from status ailments
     public Stats intelligence; //1 point increase damage of status effects
     
     [Header("Offensive Stats")] 
@@ -61,16 +61,14 @@ public class EntityStats : MonoBehaviour
     private int lightningDamage;
     
     public int currentHealth;
-    public int currentDamage;
     private bool isDead;
     
     public UnityEvent onHealthChanged;
     private EntityFx entityFx;
     
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         currentHealth = CalculateMaxHealthValue();
-        currentDamage = damage.GetValue();
         criticalDamage.SetDefaultValue(150);
         entityFx = GetComponent<EntityFx>();
     }
@@ -126,8 +124,8 @@ public class EntityStats : MonoBehaviour
         }
 
         totalDamage = CalculateTargetsArmor(entityStats, totalDamage);
-        entityStats.TakeDamage(totalDamage);
-        //StatusAilments(entityStats);
+        //entityStats.TakeDamage(totalDamage);
+        StatusAilments(entityStats);
     }
 
     private int CalculateTargetsArmor(EntityStats entityStats, int totalDamage)
@@ -212,7 +210,7 @@ public class EntityStats : MonoBehaviour
     
     public int CalculateMaxHealthValue()
     {
-        return maxHealth.GetValue() + vitality.GetValue() * 5;
+        return maxHealth.GetValue();
     }
 
     public virtual void StatusAilments(EntityStats target)
@@ -284,33 +282,9 @@ public class EntityStats : MonoBehaviour
             }
             else
             {
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 10);
-                float closestDistance = Mathf.Infinity;
-                Transform closestEnemy = null;
-                
-                foreach (var hit in colliders)
-                {
-                    if (hit.CompareTag("Enemy") && transform.position != hit.transform.position)
-                    {
-                        float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
-                        if (distanceToEnemy < closestDistance)
-                        {
-                            closestDistance = distanceToEnemy;
-                            closestEnemy = hit.transform;
-                        }
-
-                        if (closestEnemy == null)
-                        {
-                            closestEnemy = transform;
-                        }
-                    }
-                }
-
-                if (closestEnemy != null)
-                {
-                    GameObject newLightningPrefab = Instantiate(lightningPrefab, transform.position, Quaternion.identity);
-                    newLightningPrefab.GetComponent<LightningController>().SetupLightning(lightningDamage, closestEnemy.GetComponent<EntityStats>());
-                }
+                Debug.Log("First Damage" + lightningDamage);
+                GameObject newLightningPrefab = Instantiate(lightningPrefab, transform.position, Quaternion.identity);
+                newLightningPrefab.GetComponent<LightningController>().SetupLightning(lightningDamage);
             }
         }
     }

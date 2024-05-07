@@ -16,9 +16,9 @@ public class EnemyStats : EntityStats
     [SerializeField]
     private float percentageModifier = .4f;
     
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
         enemy = GetComponent<Enemy>();
         itemDrop = GetComponent<ItemDrop>();
         healthBar = GetComponentInChildren<HealthBar>();
@@ -70,6 +70,6 @@ public class EnemyStats : EntityStats
     {
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
-        itemDrop.DropItem();
+        itemDrop.GenerateDrop();
     }
 }

@@ -8,14 +8,10 @@ public class PlayerStats : EntityStats
 {
     private Player player;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         player = GetComponent<Player>();
-    }
-
-    protected override void Start()
-    {
-        base.Start();
     }
 
     public override void TakeDamage(int damage)

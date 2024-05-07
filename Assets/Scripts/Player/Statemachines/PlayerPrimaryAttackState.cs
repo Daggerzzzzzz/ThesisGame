@@ -8,11 +8,8 @@ public class PlayerPrimaryAttackState : PlayerState
 {
     private int comboCounter;
     private float lastTimeAttack;
-    private float comboWindow = 2;
-    private float loopDuration = 0.7f; 
-    private bool isInLoop = true;
-    
-    PlayerInputs playerInputs;
+
+    private PlayerInputs playerNewInputs;
         
     public PlayerPrimaryAttackState(Player playerState, PlayerStateMachine stateMachineState, string animationNameState) : base(playerState, stateMachineState, animationNameState)
     {
@@ -21,13 +18,8 @@ public class PlayerPrimaryAttackState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        playerInputs = player.OnPlayerInputs;
-        playerInputs.Player.Fire.Disable();
-        /*if (comboCounter > 2 || Time.time >= lastTimeAttack + comboWindow)
-        {
-            comboCounter = 0;
-        }*/
-        //stateTimer = .1f;
+        playerNewInputs = player.OnPlayerInputs;
+        playerNewInputs.Player.Fire.Disable();
     }
 
     public override void Update()
@@ -46,11 +38,7 @@ public class PlayerPrimaryAttackState : PlayerState
     public override void Exit()
     {
         base.Exit();
-        playerInputs.Player.Fire.Enable();
-        //player.StartCoroutine(nameof(Player.BusyFor), .7f);
-        //Debug.Log("Exit");
-        /*comboCounter ++;
-        lastTmeAttack = Time.time;*/
+        playerNewInputs.Player.Fire.Enable();
     }
     
 }

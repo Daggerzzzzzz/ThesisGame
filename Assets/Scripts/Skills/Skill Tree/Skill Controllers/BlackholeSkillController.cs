@@ -26,24 +26,29 @@ public class BlackholeSkillController : MonoBehaviour
     private bool canShrink;
     private bool canAttack;
     private bool allSwordsSummoned;
+    private bool alreadyScattered = false;
     
     private int amountOfSwords;
     private int amountOfAttacks;
     private int swordsSummoned; 
     
     private readonly List<Transform> targets = new();
-    private readonly List<GameObject> swords = new();
-    private CircleCollider2D collider;
+    [SerializeField]
+    private List<GameObject> swords = new();
+    private GameObject newSlash;
+    private CircleCollider2D circleCollider2D;
     private Player player;
+    
+    private static readonly int Scatter = Animator.StringToHash("scatter");
 
     private void Awake()
     {
-        collider = GetComponent<CircleCollider2D>();
+        circleCollider2D = GetComponent<CircleCollider2D>();
     }
 
     private void Start()
     {
-        circleRadius = collider.radius * maximumSize;
+        circleRadius = circleCollider2D.radius * maximumSize;
         currentAngleRad = 0f;
         angleIncrementRad = angleIncrement * Mathf.Deg2Rad;
         amountOfAttacks = amountOfSwords / 2;
@@ -56,11 +61,32 @@ public class BlackholeSkillController : MonoBehaviour
 
         if (allSwordsSummoned)
         {
-            canAttack = true;   
+            canAttack = true;
+            if (!alreadyScattered)
+            {
+                foreach (var sword in swords)
+                {
+                    sword.GetComponent<Animator>().SetTrigger(Scatter);
+                }
+
+                alreadyScattered = true;
+            }
+        }
+
+        if (swords.Count != 0)
+        {
+            for (int i = 0; i < swords.Count; i++)
+            {
+                if (swords[i] == null)
+                {
+                    swords.Remove(swords[i]);
+                }
+            }
         }
         
         if (swordAttackTimer < 0 && canAttack)
         {
+            Debug.Log("Pumasok Dito");
             swordAttackTimer = swordAttackCooldown;
             
             if (targets.Count == 0)
@@ -70,19 +96,10 @@ public class BlackholeSkillController : MonoBehaviour
                 canShrink = true;
                 return;
             }
-            
-            int randomSlash = UnityEngine.Random.Range(0, slashesList.Count);
-            int randomTarget = UnityEngine.Random.Range(0, targets.Count);
-            GameObject newSlash = Instantiate(slashesList[randomSlash], targets[randomTarget].transform.position, Quaternion.identity);
-            newSlash.GetComponent<SlashController>().SetupSwordSlash(player);
-            
-            amountOfAttacks--;
 
-            if (amountOfAttacks <= 0)
+            if (newSlash == null)
             {
-                PlayerCanExitUltimate = true;
-                canAttack = false;
-                canShrink = true;
+                SlashAttack();
             }
         }
         
@@ -93,7 +110,26 @@ public class BlackholeSkillController : MonoBehaviour
             BulkSwordSummon();
         }
         
+        if (swords.Count == 0)
+        {
+            PlayerCanExitUltimate = true;
+            canAttack = false;
+            canShrink = true;
+        }
+        
         DestroyBlackhole();
+    }
+
+    private void SlashAttack()
+    {
+        if (amountOfAttacks > 0)
+        {
+            int randomSlash = UnityEngine.Random.Range(0, slashesList.Count);
+            int randomTarget = UnityEngine.Random.Range(0, targets.Count);
+            newSlash = Instantiate(slashesList[randomSlash], targets[randomTarget].transform.position, Quaternion.identity);
+            newSlash.GetComponent<SlashController>().SetupSwordSlash(player);
+            amountOfAttacks--;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -146,19 +182,6 @@ public class BlackholeSkillController : MonoBehaviour
             }
         }
     }
-    
-    private void DestroySword()
-    {
-        if (swords.Count <= 0)
-        {
-            return;
-        }
-
-        foreach (var sword in swords)
-        {
-            Destroy(sword);
-        }
-    }
 
     private void DestroyBlackhole()
     {
@@ -175,9 +198,8 @@ public class BlackholeSkillController : MonoBehaviour
 
     private IEnumerator SlashAnimationDelay()
     {
-        yield return new WaitForSeconds(swordAttackCooldown * amountOfSwords + 1);
+        yield return new WaitForSeconds(swordAttackCooldown * amountOfSwords);
         allSwordsSummoned = true;
-        DestroySword();
     }
 
     public void SetupBlackhole(float maximumSize, float speedOfGrowth, int amountOfSwords, float swordAttackCooldown, float angleIncrement, Player player)

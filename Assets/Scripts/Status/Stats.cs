@@ -8,7 +8,7 @@ public class Stats
 {
     [SerializeField]
     private int baseValue;
-    [HideInInspector]
+    [SerializeField]
     public List<int> modifiers;
     
     public int GetValue()
@@ -23,14 +23,14 @@ public class Stats
         return finalValue;   
     }
 
-    public void AddModifiers(int modifiers)
+    public void AddModifiers(int _modifiers)
     {
-        this.modifiers.Add(modifiers);
+        modifiers.Add(_modifiers);
     }
 
-    public void RemoveModifiers(int modifiers)
+    public void RemoveModifiers(int _modifiers)
     {
-        this.modifiers.RemoveAt(modifiers);
+        modifiers.Remove(_modifiers);
     }
 
     public void SetDefaultValue(int value)

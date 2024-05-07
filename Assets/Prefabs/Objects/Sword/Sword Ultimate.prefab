@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7329831168749235102}
   - component: {fileID: 1620486945965469728}
+  - component: {fileID: 5126051333561926861}
   - component: {fileID: 1927217752084190169}
   m_Layer: 12
   m_Name: Sword Ultimate
@@ -28,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.1070426, y: 1.5269384, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -85,6 +86,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5126051333561926861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2574417356172668232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e5db5a263456e479213c0fd95e315b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &1927217752084190169
 Animator:
   serializedVersion: 5

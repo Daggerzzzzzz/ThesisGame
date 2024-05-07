@@ -8,67 +8,90 @@ public class LightningController : MonoBehaviour
     [SerializeField] 
     private EntityStats entityStats;
     [SerializeField] 
-    private float lightningSpeed;
+    private LayerMask enemyLayer;
+    [SerializeField] 
+    private GameObject lightningController;
+    [SerializeField] 
+    private GameObject beenStruck;
+    [SerializeField] 
+    private GameObject endObject;
+    [SerializeField] 
+    private int amountToChain;
 
     private Animator anim;
-    private bool triggered;
-    private int damage;
+    private CircleCollider2D circleCollider2D;
+    [SerializeField] 
+    private GameObject startObject;
+    private ParticleSystem part;
     
-    private static readonly int Hit = Animator.StringToHash("hit");
-    private static readonly int MoveX = Animator.StringToHash("moveX");
-    private static readonly int MoveY = Animator.StringToHash("moveY");
-
+    private int damage;
+    private int singleSpawns;
+    
     private void Awake()
     {
         anim = GetComponentInChildren<Animator>();
+        part = GetComponent<ParticleSystem>();
+        circleCollider2D = GetComponent<CircleCollider2D>();
+        startObject = gameObject;
     }
 
     private void Start()
     {
-        LightningAnimation();
+        if (amountToChain == 0)
+        {
+            Destroy(gameObject);
+        }
+
+        singleSpawns = 1;
     }
 
-    private void Update()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (entityStats == null)
-        {
-            return;
-        }
-        
-        if (triggered)
-        {
-            return;
-        }
-        
-        LightningAnimation();
-        
-        transform.position = Vector2.MoveTowards(transform.position, entityStats.transform.position,
-            lightningSpeed * Time.deltaTime);
-
-        if (Vector2.Distance(transform.position, entityStats.transform.position) < 0.1f)
-        {
-            Invoke(nameof(DamageAndDestroy), .2f);
+        Debug.Log("damage" + damage);
+        if (enemyLayer == (enemyLayer | (1 << other.gameObject.layer)) && !other.GetComponentInChildren<EnemyStruck>())
+        { 
+            if (singleSpawns != 0)
+            {
+                endObject = other.gameObject;
+                amountToChain -= 1;
             
-            triggered = true;
-            anim.SetTrigger(Hit);
+                GameObject newLightning = Instantiate(lightningController, other.gameObject.transform.position, Quaternion.identity);
+                newLightning.GetComponent<LightningController>().SetupLightning(damage);
+                Instantiate(beenStruck, other.gameObject.transform);
+                entityStats = other.GetComponent<EntityStats>();
+            
+                anim.StopPlayback();
+                DamageAndDestroy();
+                ParticleAnimation();
+                singleSpawns--;
+            }
         }
     }
 
-    public void SetupLightning(int damage, EntityStats entityStats)
+    public void SetupLightning(int damage)
     {
         this.damage = damage;
-        this.entityStats = entityStats;
     }
     
-    private void LightningAnimation()
-    {
-        anim.SetFloat(MoveX, entityStats.transform.position.x - transform.position.x);
-        anim.SetFloat(MoveY, entityStats.transform.position.y - transform.position.y);
-    }
-
     private void DamageAndDestroy()
     {
+        circleCollider2D.enabled = false;
         entityStats.TakeDamage(damage);
         Destroy(gameObject, 1f);
+    }
+
+    private void ParticleAnimation()
+    {
+        part.Play();
+        var emitParams = new ParticleSystem.EmitParams();
+        
+        emitParams.position = startObject.transform.position;
+        part.Emit(emitParams, 1);
+        
+        emitParams.position = endObject.transform.position;
+        part.Emit(emitParams, 1);
+
+        emitParams.position = (startObject.transform.position + endObject.transform.position) / 2;
+        part.Emit(emitParams, 1);
     }
 }

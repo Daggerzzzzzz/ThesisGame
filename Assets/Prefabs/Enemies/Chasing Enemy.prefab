@@ -190,6 +190,8 @@ MonoBehaviour:
   animatorDirection: {x: 0, y: 0}
   moveSpeed: 5
   idleTime: 0
+  attackCooldown: 0
+  lastTimeAttacked: 0
   enemyDataSo: {fileID: 11400000, guid: b110da029850053458ae324a75bc74b9, type: 2}
 --- !u!114 &3223229283606060283
 MonoBehaviour:
@@ -277,6 +279,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 2100000, guid: e219f0f867111324986053c63303258e, type: 2}
+  spriteLitDefault: {fileID: 0}
+  freezeColor: []
+  burnColor: []
+  shockColor: []
 --- !u!114 &413474813214161917
 MonoBehaviour:
   m_ObjectHideFlags: 0

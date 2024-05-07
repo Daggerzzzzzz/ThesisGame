@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -8,9 +9,17 @@ public class ItemDrop : MonoBehaviour
     [SerializeField] 
     private GameObject dropPrefab;
     [SerializeField] 
-    private ItemDataSO itemDataSo;
+    private ItemDataSO[] possibleDrop;
 
-    public void DropItem()
+    public virtual void GenerateDrop()
+    {
+        for (int i = 0; i < possibleDrop.Length; i++)
+        {
+            DropItem(possibleDrop[i]);
+        }
+    }
+    
+    public void DropItem(ItemDataSO itemDataSo)
     {
         GameObject newDrop = Instantiate(dropPrefab, transform.position, quaternion.identity);
         newDrop.GetComponent<ItemObject>().SetupItem(itemDataSo);

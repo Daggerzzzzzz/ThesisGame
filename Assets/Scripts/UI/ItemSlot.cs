@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+public class ItemSlot : MonoBehaviour
 {
     [SerializeField]
     private Image itemImage;
@@ -41,8 +38,17 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             }
         }
     }
+    
+    public void CleanUpSlot()
+    {
+        item = null;
 
-    public void OnPointerEnter(PointerEventData eventData)
+        itemImage.sprite = null;
+        itemImage.color = Color.clear;
+        itemText.text = "";
+    }
+
+    /*public void OnPointerEnter(PointerEventData eventData)
     {
         if (item.itemDataSo == null)
         {
@@ -58,10 +64,5 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             return;
         }
         ui.itemTooltip.HideTooltip();
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log("Pressed Something");
-    }
+    }*/
 }

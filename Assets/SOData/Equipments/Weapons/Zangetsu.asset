@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 446c3cff0661e97438fc1093d7a40619, type: 3}
+  m_Name: Zangetsu
+  m_EditorClassIdentifier: 
+  itemType: 1
+  itemName: Zangetsu
+  icon: {fileID: 1844952127, guid: 0bbea31685432c94d8c53eec6c9c8c56, type: 3}
+  equipmentType: 1
+  position: {x: -4, y: -2}
+  strength: 0
+  agility: 5
+  intelligence: 0
+  burnDamage: 0
+  freezeDamage: 10
+  shockDamage: 0

@@ -6,17 +6,13 @@ public class GeneticAlgorithm
 {
     private int populationSize;
     public List<DNA> population;
-    private int generation;
     private DNA bestSolution;
-    private List<float> listOfSolutions;
     
     public GeneticAlgorithm(int populationSize)
     {
         this.populationSize = populationSize;
         population = new List<DNA>();
-        generation = 0;
         bestSolution = null;
-        listOfSolutions = new List<float>();
     }
     
     public void InitializePopulation(List<int> batch, List<float> difficulty, int distance)
@@ -100,7 +96,6 @@ public class GeneticAlgorithm
             }
             OrderPopulation();
             DNA best = population[0];
-            listOfSolutions.Add(best.ScoreEvaluation);
             BestIndividual(best);
         }
         

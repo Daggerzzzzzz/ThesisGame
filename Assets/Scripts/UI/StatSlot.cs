@@ -38,21 +38,5 @@ public class StatSlot : MonoBehaviour
         {
             statValueText.text = playerStats.StatToGet(statType).GetValue().ToString();
         }
-
-        statValueText.text = statType switch
-        {
-            StatType.HEALTH => playerStats.CalculateMaxHealthValue().ToString(),
-            StatType.DAMAGE => (playerStats.damage.GetValue() + playerStats.strength.GetValue()).ToString(),
-            StatType.CRITCHANCE => (playerStats.criticalChance.GetValue() + playerStats.agility.GetValue()).ToString(),
-            StatType.CRITICALDAMAGE => (playerStats.criticalDamage.GetValue() + playerStats.strength.GetValue())
-                .ToString(),
-            StatType.EVASION => (playerStats.dodge.GetValue() + playerStats.agility.GetValue()).ToString(),
-            StatType.BURNDAMAGE => (playerStats.burnDamage.GetValue() + playerStats.intelligence.GetValue()).ToString(),
-            StatType.FREEZEDAMAGE => (playerStats.freezeDamage.GetValue() + playerStats.intelligence.GetValue())
-                .ToString(),
-            StatType.SHOCKDAMAGE => (playerStats.shockDamage.GetValue() + playerStats.intelligence.GetValue())
-                .ToString(),
-            _ => statValueText.text
-        };
     }
 }

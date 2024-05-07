@@ -23,7 +23,7 @@ public class SwordSkillController : MonoBehaviour
     
     private Animator anim;
     private CircleCollider2D circleCollider;
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D rb;
     private Player player;
 
     private bool canRotate;
@@ -51,7 +51,7 @@ public class SwordSkillController : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         circleCollider = GetComponentInChildren<CircleCollider2D>();
-        rigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         canRotate = true;
     }
 
@@ -64,7 +64,7 @@ public class SwordSkillController : MonoBehaviour
     {
         if (canRotate)
         {
-            rigidbody.velocity = playerFacingDirection.normalized * throwSword;
+            rb.velocity = playerFacingDirection.normalized * throwSword;
         }
 
         if (canChangeSwordPosition)
@@ -114,7 +114,7 @@ public class SwordSkillController : MonoBehaviour
         throwSword = throwForce;
         swordSpeed = returnSpeed;
         playerFacingDirection = movementDirection;
-        rigidbody.velocity = movementDirection;
+        rb.velocity = movementDirection;
         anim.SetBool(Rotation, true);
         targetPosition = playerFacingDirection * 20f;
         Invoke(nameof(DestroySword), 10f);
@@ -138,7 +138,7 @@ public class SwordSkillController : MonoBehaviour
 
     public void ReturnSword()
     {
-        rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
         transform.parent = null;
         isReturning = true;
         anim.SetBool(Stuck, false);
@@ -155,8 +155,8 @@ public class SwordSkillController : MonoBehaviour
         canRotate = false;
         circleCollider.enabled = false;
         
-        rigidbody.isKinematic = true;
-        rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+        rb.isKinematic = true;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
 
         if (isBouncing && enemyTargets.Count > 0)
         {
@@ -177,7 +177,7 @@ public class SwordSkillController : MonoBehaviour
     private void StopWhenEnemiesEncountered()
     {
         wasStopped = true;
-        rigidbody.constraints = RigidbodyConstraints2D.FreezePosition;
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
         spinTimer = spinDuration;
     }
 

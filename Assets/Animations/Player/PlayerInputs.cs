@@ -80,6 +80,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Equip"",
+                    ""type"": ""Button"",
+                    ""id"": ""089a66fe-1967-4cb5-8636-52391144f841"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -234,6 +243,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Teleport"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5292ae26-2be1-4787-bac6-366d105aee7b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Equip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -827,6 +847,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Ultimate = m_Player.FindAction("Ultimate", throwIfNotFound: true);
         m_Player_Teleport = m_Player.FindAction("Teleport", throwIfNotFound: true);
+        m_Player_Equip = m_Player.FindAction("Equip", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -906,6 +927,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Ultimate;
     private readonly InputAction m_Player_Teleport;
+    private readonly InputAction m_Player_Equip;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -916,6 +938,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @Ultimate => m_Wrapper.m_Player_Ultimate;
         public InputAction @Teleport => m_Wrapper.m_Player_Teleport;
+        public InputAction @Equip => m_Wrapper.m_Player_Equip;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -943,6 +966,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Teleport.started += instance.OnTeleport;
             @Teleport.performed += instance.OnTeleport;
             @Teleport.canceled += instance.OnTeleport;
+            @Equip.started += instance.OnEquip;
+            @Equip.performed += instance.OnEquip;
+            @Equip.canceled += instance.OnEquip;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -965,6 +991,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Teleport.started -= instance.OnTeleport;
             @Teleport.performed -= instance.OnTeleport;
             @Teleport.canceled -= instance.OnTeleport;
+            @Equip.started -= instance.OnEquip;
+            @Equip.performed -= instance.OnEquip;
+            @Equip.canceled -= instance.OnEquip;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1153,6 +1182,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnUltimate(InputAction.CallbackContext context);
         void OnTeleport(InputAction.CallbackContext context);
+        void OnEquip(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

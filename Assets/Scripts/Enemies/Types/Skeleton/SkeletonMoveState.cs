@@ -6,7 +6,7 @@ public class SkeletonMoveState : EnemyState
 {
     private EnemySkeleton enemy;
     
-    public SkeletonMoveState(Enemy enemyBase, EnemyStateMachine stateMachineState, string animationNameState, EnemySkeleton _enemy) : base(enemyBase, stateMachineState, animationNameState)
+    public SkeletonMoveState(Enemy enemyBase, EnemyStateMachine stateMachineState, string animationNameState, EnemySkeleton enemy) : base(enemyBase, stateMachineState, animationNameState)
     {
         this.enemy = enemy;
     }

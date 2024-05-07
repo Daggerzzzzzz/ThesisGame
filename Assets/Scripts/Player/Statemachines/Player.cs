@@ -8,11 +8,12 @@ public class Player : Entity
     [Header("Dash Inputs")] 
     [SerializeField]
     private float distance;
+    [HideInInspector]
+    public Vector2 dashDirection;
     private const float DashCheckRadius = 1f;
     public float dashSpeed;
     public float dashDuration;
     private float normalDashSpeed;
-    public Vector2 dashDirection;
     
     [Header("Clone Inputs")] 
     private RaycastHit2D dashHit;
@@ -22,9 +23,13 @@ public class Player : Entity
     
     [Header("Movement Inputs")]
     public float moveSpeed = 10f;
-    [SerializeField]
     private Transform playerTransform;
     private float normalMoveSpeed;
+
+    [Header("Equipment Tooltip")] 
+    public GameObject eKey;
+    public GameObject equipmentInfo;
+    public ItemTooltip itemTooltip;
     
     public static Transform OnTransformPosition { get; private set; }
     public SkillManager OnSkill { get; private set; }
@@ -43,7 +48,9 @@ public class Player : Entity
 
     #endregion
     
+    [HideInInspector]
     public float lastImageXpos;
+    [HideInInspector]
     public float lastImageYpos;
     public bool OnIsBusy { get; private set; }
     public PlayerInputs OnPlayerInputs { get; private set; }

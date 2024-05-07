@@ -1,17 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class UI : MonoBehaviour
 {
     public ItemTooltip itemTooltip;
-
-    private void Start()
-    {
-        //itemTooltip = GetComponentInChildren<ItemTooltip>();
-    }
 
     public void SwitchMenus(GameObject menu)
     {
