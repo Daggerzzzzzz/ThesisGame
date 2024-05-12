@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 1
   itemName: Guardian Angel
-  icon: {fileID: 829115968, guid: a87b582b1b34d0347baaa001d0a3cfa3, type: 3}
+  icon: {fileID: 21300000, guid: 650f0546f5da1be439c8b522bc2916ef, type: 3}
   equipmentType: 0
-  position: {x: -1, y: 0}
+  position: {x: -1, y: -0.4}
   vitality: 10
   armor: 5

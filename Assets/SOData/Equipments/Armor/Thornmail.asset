@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 1
   itemName: Thornmail
-  icon: {fileID: 1892527650, guid: a87b582b1b34d0347baaa001d0a3cfa3, type: 3}
+  icon: {fileID: 21300000, guid: 6d49cbbbb2c1a194e91f2a3201e55d36, type: 3}
   equipmentType: 0
-  position: {x: -4, y: 0}
+  position: {x: -4, y: -0.4}
   vitality: 0
   armor: 20

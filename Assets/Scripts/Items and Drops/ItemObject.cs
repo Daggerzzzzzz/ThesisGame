@@ -7,21 +7,28 @@ public class ItemObject : MonoBehaviour
 {
     [field:SerializeField]
     public ItemDataSO ItemDataSo { get; private set; }
-    
-    private void InitializeItem()
-    {
-        if (ItemDataSo == null)
-        {
-            return;
-        }
-        GetComponent<SpriteRenderer>().sprite = ItemDataSo.icon;
-        gameObject.name = ItemDataSo.name;
-    }
 
     public void SetupItem(ItemDataSO _itemDataSo)
     {
         ItemDataSo = _itemDataSo;
-        InitializeItem();
+        
+        if (ItemDataSo == null)
+        {
+            return;
+        }
+        
+        if (ItemDataSo.itemType == ItemType.EQUIPMENT)
+        {
+            EquipmentDataSO equipmentDataSo = ItemDataSo as EquipmentDataSO;
+            if (equipmentDataSo != null) gameObject.name = equipmentDataSo.equipmentType.ToString().ToLower();
+        }
+        else
+        {
+            gameObject.name = ItemDataSo.name;
+        }
+        
+        GetComponent<SpriteRenderer>().sprite = ItemDataSo.icon;
+        
     }
 
     public void ItemPickup()

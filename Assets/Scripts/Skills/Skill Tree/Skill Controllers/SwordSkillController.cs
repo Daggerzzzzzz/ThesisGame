@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class SwordSkillController : MonoBehaviour
@@ -142,6 +139,8 @@ public class SwordSkillController : MonoBehaviour
         transform.parent = null;
         isReturning = true;
         anim.SetBool(Stuck, false);
+        
+        //player.OnSword.
         ResetAnimator();
     }
     
@@ -269,18 +268,23 @@ public class SwordSkillController : MonoBehaviour
 
     private void SwordSkillDamage(Enemy enemy)
     {
-        player.OnEntityStats.StatusAilments(enemy.GetComponent<EntityStats>());
-        enemy.StartCoroutine("FreezeTimeFor", freezeTimeDuration);
+        EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
+        
+        player.OnEntityStats.DoDamage(enemyStats);
+
+        if (player.OnSkill.Sword.timeStopUnlocked)
+        { 
+            enemy.StartCoroutine("FreezeTimeFor", freezeTimeDuration);
+        }
+        
+        if (player.OnSkill.Sword.vulnerableUnlocked)
+        { 
+            enemyStats.MakeVulnerable(freezeTimeDuration);
+        }
     }
 
     private void DestroySword()
     {
         Destroy(gameObject);
-    }
-    
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, 0.75f);
     }
 }

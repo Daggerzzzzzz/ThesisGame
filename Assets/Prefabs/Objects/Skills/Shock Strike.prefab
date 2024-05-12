@@ -9801,7 +9801,7 @@ MonoBehaviour:
   lightningController: {fileID: 8030014435009751533}
   beenStruck: {fileID: 398871499061640560, guid: a6fd0265a7bf11c4c809cfb4f181c6f0, type: 3}
   endObject: {fileID: 0}
-  amountToChain: 4
+  amountToChain: 2
   startObject: {fileID: 0}
 --- !u!58 &8446855365414476637
 CircleCollider2D:

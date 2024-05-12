@@ -18,7 +18,6 @@ public class Player : Entity
     [Header("Clone Inputs")] 
     private RaycastHit2D dashHit;
     public Collider2D OnEnemyDashedCollider { get; private set; }
-    public bool OnCanCreateClone { get; internal set; }
 
     
     [Header("Movement Inputs")]
@@ -92,11 +91,11 @@ public class Player : Entity
         CheckForDashInput();
         OnTransformPosition = playerTransform;
 
-        if (OnPlayerInputs.Player.Teleport.IsPressed())
+        if (OnPlayerInputs.Player.Teleport.IsPressed() && OnSkill.Kunai.KunaiUnlocked)
         {
             OnPlayerInputs.Player.Teleport.Disable();
             OnSkill.Kunai.CanUseSkill();
-            if (OnSkill.Kunai.CanMultiStack)
+            if (OnSkill.Kunai.KunaiStackExplodeUnlocked)
             {
                 OnPlayerInputs.Player.Teleport.Enable();
             }
@@ -121,6 +120,11 @@ public class Player : Entity
 
     private void CheckForDashInput()
     {
+        if (OnSkill.Dash.DashUnlocked == false)
+        {
+            return;
+        }
+        
         if (OnPlayerInputs.Player.Dash.IsPressed() && SkillManager.Instance.Dash.CanUseSkill())
         {
             if (transform != null)
@@ -129,14 +133,6 @@ public class Player : Entity
                 PlayerAfterImagePool.Instance.GetFromPool();
                 lastImageXpos = transform.position.x;
                 lastImageYpos = transform.position.y;
-
-                dashHit = Physics2D.CircleCast(transform.position, DashCheckRadius, dashDirection * dashSpeed);
-                
-                if (dashHit.collider != null && dashHit.collider.CompareTag("Movement Collider"))
-                {
-                    OnCanCreateClone = true;
-                    OnEnemyDashedCollider = dashHit.collider;
-                }
 
                 if (dashDirection != Vector2.zero)
                 {

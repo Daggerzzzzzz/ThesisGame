@@ -25,4 +25,11 @@ public class PlayerStats : EntityStats
         base.EntityDeath();
         player.EntityDeath();
     }
+
+    protected override void ApplyStatusAilments(bool burn, bool freeze, bool shock)
+    {
+        playerAttack = true;
+        
+        base.ApplyStatusAilments(burn, freeze, shock);
+    }
 }

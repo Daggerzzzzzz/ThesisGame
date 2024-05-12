@@ -72,4 +72,11 @@ public class EnemyStats : EntityStats
         Destroy(gameObject);
         itemDrop.GenerateDrop();
     }
+
+    protected override void ApplyStatusAilments(bool burn, bool freeze, bool shock)
+    {
+        playerAttack = false;
+        
+        base.ApplyStatusAilments(burn, freeze, shock);
+    }
 }

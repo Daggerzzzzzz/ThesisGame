@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 1
   itemName: Warmogs
-  icon: {fileID: -394485056, guid: a87b582b1b34d0347baaa001d0a3cfa3, type: 3}
+  icon: {fileID: 21300000, guid: 7cc4c691b0ce75744a15dc596249c6f1, type: 3}
   equipmentType: 0
-  position: {x: 2, y: 0}
+  position: {x: 2, y: -0.4}
   vitality: 5
   armor: 5

@@ -10,33 +10,29 @@ public class UIInputManager : SingletonMonoBehavior<UIInputManager>
     private GraphicRaycaster uIRayCaster;
     private PointerEventData pointerData;
     private List<RaycastResult> pointerResults;
-    
-    public GameObject pauseMenu;
-
-    private UI pauseMenuUI;
 
     protected override void Awake()
     {
         base.Awake();
         inputModule = GetComponent<InputSystemUIInputModule>();
-        uIRayCaster = pauseMenu.GetComponent<GraphicRaycaster>();
     }
 
     private void Start()
     {
         pointerData = new PointerEventData(EventSystem.current);
         pointerResults = new List<RaycastResult>();
-        pauseMenuUI = pauseMenu.GetComponent<UI>();
     }
 
-    private void Update()
+    public static Vector2 GetMousePosition()
     {
-        if (inputModule.leftClick.action.WasReleasedThisFrame())
+        if (Instance == null)
         {
-            GetUIElements();
+            return new Vector2();
         }
-
-        GetUIElements();
+        else
+        {
+            return Instance.inputModule.point.action.ReadValue<Vector2>();
+        }
     }
     
     private void GetUIElements()
@@ -48,32 +44,9 @@ public class UIInputManager : SingletonMonoBehavior<UIInputManager>
 
         foreach (RaycastResult result in pointerResults)
         {
+            Debug.Log(result);
             GameObject uiElement = result.gameObject;
-
-            if (uiElement.name == "Armor Slot")
-            {
-                ArmorSlot armorSlot = uiElement.GetComponent<ArmorSlot>();
-                ArmorDataSO armorDataSo = armorSlot.item.itemDataSo as ArmorDataSO;
-
-                if (armorSlot.item.itemDataSo == null)
-                {
-                    return;
-                }
                 
-                pauseMenuUI.itemTooltip.ShowArmorTooltip(armorDataSo);
-            }
-            else if (uiElement.name == "Weapon Slot")
-            {
-                WeaponSlot weaponSlot = uiElement.GetComponent<WeaponSlot>();
-                WeaponDataSO weaponDataSo = weaponSlot.item.itemDataSo as WeaponDataSO;
-
-                if (weaponSlot.item.itemDataSo == null)
-                {
-                    return;
-                }
-                
-                pauseMenuUI.itemTooltip.ShowWeaponTooltip(weaponDataSo);
-            }
         }
     }
 }

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 1
   itemName: Ryujin Jakka
-  icon: {fileID: -522131548, guid: 0bbea31685432c94d8c53eec6c9c8c56, type: 3}
+  icon: {fileID: 21300000, guid: 51523486b62f8ae4681be1b5d331525b, type: 3}
   equipmentType: 1
-  position: {x: -1, y: -2}
+  position: {x: -1, y: -2.2}
   strength: 0
   agility: 0
   intelligence: 5

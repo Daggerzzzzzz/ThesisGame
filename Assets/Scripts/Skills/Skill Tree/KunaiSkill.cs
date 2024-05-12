@@ -2,23 +2,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KunaiSkill : Skill
 {
     [SerializeField] 
     private GameObject kunaiPrefab;
     
-    [Header("Teleporting Kunai")]
+    [Header("Kunai Teleport")]
     [SerializeField]
-    private bool canTeleport;
-    
-    [Header("Exploding Kunai")]
-    [SerializeField]
-    private bool canExplode;
+    private SkillTreeSlot unlockKunaiTeleportButton;
+    public bool KunaiUnlocked { get; private set; }
 
-    [field:Header("Multiple Kunai")]
-    [field:SerializeField]
-    public bool CanMultiStack { get; set; }
+    [Header("Kunai Switch Explode")]
+    [SerializeField]
+    private SkillTreeSlot unlockKunaiSwitchExplodeButton;
+    public bool KunaiSwitchExplodeUnlocked { get; private set; }
+
+
+    [Header("Kunai Stack Explode")]
+    [SerializeField]
+    private SkillTreeSlot unlockKunaiStackExplodeButton;
+    public bool KunaiStackExplodeUnlocked { get; set; }
+    
+    
     [SerializeField]
     private int amountOfStacks;
     [SerializeField]
@@ -35,12 +42,45 @@ public class KunaiSkill : Skill
     private bool firstEntered = true;
     [field:SerializeField]
     public GameObject CurrentKunai { get; private set; }
-    
+
+    protected override void Start()
+    {
+        base.Start();
+        
+        unlockKunaiTeleportButton.GetComponent<Button>().onClick.AddListener(UnlockKunai);
+        unlockKunaiSwitchExplodeButton.GetComponent<Button>().onClick.AddListener(UnlockKunaiSwitchExplode);
+        unlockKunaiStackExplodeButton.GetComponent<Button>().onClick.AddListener(UnlockKunaiStackExplode);
+    }
+
     protected override void Update()
     {
         base.Update();
         CheckForMissingObjects(summonedKunais);
         CheckForMissingObjects(kunaiLeft);
+    }
+
+    private void UnlockKunai()
+    {
+        if (unlockKunaiTeleportButton.unlocked)
+        {
+            KunaiUnlocked = true;
+        }
+    }
+    
+    private void UnlockKunaiSwitchExplode()
+    {
+        if (unlockKunaiSwitchExplodeButton.unlocked)
+        {
+            KunaiSwitchExplodeUnlocked = true;
+        }
+    }
+    
+    private void UnlockKunaiStackExplode()
+    {
+        if (unlockKunaiStackExplodeButton.unlocked)
+        {
+            KunaiStackExplodeUnlocked = true;
+        }
     }
 
     public override void UseSkill()
@@ -49,10 +89,10 @@ public class KunaiSkill : Skill
 
         if (CanUseMultiStack())
         {
-            return;
+            
         }
 
-        if (canExplode || canTeleport)
+        else if (KunaiSwitchExplodeUnlocked || KunaiUnlocked)
         {
             if (CurrentKunai == null)
             {
@@ -61,18 +101,23 @@ public class KunaiSkill : Skill
                 
                 pressedTwice = false;
                 player.OnPlayerInputs.Player.Teleport.Enable();
+
+                tempCooldown = cooldown;
+                cooldown = 0;
             }
-            else
+            else if (CurrentKunai != null)
             {
                 player.OnPlayerInputs.Player.Teleport.Disable();
                 Vector2 playerBeforePos = player.transform.position;
-            
+        
                 player.transform.position = CurrentKunai.transform.position;
                 CurrentKunai.transform.position = playerBeforePos;
 
                 pressedTwice = true;
-                currentKunaiSkillController.SetupKunai(canExplode, canTeleport, pressedTwice, CanMultiStack, player);
+                currentKunaiSkillController.SetupKunai(KunaiSwitchExplodeUnlocked, KunaiUnlocked, pressedTwice, KunaiStackExplodeUnlocked, player);
                 currentKunaiSkillController.KunaiExplosion();
+
+                cooldown = tempCooldown;
                 StartCoroutine(ExplosionAnimationDelay());
             }
         }
@@ -80,7 +125,7 @@ public class KunaiSkill : Skill
 
     private bool CanUseMultiStack()
     {
-        if (CanMultiStack)
+        if (KunaiStackExplodeUnlocked)
         {
             if (firstEntered)
             {
@@ -116,13 +161,13 @@ public class KunaiSkill : Skill
         }
         return false;
     }
-
+    
     private void DeleteAllKunais()
     {
         foreach (GameObject kunai in summonedKunais)
         {
             currentKunaiSkillController = kunai.GetComponent<KunaiSkillController>();
-            currentKunaiSkillController.SetupKunai(canExplode, canTeleport, pressedTwice, CanMultiStack, player);
+            currentKunaiSkillController.SetupKunai(KunaiSwitchExplodeUnlocked, KunaiUnlocked, pressedTwice, KunaiStackExplodeUnlocked, player);
         }
     }
 

@@ -42,12 +42,12 @@ public class PlayerState
          stateMachine.ChangeState(player.OnPrimaryAttackState);
       }
 
-      if (playerInputs.Player.ThrowSword.WasPressedThisFrame() && HasNoSword())
+      if (playerInputs.Player.ThrowSword.WasPressedThisFrame() && HasNoSword() && player.OnSkill.Sword.swordFlyingUnlocked)
       {
          stateMachine.ChangeState(player.OnPlayerAimState);
       }
 
-      if (playerInputs.Player.Ultimate.IsPressed())
+      if (playerInputs.Player.Ultimate.IsPressed() && player.OnSkill.Blackhole.baseUpgradeUnlock && player.OnSkill.Blackhole.CanUseSkill())
       {
          stateMachine.ChangeState(player.OnPlayerBlackholeState);
       }

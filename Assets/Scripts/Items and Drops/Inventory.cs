@@ -70,7 +70,6 @@ public class Inventory : SingletonMonoBehavior<Inventory>
             if (armor.itemDataSo == null )
             {
                 armor = newItem;
-                newItem.stackSize++;
             }
             else
             {

@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.tvOS;
 
 public class HealthBar : MonoBehaviour
 {
+    [SerializeField]
     private Material material;
     private EntityStats entityStats;
     private SpriteRenderer sr;
@@ -14,14 +11,22 @@ public class HealthBar : MonoBehaviour
 
     private void Awake()
     {
-        material = GetComponentInChildren<SpriteRenderer>().material;
         sr = GetComponentInChildren<SpriteRenderer>();
     }
 
     private void Start()
     {
         entityStats = GetComponentInParent<EntityStats>();
-        UpdateHealthUI();
+        material = sr.GetComponent<SpriteRenderer>().material;
+        
+        if (material != null)
+        {
+            UpdateHealthUI();
+        }
+        else
+        {
+            Debug.LogWarning("Material is null. Health UI update skipped.");
+        }
     }
     
     public void UpdateHealthUI()

@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class Skill : MonoBehaviour
 {
-    [SerializeField] 
-    protected float cooldown;
+    public float cooldown;
     
     protected float cooldownTimer;
+
+    protected float tempCooldown;
 
     protected Player player;
 

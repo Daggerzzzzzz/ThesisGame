@@ -5,7 +5,10 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item Data", menuName = "Data/Weapon")]
 public class WeaponDataSO : EquipmentDataSO
-{ 
+{
+    [TextArea] 
+    public string itemEffectDesc;
+    
     public int strength;
     public int agility;
     public int intelligence;
@@ -78,6 +81,11 @@ public class WeaponDataSO : EquipmentDataSO
                 sb.AppendLine();
                 sb.Append("");
             }
+        }
+
+        if (itemEffectDesc.Length > 0)
+        {
+            sb.Append(itemEffectDesc); 
         }
         
         return sb.ToString();

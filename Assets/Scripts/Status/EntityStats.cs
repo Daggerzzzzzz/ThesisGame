@@ -1,6 +1,6 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-using Random = UnityEngine.Random;
 
 public enum StatType
 {
@@ -13,7 +13,7 @@ public enum StatType
     CRITICALDAMAGE,
     HEALTH,
     ARMOR,
-    EVASION,
+    DODGE,
     BURNDAMAGE,
     FREEZEDAMAGE,
     SHOCKDAMAGE
@@ -65,6 +65,8 @@ public class EntityStats : MonoBehaviour
     
     public UnityEvent onHealthChanged;
     private EntityFx entityFx;
+    private bool isVulnerable;
+    protected bool playerAttack;
     
     protected virtual void Awake()
     {
@@ -162,6 +164,8 @@ public class EntityStats : MonoBehaviour
     {
         DecreaseHealthBy(damage);
         
+        Debug.Log("Take Damage " + damage);
+        
         if (currentHealth < 0 && !isDead)
         {
             EntityDeath();
@@ -170,6 +174,11 @@ public class EntityStats : MonoBehaviour
 
     private void DecreaseHealthBy(int damage)
     {
+        if (isVulnerable)
+        {
+            damage = Mathf.RoundToInt(damage * 1.5f);
+        }
+        
         currentHealth -= damage;
 
         onHealthChanged?.Invoke();
@@ -181,7 +190,7 @@ public class EntityStats : MonoBehaviour
 
         if (currentHealth > CalculateMaxHealthValue())
         {
-            currentHealth += CalculateMaxHealthValue();
+            currentHealth = CalculateMaxHealthValue();
         }
         
         onHealthChanged?.Invoke();
@@ -210,7 +219,7 @@ public class EntityStats : MonoBehaviour
     
     public int CalculateMaxHealthValue()
     {
-        return maxHealth.GetValue();
+        return maxHealth.GetValue() + vitality.GetValue() * 5;
     }
 
     public virtual void StatusAilments(EntityStats target)
@@ -247,7 +256,7 @@ public class EntityStats : MonoBehaviour
         target.ApplyStatusAilments(applyBurn, applyFreeze, applyShock);
     }
 
-    private void ApplyStatusAilments(bool burn, bool freeze, bool shock)
+    protected virtual void ApplyStatusAilments(bool burn, bool freeze, bool shock)
     {
         bool canBurn = !isBurning && !isOnShock && !isOnShock;
         bool canFreeze = !isBurning && !isOnShock && !isOnShock;
@@ -280,13 +289,21 @@ public class EntityStats : MonoBehaviour
             
                 entityFx.ShockFx(statusEffectsDuration);
             }
-            else
-            {
-                Debug.Log("First Damage" + lightningDamage);
-                GameObject newLightningPrefab = Instantiate(lightningPrefab, transform.position, Quaternion.identity);
-                newLightningPrefab.GetComponent<LightningController>().SetupLightning(lightningDamage);
-            }
         }
+    }
+
+    public void MakeVulnerable(float duration)
+    {
+        StartCoroutine(VulnerableTimeCoroutine(duration));
+    }
+
+    private IEnumerator VulnerableTimeCoroutine(float duration)
+    {
+        isVulnerable = true;
+
+        yield return new WaitForSeconds(duration);
+
+        isVulnerable = false;
     }
 
     private void SetupBurnDamage(int damage)
@@ -317,7 +334,7 @@ public class EntityStats : MonoBehaviour
             StatType.CRITICALDAMAGE => criticalDamage,
             StatType.HEALTH => maxHealth,
             StatType.ARMOR => armor,
-            StatType.EVASION => dodge,
+            StatType.DODGE => dodge,
             StatType.BURNDAMAGE => burnDamage,
             StatType.FREEZEDAMAGE => freezeDamage,
             StatType.SHOCKDAMAGE => shockDamage,

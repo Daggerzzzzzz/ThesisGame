@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class ItemTrigger : MonoBehaviour
 {
-    [SerializeField] 
-    private Transform parentTransform;
-    
+    [SerializeField] private Transform parentTransform;
+
     private ItemObject itemObject;
-    
+    private Player player;
+
     private bool canEquip;
 
     private void Start()
@@ -31,6 +31,7 @@ public class ItemTrigger : MonoBehaviour
                     {
                         itemObject.ItemPickup();
                     }
+
                     break;
                 }
                 case ItemType.MATERIAL:
@@ -45,18 +46,18 @@ public class ItemTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             canEquip = true;
-            Player player = other.GetComponent<Player>();
+            player = other.GetComponent<Player>();
             player.eKey.SetActive(true);
             player.equipmentInfo.SetActive(true);
 
-            if (parentTransform.gameObject.name == "Sword")
+            if (parentTransform.gameObject.name == "weapon")
             {
                 WeaponDataSO weaponDataSo = itemObject.ItemDataSo as WeaponDataSO;
                 player.itemTooltip.ShowWeaponTooltip(weaponDataSo);
             }
 
-            else if (parentTransform.gameObject.name == "Armor")
-            { 
+            else if (parentTransform.gameObject.name == "armor")
+            {
                 ArmorDataSO armorDataSo = itemObject.ItemDataSo as ArmorDataSO;
                 player.itemTooltip.ShowArmorTooltip(armorDataSo);
             }
@@ -65,8 +66,14 @@ public class ItemTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        canEquip = false;
-        PlayerManager.Instance.player.eKey.SetActive(false);
-        PlayerManager.Instance.player.equipmentInfo.SetActive(false);
+        if (other.CompareTag("Player"))
+        {
+            canEquip = false;
+            player = other.GetComponent<Player>();
+
+            player.eKey.SetActive(false);
+            player.equipmentInfo.SetActive(false);
+
+        }
     }
 }

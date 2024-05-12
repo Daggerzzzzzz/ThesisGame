@@ -11,11 +11,7 @@ public class PlayerDashState : PlayerState
     {
         base.Enter();
         player.OnPlayerInputs.Player.Move.Disable();
-        if (player.OnCanCreateClone)
-        {
-            player.OnSkill.Clone.CreateClone(player.OnEnemyDashedCollider.transform.position);
-            //player.skill.clone.CreateClone(player.transform.position);
-        }
+        player.OnSkill.Dash.CloneDash();
         stateTimer = player.dashDuration;
     }
 
@@ -43,9 +39,9 @@ public class PlayerDashState : PlayerState
     {
         base.Exit();
         player.OnPlayerInputs.Player.Move.Enable();
+        player.OnSkill.Dash.CloneDash();
         player.SetVelocity(0, 0, player.moveSpeed);
         player.dashDirection = Vector2.zero;
-        player.OnCanCreateClone = false;
     }
 }
 

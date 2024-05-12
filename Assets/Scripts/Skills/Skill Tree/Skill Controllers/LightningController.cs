@@ -49,19 +49,23 @@ public class LightningController : MonoBehaviour
     {
         Debug.Log("damage" + damage);
         if (enemyLayer == (enemyLayer | (1 << other.gameObject.layer)) && !other.GetComponentInChildren<EnemyStruck>())
-        { 
+        {
             if (singleSpawns != 0)
             {
                 endObject = other.gameObject;
                 amountToChain -= 1;
-            
-                GameObject newLightning = Instantiate(lightningController, other.gameObject.transform.position, Quaternion.identity);
-                newLightning.GetComponent<LightningController>().SetupLightning(damage);
-                Instantiate(beenStruck, other.gameObject.transform);
-                entityStats = other.GetComponent<EntityStats>();
+                
+                if (other != null)
+                {
+                    GameObject newLightning = Instantiate(lightningController, other.gameObject.transform.position, Quaternion.identity);
+                    newLightning.GetComponent<LightningController>().SetupLightning(damage);
+                    Instantiate(beenStruck, other.gameObject.transform);
+                    entityStats = other.GetComponent<EntityStats>();
+                    entityStats.TakeDamage(damage);
+                }
             
                 anim.StopPlayback();
-                DamageAndDestroy();
+                Destroy();
                 ParticleAnimation();
                 singleSpawns--;
             }
@@ -73,10 +77,9 @@ public class LightningController : MonoBehaviour
         this.damage = damage;
     }
     
-    private void DamageAndDestroy()
+    private void Destroy()
     {
         circleCollider2D.enabled = false;
-        entityStats.TakeDamage(damage);
         Destroy(gameObject, 1f);
     }
 

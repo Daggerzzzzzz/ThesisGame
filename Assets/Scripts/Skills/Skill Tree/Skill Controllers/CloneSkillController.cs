@@ -17,7 +17,7 @@ public class CloneSkillController : MonoBehaviour
     private Vector2 cloneHitBoxDirection;
 
     private SpriteRenderer srClone;
-    //private SpriteRenderer srCloneAttackCheck;
+    private SpriteRenderer srCloneAttackCheck;
     private Animator anim;
     private GameObject playerReference;
     private Player player;
@@ -29,7 +29,7 @@ public class CloneSkillController : MonoBehaviour
     private void Awake()
     {
         srClone = GetComponent<SpriteRenderer>();
-        //srCloneAttackCheck = attackCheck.GetComponent<SpriteRenderer>();
+        srCloneAttackCheck = attackCheck.GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         playerReference = GameObject.FindGameObjectWithTag("Player");
     }
@@ -64,7 +64,7 @@ public class CloneSkillController : MonoBehaviour
         if (cloneTimer < 0)
         {
             srClone.color = new Color(1, 1, 1, srClone.color.a - (Time.deltaTime * colorVanishingSpeed));
-            //srCloneAttackCheck.color = new Color(1, 1, 1, srCloneAttackCheck.color.a - (Time.deltaTime * colorVanishingSpeed));
+            srCloneAttackCheck.color = new Color(1, 1, 1, srCloneAttackCheck.color.a - (Time.deltaTime * colorVanishingSpeed));
         }
     }
 

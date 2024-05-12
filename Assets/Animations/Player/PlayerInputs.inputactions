@@ -67,6 +67,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CharacterPanel",
+                    "type": "Button",
+                    "id": "3912a755-6d19-4898-b96f-6d7bcb4e4b96",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SkillTreePanel",
+                    "type": "Button",
+                    "id": "501ffc3f-3fe7-4f07-8448-9fc9fa41293d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SettingsPanel",
+                    "type": "Button",
+                    "id": "ba8ead24-8b9a-4190-994c-d3bdcb37ae1e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -232,6 +259,39 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Equip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd92f193-af28-444f-bb93-31c3f7e57f8f",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CharacterPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f71b848b-025f-4cdc-8a8e-fba8d2253ffc",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SkillTreePanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3568a549-ed23-4056-880a-2deb2b24e3da",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SettingsPanel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -89,6 +89,33 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CharacterPanel"",
+                    ""type"": ""Button"",
+                    ""id"": ""3912a755-6d19-4898-b96f-6d7bcb4e4b96"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillTreePanel"",
+                    ""type"": ""Button"",
+                    ""id"": ""501ffc3f-3fe7-4f07-8448-9fc9fa41293d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SettingsPanel"",
+                    ""type"": ""Button"",
+                    ""id"": ""ba8ead24-8b9a-4190-994c-d3bdcb37ae1e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -254,6 +281,39 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd92f193-af28-444f-bb93-31c3f7e57f8f"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CharacterPanel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f71b848b-025f-4cdc-8a8e-fba8d2253ffc"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillTreePanel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3568a549-ed23-4056-880a-2deb2b24e3da"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SettingsPanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -848,6 +908,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Ultimate = m_Player.FindAction("Ultimate", throwIfNotFound: true);
         m_Player_Teleport = m_Player.FindAction("Teleport", throwIfNotFound: true);
         m_Player_Equip = m_Player.FindAction("Equip", throwIfNotFound: true);
+        m_Player_CharacterPanel = m_Player.FindAction("CharacterPanel", throwIfNotFound: true);
+        m_Player_SkillTreePanel = m_Player.FindAction("SkillTreePanel", throwIfNotFound: true);
+        m_Player_SettingsPanel = m_Player.FindAction("SettingsPanel", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -928,6 +991,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Ultimate;
     private readonly InputAction m_Player_Teleport;
     private readonly InputAction m_Player_Equip;
+    private readonly InputAction m_Player_CharacterPanel;
+    private readonly InputAction m_Player_SkillTreePanel;
+    private readonly InputAction m_Player_SettingsPanel;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -939,6 +1005,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Ultimate => m_Wrapper.m_Player_Ultimate;
         public InputAction @Teleport => m_Wrapper.m_Player_Teleport;
         public InputAction @Equip => m_Wrapper.m_Player_Equip;
+        public InputAction @CharacterPanel => m_Wrapper.m_Player_CharacterPanel;
+        public InputAction @SkillTreePanel => m_Wrapper.m_Player_SkillTreePanel;
+        public InputAction @SettingsPanel => m_Wrapper.m_Player_SettingsPanel;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -969,6 +1038,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Equip.started += instance.OnEquip;
             @Equip.performed += instance.OnEquip;
             @Equip.canceled += instance.OnEquip;
+            @CharacterPanel.started += instance.OnCharacterPanel;
+            @CharacterPanel.performed += instance.OnCharacterPanel;
+            @CharacterPanel.canceled += instance.OnCharacterPanel;
+            @SkillTreePanel.started += instance.OnSkillTreePanel;
+            @SkillTreePanel.performed += instance.OnSkillTreePanel;
+            @SkillTreePanel.canceled += instance.OnSkillTreePanel;
+            @SettingsPanel.started += instance.OnSettingsPanel;
+            @SettingsPanel.performed += instance.OnSettingsPanel;
+            @SettingsPanel.canceled += instance.OnSettingsPanel;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -994,6 +1072,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Equip.started -= instance.OnEquip;
             @Equip.performed -= instance.OnEquip;
             @Equip.canceled -= instance.OnEquip;
+            @CharacterPanel.started -= instance.OnCharacterPanel;
+            @CharacterPanel.performed -= instance.OnCharacterPanel;
+            @CharacterPanel.canceled -= instance.OnCharacterPanel;
+            @SkillTreePanel.started -= instance.OnSkillTreePanel;
+            @SkillTreePanel.performed -= instance.OnSkillTreePanel;
+            @SkillTreePanel.canceled -= instance.OnSkillTreePanel;
+            @SettingsPanel.started -= instance.OnSettingsPanel;
+            @SettingsPanel.performed -= instance.OnSettingsPanel;
+            @SettingsPanel.canceled -= instance.OnSettingsPanel;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1183,6 +1270,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnUltimate(InputAction.CallbackContext context);
         void OnTeleport(InputAction.CallbackContext context);
         void OnEquip(InputAction.CallbackContext context);
+        void OnCharacterPanel(InputAction.CallbackContext context);
+        void OnSkillTreePanel(InputAction.CallbackContext context);
+        void OnSettingsPanel(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
