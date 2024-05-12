@@ -9,6 +9,7 @@ TagManager:
   - Camera Zone
   - Player Sprite
   - Movement Collider
+  - Starting Center
   layers:
   - Default
   - TransparentFX

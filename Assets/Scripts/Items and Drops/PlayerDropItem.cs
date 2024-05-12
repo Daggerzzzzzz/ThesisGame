@@ -22,12 +22,13 @@ public class PlayerDropItem : MonoBehaviour
     private GameObject thornmail;
     [SerializeField] 
     private GameObject guardianAngel;
-    
+    [SerializeField]
     private GameObject targetGameObject;
 
     private void Start()
     {
-        targetGameObject = GameObject.Find("Starting Center");
+        Debug.Log("PlayerDrop");
+        targetGameObject = GameObject.FindGameObjectWithTag("Starting Center");
     }
     
     public void GenerateDrop()

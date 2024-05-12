@@ -19,6 +19,7 @@ public class RoomCenter : MonoBehaviour
     
     private void Start() 
     {
+        Debug.Log("Room Center");
         if(openWhenEnemiesCleared)
         {
             TheRoom.closeWhenEntered = true;

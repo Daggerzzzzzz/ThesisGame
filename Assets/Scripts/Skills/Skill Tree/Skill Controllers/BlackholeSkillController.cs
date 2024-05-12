@@ -58,7 +58,7 @@ public class BlackholeSkillController : MonoBehaviour
     {
         circleRadius = circleCollider2D.radius * maximumSize;
         angleIncrementRad = angleIncrement * Mathf.Deg2Rad;
-        canSlashAttackTimer = swordAttackCooldown * amountOfSwords + 0.25f;
+        canSlashAttackTimer = swordAttackCooldown * amountOfSwords;
         allSwordsSummoned = false;
         alreadyScattered = false;
         alreadyDisappear = false;
