@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class SkillManager : SingletonMonoBehavior<SkillManager>
 {
     public DashSkill Dash { get; private set; }
