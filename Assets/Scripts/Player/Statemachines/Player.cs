@@ -89,14 +89,9 @@ public class Player : Entity
         CheckForDashInput();
         OnTransformPosition = playerTransform;
 
-        if (OnPlayerInputs.Player.Teleport.IsPressed() && OnSkill.Kunai.KunaiUnlocked)
+        if (OnPlayerInputs.Player.Teleport.WasPressedThisFrame() && OnSkill.Kunai.KunaiUnlocked)
         {
-            OnPlayerInputs.Player.Teleport.Disable();
             OnSkill.Kunai.CanUseSkill();
-            if (OnSkill.Kunai.KunaiStackExplodeUnlocked)
-            {
-                OnPlayerInputs.Player.Teleport.Enable();
-            }
         }
     }
 

@@ -17,7 +17,7 @@ public class HealthBar : MonoBehaviour
     private void Start()
     {
         entityStats = GetComponentInParent<EntityStats>();
-        material = sr.GetComponent<SpriteRenderer>().material;
+        material = sr.material;
         
         if (material != null)
         {

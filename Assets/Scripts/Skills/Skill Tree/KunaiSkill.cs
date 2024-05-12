@@ -11,17 +11,20 @@ public class KunaiSkill : Skill
     [Header("Kunai Teleport")]
     [SerializeField]
     private SkillTreeSlot unlockKunaiTeleportButton;
+    [field:SerializeField]
     public bool KunaiUnlocked { get; private set; }
 
     [Header("Kunai Switch Explode")]
     [SerializeField]
     private SkillTreeSlot unlockKunaiSwitchExplodeButton;
+    [field:SerializeField]
     public bool KunaiSwitchExplodeUnlocked { get; private set; }
 
 
     [Header("Kunai Stack Explode")]
     [SerializeField]
     private SkillTreeSlot unlockKunaiStackExplodeButton;
+    [field:SerializeField]
     public bool KunaiStackExplodeUnlocked { get; set; }
     
     
@@ -91,33 +94,31 @@ public class KunaiSkill : Skill
             
         }
 
-        else if (KunaiSwitchExplodeUnlocked || KunaiUnlocked)
+        else if ((KunaiSwitchExplodeUnlocked || KunaiUnlocked) && !KunaiStackExplodeUnlocked)
         {
             if (CurrentKunai == null)
             {
                 CurrentKunai = Instantiate(kunaiPrefab, player.transform.position, Quaternion.identity);
                 currentKunaiSkillController = CurrentKunai.GetComponent<KunaiSkillController>();
-                
-                pressedTwice = false;
-                player.OnPlayerInputs.Player.Teleport.Enable();
 
+                pressedTwice = false;
+                
                 tempCooldown = cooldown;
                 cooldown = 0;
             }
             else if (CurrentKunai != null)
             {
-                player.OnPlayerInputs.Player.Teleport.Disable();
                 Vector2 playerBeforePos = player.transform.position;
         
                 player.transform.position = CurrentKunai.transform.position;
                 CurrentKunai.transform.position = playerBeforePos;
 
                 pressedTwice = true;
+                
                 currentKunaiSkillController.SetupKunai(KunaiSwitchExplodeUnlocked, KunaiUnlocked, pressedTwice, KunaiStackExplodeUnlocked, player);
                 currentKunaiSkillController.KunaiExplosion();
 
                 cooldown = tempCooldown;
-                StartCoroutine(ExplosionAnimationDelay());
             }
         }
     }
@@ -131,7 +132,6 @@ public class KunaiSkill : Skill
                 RestockKunai();
                 firstEntered = false;
             }
-            player.OnPlayerInputs.Player.Teleport.Enable();
             if (kunaiLeft.Count > 0)
             {
                 cooldown = 0;
@@ -200,11 +200,5 @@ public class KunaiSkill : Skill
                 gameObjects.Remove(gameObjects[i]);
             }
         }
-    }
-    
-    private IEnumerator ExplosionAnimationDelay()
-    {
-        yield return new WaitForSeconds(1);
-        player.OnPlayerInputs.Player.Teleport.Enable();
     }
 }

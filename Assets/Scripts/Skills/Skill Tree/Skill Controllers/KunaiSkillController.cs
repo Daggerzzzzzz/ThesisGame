@@ -39,38 +39,25 @@ public class KunaiSkillController : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(pressedTwice);
+        
         if (canGrow)
         {
             transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(3, 3), speedOfGrowth * Time.deltaTime);
         }
 
-        if (canTeleport)
+        if (canTeleport && pressedTwice)
         {
-            if (!pressedTwice)
-            {
-                return;
-            }
-            
             KunaiExplosion();
         }
 
-        if (canExplode)
+        if (canExplode && pressedTwice)
         {
-            if (!pressedTwice)
-            {
-                return;
-            }
-            
             KunaiExplosion();
         }
 
-        if (canMultiStack)
+        if (canMultiStack && pressedTwice)
         {
-            if (!pressedTwice)
-            {
-                return;
-            }
-            
             KunaiExplosion();
         }
     }

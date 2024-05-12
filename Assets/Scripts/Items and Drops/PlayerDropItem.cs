@@ -27,7 +27,6 @@ public class PlayerDropItem : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("PlayerDrop");
         targetGameObject = GameObject.FindGameObjectWithTag("Starting Center");
     }
     

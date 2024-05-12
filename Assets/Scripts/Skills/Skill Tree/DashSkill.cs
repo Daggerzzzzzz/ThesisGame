@@ -25,8 +25,6 @@ public class DashSkill : Skill
       unlockDashButton.GetComponent<Button>().onClick.AddListener(UnlockDash);
       unlockCloneDashButton.GetComponent<Button>().onClick.AddListener(UnlockCloneDash);
       unlockKunaiDashButton.GetComponent<Button>().onClick.AddListener(UnlockKunaiDash);
-      
-      Debug.Log("DashSkill");
    }
 
    public override void UseSkill()

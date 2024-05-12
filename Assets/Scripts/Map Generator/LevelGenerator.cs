@@ -61,7 +61,7 @@ public class LevelGenerator : MonoBehaviour
     private GameObject endRoom;
     private RoomCenter roomCenterDetails;
 
-    void Start()
+    private void Awake()
     {
         Instantiate(layoutRoom, generatorPoint.position, generatorPoint.rotation).GetComponent<SpriteRenderer>().color = startingColor;
         
