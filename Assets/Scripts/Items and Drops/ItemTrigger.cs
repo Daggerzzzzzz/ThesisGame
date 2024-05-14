@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class ItemTrigger : MonoBehaviour
 {
-    [SerializeField] private Transform parentTransform;
-
     private ItemObject itemObject;
     private Player player;
 
@@ -12,7 +10,6 @@ public class ItemTrigger : MonoBehaviour
     private void Start()
     {
         itemObject = GetComponentInParent<ItemObject>();
-        parentTransform = itemObject.GetComponentInParent<Transform>();
     }
 
     private void Update()
@@ -45,14 +42,15 @@ public class ItemTrigger : MonoBehaviour
             player = other.GetComponent<Player>();
             player.eKey.SetActive(true);
             player.equipmentInfo.SetActive(true);
+            EquipmentDataSO equipmentDataSo = itemObject.ItemDataSo as EquipmentDataSO;
 
-            if (parentTransform.gameObject.name == "weapon")
+            if (equipmentDataSo.equipmentType == EquipmentType.WEAPON)
             {
                 WeaponDataSO weaponDataSo = itemObject.ItemDataSo as WeaponDataSO;
                 player.itemTooltip.ShowWeaponTooltip(weaponDataSo);
             }
 
-            else if (parentTransform.gameObject.name == "armor")
+            else if (equipmentDataSo.equipmentType == EquipmentType.ARMOR)
             {
                 ArmorDataSO armorDataSo = itemObject.ItemDataSo as ArmorDataSO;
                 player.itemTooltip.ShowArmorTooltip(armorDataSo);

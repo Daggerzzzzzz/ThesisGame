@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerManager : SingletonMonoBehavior<PlayerManager>
+public class PlayerManager : SingletonMonoBehavior<PlayerManager>, ISaveManager
 {
    public Player player;
    public int soulCurrency;
@@ -21,5 +21,15 @@ public class PlayerManager : SingletonMonoBehavior<PlayerManager>
    public int CurrentSouls()
    {
       return soulCurrency;
+   }
+
+   public void LoadData(GameData data)
+   {
+      soulCurrency = data.soulCurrency;
+   }
+
+   public void SaveData(ref GameData data)
+   {
+      data.soulCurrency = soulCurrency;
    }
 }

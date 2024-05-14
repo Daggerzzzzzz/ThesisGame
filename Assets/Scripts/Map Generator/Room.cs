@@ -4,11 +4,12 @@ using UnityEngine;
 public class Room : MonoBehaviour
 {
     [SerializeField]
-    public bool closeWhenEntered;
-    [SerializeField]
     private GameObject[] doors;
+    [SerializeField]
+    private GameObject mapHider;
     
     public bool roomActive;
+    public bool closeWhenEntered;
     
     private static readonly int Close = Animator.StringToHash("close");
 
@@ -23,6 +24,8 @@ public class Room : MonoBehaviour
             }
 
             roomActive = true; 
+            mapHider.SetActive(false);
+            
             CameraController.Instance.ChangeTarget(transform);
             CameraSwitch.Instance.PlayerEnter(); 
         }

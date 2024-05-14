@@ -140,7 +140,6 @@ public class SwordSkillController : MonoBehaviour
         isReturning = true;
         anim.SetBool(Stuck, false);
         
-        //player.OnSword.
         ResetAnimator();
     }
     
@@ -272,12 +271,12 @@ public class SwordSkillController : MonoBehaviour
         
         player.OnEntityStats.DoDamage(enemyStats);
 
-        if (player.OnSkill.Sword.timeStopUnlocked)
+        if (player.OnSkill.Sword.TimeStopUnlocked)
         { 
             enemy.StartCoroutine("FreezeTimeFor", freezeTimeDuration);
         }
         
-        if (player.OnSkill.Sword.vulnerableUnlocked)
+        if (player.OnSkill.Sword.VulnerableUnlocked)
         { 
             enemyStats.MakeVulnerable(freezeTimeDuration);
         }

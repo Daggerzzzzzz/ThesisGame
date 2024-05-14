@@ -17,17 +17,17 @@ public class BlackholeSkill : Skill
     [Header("Base Upgrade")] 
     [SerializeField]
     private SkillTreeSlot blackholeUnlockButton;
-    public bool baseUpgradeUnlock { get; private set; }
+    public bool BaseUpgradeUnlock { get; private set; }
 
     [Header("Second Upgrade")] 
     [SerializeField]
     private SkillTreeSlot blackholeSecondUpgradeButton;
-    public bool secondUpgradeUnlock { get; private set; }
+    public bool SecondUpgradeUnlock { get; private set; }
     
     [Header("Third Upgrade")] 
     [SerializeField]
     private SkillTreeSlot blackholeThirdUpgradeButton;
-    public bool thirdUpgradeUnlock { get; private set; }
+    public bool ThirdUpgradeUnlock { get; private set; }
     
     private int angleIncrement;
     private int amountOfSwords;
@@ -54,11 +54,11 @@ public class BlackholeSkill : Skill
         return base.CanUseSkill();
     }
 
-    public override void UseSkill()
+    protected override void UseSkill()
     {
         base.UseSkill();
         
-        BlackholeUpgrades(baseUpgradeUnlock, secondUpgradeUnlock, thirdUpgradeUnlock);
+        BlackholeUpgrades(BaseUpgradeUnlock, SecondUpgradeUnlock, ThirdUpgradeUnlock);
         
         newBlackhole = Instantiate(blackholePrefab, player.transform.position, quaternion.identity);
 
@@ -106,7 +106,7 @@ public class BlackholeSkill : Skill
     {
         if (blackholeUnlockButton.unlocked)
         {
-            baseUpgradeUnlock = true;
+            BaseUpgradeUnlock = true;
         }
     }
     
@@ -114,7 +114,7 @@ public class BlackholeSkill : Skill
     {
         if (blackholeSecondUpgradeButton.unlocked)
         {
-            secondUpgradeUnlock = true;
+            SecondUpgradeUnlock = true;
         }
     }
     
@@ -122,7 +122,14 @@ public class BlackholeSkill : Skill
     {
         if (blackholeThirdUpgradeButton.unlocked)
         {
-            thirdUpgradeUnlock = true;
+            ThirdUpgradeUnlock = true;
         }
+    }
+
+    protected override void CheckUnlocked()
+    {
+        UnlockBaseUpgrade();
+        UnlockSecondUpgrade();
+        UnlockThirdUpgrade();
     }
 }

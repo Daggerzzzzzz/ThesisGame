@@ -5,9 +5,9 @@ public class ItemObject : MonoBehaviour
     [field:SerializeField]
     public ItemDataSO ItemDataSo { get; private set; }
 
-    public void SetupItem(ItemDataSO _itemDataSo)
+    public void SetupItem(ItemDataSO itemDataSo)
     {
-        ItemDataSo = _itemDataSo;
+        ItemDataSo = itemDataSo;
         
         if (ItemDataSo == null)
         {
@@ -17,7 +17,7 @@ public class ItemObject : MonoBehaviour
         if (ItemDataSo.itemType == ItemType.EQUIPMENT)
         {
             EquipmentDataSO equipmentDataSo = ItemDataSo as EquipmentDataSO;
-            if (equipmentDataSo != null) gameObject.name = equipmentDataSo.equipmentType.ToString().ToLower();
+            if (equipmentDataSo != null) gameObject.name = equipmentDataSo.itemName;
         }
         else
         {

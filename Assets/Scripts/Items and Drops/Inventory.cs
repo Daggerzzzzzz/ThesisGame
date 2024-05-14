@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class Inventory : SingletonMonoBehavior<Inventory>
+public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
 {
     public List<InventoryItem> inventory;
     public List<InventoryItem> stash;
@@ -23,6 +24,12 @@ public class Inventory : SingletonMonoBehavior<Inventory>
     [SerializeField]
     private Transform statSlotParent;
 
+    [Header("Database")] 
+    private List<ItemDataSO> itemDatabase;
+    public List<InventoryItem> loadedItems;
+    private List<EquipmentDataSO> equipmentDatabase;
+    public List<InventoryItem> loadedEquipments;
+
     private ItemSlot[] stashItemSlots;
     private ItemSlot[] inventoryItemSlots;
     private WeaponSlot weaponSlot;
@@ -42,6 +49,30 @@ public class Inventory : SingletonMonoBehavior<Inventory>
         weaponSlot = equipmentSlotParent.GetComponentInChildren<WeaponSlot>();
         armorSlot = equipmentSlotParent.GetComponentInChildren<ArmorSlot>();
         statSlots = statSlotParent.GetComponentsInChildren<StatSlot>();
+
+        AddStartingItems();
+    }
+
+    private void AddStartingItems()
+    {
+        if (loadedItems.Count > 0)
+        {
+            foreach (InventoryItem item in loadedItems)
+            {
+                for (int i = 0; i < item.stackSize; i++)
+                {
+                    AddItem(item.itemDataSo);
+                }
+            }
+        }
+        
+        if (loadedEquipments.Count > 0)
+        {
+            foreach (InventoryItem equipment in loadedEquipments)
+            {
+                AddItem(equipment.itemDataSo);
+            }
+        }
     }
 
     public void AddItem(ItemDataSO item)
@@ -79,10 +110,12 @@ public class Inventory : SingletonMonoBehavior<Inventory>
             if (oldArmor != null)
             {
                 oldArmor.RemoveModifiers();
+                inventoryDict.Remove(oldArmor);
                 PlayerManager.Instance.player.GetComponent<PlayerDropItem>()?.DropEquipment(oldArmor);
             }
         
             armor = newItem;
+            inventoryDict.Add(newArmor, newItem);
             newArmor.AddModifiers();
         }
         else if (newEquipment != null && newEquipment.equipmentType == EquipmentType.WEAPON)
@@ -102,10 +135,12 @@ public class Inventory : SingletonMonoBehavior<Inventory>
             if (oldWeapon != null)
             {
                 oldWeapon.RemoveModifiers();
+                inventoryDict.Remove(oldWeapon);
                 PlayerManager.Instance.player.GetComponent<PlayerDropItem>()?.DropEquipment(oldWeapon);
             }
         
             weapon = newItem;
+            inventoryDict.Add(newWeapon, newItem);
             newWeapon.AddModifiers();
         }
     }
@@ -177,5 +212,88 @@ public class Inventory : SingletonMonoBehavior<Inventory>
         {
             statSlots[i].UpdateStatValue();
         }
+    }
+
+    public void LoadData(GameData data)
+    {
+        foreach (KeyValuePair<string, int> pair in data.stash)
+        {
+            foreach (var item in GetItemDatabase())
+            {
+                if (item != null && item.itemID == pair.Key)
+                {
+                    InventoryItem itemToLoad = new InventoryItem(item)
+                    {
+                        stackSize = pair.Value
+                    };
+
+                    loadedItems.Add(itemToLoad);
+                }
+            }
+        }
+        
+        foreach (KeyValuePair<string, int> pair in data.equipment)
+        {
+            foreach (var equipment in GetEquipmentDatabase())
+            {
+                if (equipment != null && equipment.itemID == pair.Key)
+                {
+                    InventoryItem equipmentToLoad = new InventoryItem(equipment)
+                    {
+                        stackSize = pair.Value
+                    };
+
+                    loadedEquipments.Add(equipmentToLoad);
+                }
+            }
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.stash.Clear();
+        data.equipment.Clear();
+
+        foreach (KeyValuePair<ItemDataSO, InventoryItem> pair in stashDict)
+        {
+            data.stash.Add(pair.Key.itemID, pair.Value.stackSize);
+        }
+        
+        foreach (KeyValuePair<EquipmentDataSO, InventoryItem> pair in inventoryDict)
+        {
+            data.equipment.Add(pair.Key.itemID, pair.Value.stackSize);
+        }
+    }
+
+    private List<EquipmentDataSO> GetEquipmentDatabase()
+    {
+        equipmentDatabase = new List<EquipmentDataSO>();
+        string[] equipmentAssetNames = AssetDatabase.FindAssets("", new[] {"Assets/SOData/Equipments"});
+
+        foreach (string SOName in equipmentAssetNames)
+        {
+            var SOpath = AssetDatabase.GUIDToAssetPath(SOName);
+            var equipmentData = AssetDatabase.LoadAssetAtPath<EquipmentDataSO>(SOpath);
+            
+            equipmentDatabase.Add(equipmentData);
+        }
+
+        return equipmentDatabase;
+    }
+    
+    private List<ItemDataSO> GetItemDatabase()
+    {
+        itemDatabase = new List<ItemDataSO>();
+        string[] itemAssetNames = AssetDatabase.FindAssets("", new[] {"Assets/SOData/Items"});
+
+        foreach (string SOName in itemAssetNames)
+        {
+            var SOpath = AssetDatabase.GUIDToAssetPath(SOName);
+            var itemData = AssetDatabase.LoadAssetAtPath<ItemDataSO>(SOpath);
+            
+            itemDatabase.Add(itemData);
+        }
+
+        return itemDatabase;
     }
 }

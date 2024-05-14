@@ -1,55 +1,75 @@
+using System.Linq;
 using UnityEngine;
 
 public class FleeBehavior : SteeringBehavior
 {
     [SerializeField]
-    private float fleeDistance = 5f;
+    private float dangerThreshold = 0.5f;
 
     [SerializeField]
     private bool showGizmo = true;
 
-    // Cache parameters for gizmos
-    private Vector2 fleePositionCached;
+    private Vector2 targetPositionCached;
+    private float[] interestsTemp;
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)
     {
-        // Flee behavior: move away from the current target
-        if (aiData.currentTarget == null)
-            return (danger, interest);
-
-        // Calculate direction to flee
-        Vector2 directionToFlee = transform.position - aiData.currentTarget.position;
-        directionToFlee.Normalize();
-
-        // Update interest directions based on fleeing direction
-        for (int i = 0; i < interest.Length; i++)
+        if (aiData.targets is not { Count: > 0 })
         {
-            float result = Vector2.Dot(directionToFlee.normalized, Directions.eightDirections[i]);
+            aiData.currentTarget = null;
+            return (danger, interest);
+        }
 
-            // Accept only directions less than 90 degrees to the fleeing direction
-            if (result > 0)
+        aiData.currentTarget = aiData.targets.OrderBy
+            (target => Vector2.Distance(target.position, transform.position)).FirstOrDefault();
+
+        if (aiData.currentTarget != null && aiData.targets.Contains(aiData.currentTarget))
+            targetPositionCached = aiData.currentTarget.position;
+
+        if (aiData.currentTarget != null)
+        {
+            Vector2 directionToTarget = (Vector2)transform.position - targetPositionCached;
+            for (int i = 0; i < interest.Length; i++)
             {
-                float valueToPutIn = result * fleeDistance; // Scale by distance to flee
-                if (valueToPutIn > interest[i])
+                float result = Vector2.Dot(directionToTarget.normalized, Directions.eightDirections[i]);
+                if (result > 0)
                 {
-                    interest[i] = valueToPutIn;
+                    float valueToPutIn = result;
+                    if (valueToPutIn > interest[i])
+                    {
+                        interest[i] = valueToPutIn;
+                    }
                 }
             }
         }
 
-        // Cache the flee position
-        fleePositionCached = (Vector2)transform.position + directionToFlee * fleeDistance;
+        for (int i = 0; i < danger.Length; i++)
+        {
+            if (danger[i] > dangerThreshold)
+            {
+                interest[i] = 0;
+            }
+        }
 
+        interestsTemp = interest;
         return (danger, interest);
     }
 
     private void OnDrawGizmos()
     {
-        if (!showGizmo)
+        if (showGizmo == false)
             return;
+        Gizmos.DrawSphere(targetPositionCached, 0.2f);
 
-        // Draw the flee position
-        Gizmos.color = Color.blue;
-        Gizmos.DrawSphere(fleePositionCached, 0.2f);
+        if (Application.isPlaying && interestsTemp != null)
+        {
+            Gizmos.color = Color.green;
+            for (int i = 0; i < interestsTemp.Length; i++)
+            {
+                Gizmos.DrawRay(transform.position, Directions.eightDirections[i] * interestsTemp[i] * 2);
+            }
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(targetPositionCached, 0.1f);
+        }
     }
 }

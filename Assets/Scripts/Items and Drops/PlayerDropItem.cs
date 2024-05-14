@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -24,10 +25,38 @@ public class PlayerDropItem : MonoBehaviour
     private GameObject guardianAngel;
     [SerializeField]
     private GameObject targetGameObject;
+    [SerializeField]
+    private List<ItemObject> equipmentsGameObjects = new ();
+    [SerializeField]
+    private List<GameObject> gameObjectsToRemove = new ();
 
     private void Start()
     {
         targetGameObject = GameObject.FindGameObjectWithTag("Starting Center");
+        equipmentsGameObjects = targetGameObject.GetComponentsInChildren<ItemObject>().ToList();
+        RemoveMatchingGameObjects();
+    }
+    
+    private void RemoveMatchingGameObjects()
+    {
+        foreach (InventoryItem equipment in Inventory.Instance.loadedEquipments)
+        {
+            foreach (ItemObject equipmentItemObject in equipmentsGameObjects)
+            {
+                if (equipmentItemObject.ItemDataSo.itemName == equipment.itemDataSo.itemName)
+                {
+                    gameObjectsToRemove.Add(equipmentItemObject.gameObject);
+                }
+            }
+        }
+        
+        foreach (GameObject gameObjectToRemove in gameObjectsToRemove)
+        {
+            Destroy(gameObjectToRemove);
+        }
+        
+        gameObjectsToRemove.Clear();
+        equipmentsGameObjects.Clear();
     }
     
     public void GenerateDrop()

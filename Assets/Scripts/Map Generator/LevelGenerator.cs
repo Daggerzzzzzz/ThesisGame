@@ -318,8 +318,6 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
-
-        graphTraversal.PrintTraversal();
         graphTraversal.BFS(0);
         graphTraversal.SortByDistance();
         

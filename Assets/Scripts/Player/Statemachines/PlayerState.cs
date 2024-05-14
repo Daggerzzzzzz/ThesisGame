@@ -45,7 +45,7 @@ public class PlayerState
          stateMachine.ChangeState(player.OnPlayerAimState);
       }
 
-      if (playerInputs.Player.Ultimate.IsPressed() && player.OnSkill.Blackhole.baseUpgradeUnlock && player.OnSkill.Blackhole.CanUseSkill())
+      if (playerInputs.Player.Ultimate.IsPressed() && player.OnSkill.Blackhole.BaseUpgradeUnlock && player.OnSkill.Blackhole.CanUseSkill())
       {
          stateMachine.ChangeState(player.OnPlayerBlackholeState);
       }

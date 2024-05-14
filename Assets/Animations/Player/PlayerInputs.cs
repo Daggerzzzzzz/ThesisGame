@@ -116,6 +116,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BigMapPanel"",
+                    ""type"": ""Button"",
+                    ""id"": ""af9cb422-b587-49cf-bd91-fea31df028c4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -290,7 +299,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/j"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""CharacterPanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -301,7 +310,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/k"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""SkillTreePanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -312,8 +321,19 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/l"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""SettingsPanel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54e30e92-9883-42c8-8953-00155d337bb9"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""BigMapPanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -911,6 +931,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_CharacterPanel = m_Player.FindAction("CharacterPanel", throwIfNotFound: true);
         m_Player_SkillTreePanel = m_Player.FindAction("SkillTreePanel", throwIfNotFound: true);
         m_Player_SettingsPanel = m_Player.FindAction("SettingsPanel", throwIfNotFound: true);
+        m_Player_BigMapPanel = m_Player.FindAction("BigMapPanel", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -994,6 +1015,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_CharacterPanel;
     private readonly InputAction m_Player_SkillTreePanel;
     private readonly InputAction m_Player_SettingsPanel;
+    private readonly InputAction m_Player_BigMapPanel;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -1008,6 +1030,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @CharacterPanel => m_Wrapper.m_Player_CharacterPanel;
         public InputAction @SkillTreePanel => m_Wrapper.m_Player_SkillTreePanel;
         public InputAction @SettingsPanel => m_Wrapper.m_Player_SettingsPanel;
+        public InputAction @BigMapPanel => m_Wrapper.m_Player_BigMapPanel;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1047,6 +1070,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @SettingsPanel.started += instance.OnSettingsPanel;
             @SettingsPanel.performed += instance.OnSettingsPanel;
             @SettingsPanel.canceled += instance.OnSettingsPanel;
+            @BigMapPanel.started += instance.OnBigMapPanel;
+            @BigMapPanel.performed += instance.OnBigMapPanel;
+            @BigMapPanel.canceled += instance.OnBigMapPanel;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1081,6 +1107,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @SettingsPanel.started -= instance.OnSettingsPanel;
             @SettingsPanel.performed -= instance.OnSettingsPanel;
             @SettingsPanel.canceled -= instance.OnSettingsPanel;
+            @BigMapPanel.started -= instance.OnBigMapPanel;
+            @BigMapPanel.performed -= instance.OnBigMapPanel;
+            @BigMapPanel.canceled -= instance.OnBigMapPanel;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1273,6 +1302,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnCharacterPanel(InputAction.CallbackContext context);
         void OnSkillTreePanel(InputAction.CallbackContext context);
         void OnSettingsPanel(InputAction.CallbackContext context);
+        void OnBigMapPanel(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

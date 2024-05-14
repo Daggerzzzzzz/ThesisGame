@@ -8,15 +8,9 @@ public class Player : Entity
     private float distance;
     [HideInInspector]
     public Vector2 dashDirection;
-    private const float DashCheckRadius = 1f;
     public float dashSpeed;
     public float dashDuration;
     private float normalDashSpeed;
-    
-    [Header("Clone Inputs")] 
-    private RaycastHit2D dashHit;
-    public Collider2D OnEnemyDashedCollider { get; private set; }
-
     
     [Header("Movement Inputs")]
     public float moveSpeed = 10f;
@@ -51,6 +45,7 @@ public class Player : Entity
     public float lastImageYpos;
     public bool OnIsBusy { get; private set; }
     public PlayerInputs OnPlayerInputs { get; private set; }
+    private CameraController cameraController;
     
     protected override void Awake()
     {
@@ -80,6 +75,7 @@ public class Player : Entity
 
         normalMoveSpeed = moveSpeed;
         normalDashSpeed = dashSpeed;
+        cameraController = CameraController.Instance;
     }
 
     protected override void Update()
@@ -92,6 +88,18 @@ public class Player : Entity
         if (OnPlayerInputs.Player.Teleport.WasPressedThisFrame() && OnSkill.Kunai.KunaiUnlocked)
         {
             OnSkill.Kunai.CanUseSkill();
+        }
+        
+        if (OnPlayerInputs.Player.BigMapPanel.WasPressedThisFrame())
+        {
+            if (!cameraController.bigMapActive)
+            {
+                cameraController.ActivateBigMap();
+            }
+            else
+            {
+                cameraController.DeactivateBigMap();
+            }
         }
     }
 
@@ -169,15 +177,5 @@ public class Player : Entity
         moveSpeed = normalMoveSpeed;
         dashSpeed = normalDashSpeed;
     }
-
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        HelperUtilities.ValidateCheckNullValue(this, nameof(OnTransformPosition), OnTransformPosition);
-        HelperUtilities.ValidateCheckNullValue(this, nameof(OnEnemyDashedCollider), OnEnemyDashedCollider);
-        HelperUtilities.ValidateCheckNullValue(this, nameof(playerTransform), playerTransform);
-        HelperUtilities.ValidateCheckNullValue(this, nameof(OnSkill), OnSkill);
-    }
-#endif
 }
 

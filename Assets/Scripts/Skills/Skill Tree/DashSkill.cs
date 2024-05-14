@@ -27,7 +27,7 @@ public class DashSkill : Skill
       unlockKunaiDashButton.GetComponent<Button>().onClick.AddListener(UnlockKunaiDash);
    }
 
-   public override void UseSkill()
+   protected override void UseSkill()
    {
       base.UseSkill();
    }
@@ -70,5 +70,12 @@ public class DashSkill : Skill
       {
          //Implement Kunai on Dash
       }
+   }
+
+   protected override void CheckUnlocked()
+   {
+      UnlockDash();
+      UnlockCloneDash();
+      UnlockKunaiDash();
    }
 }

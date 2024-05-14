@@ -85,7 +85,14 @@ public class KunaiSkill : Skill
         }
     }
 
-    public override void UseSkill()
+    protected override void CheckUnlocked()
+    {
+        UnlockKunai();
+        UnlockKunaiSwitchExplode();
+        UnlockKunaiStackExplode();
+    }
+
+    protected override void UseSkill()
     {
         base.UseSkill();
 

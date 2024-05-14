@@ -143,13 +143,4 @@ public class Entity : MonoBehaviour
     {
         OnAnim.speed = 1;
     }
-
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        HelperUtilities.ValidateCheckNullValue(this, nameof(OnAnim), OnAnim);
-        HelperUtilities.ValidateCheckNullValue(this, nameof(OnRb), OnRb);
-        HelperUtilities.ValidateCheckNullValue(this, nameof(OnEntityFx), OnEntityFx);
-    }
-#endif
 }

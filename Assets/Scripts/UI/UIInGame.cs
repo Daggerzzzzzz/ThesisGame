@@ -30,6 +30,9 @@ public class UIInGame : MonoBehaviour
     
     private SkillManager skill;
     
+    public GameObject miniMap;
+    public GameObject bigMapText;
+    
     private static readonly int Health = Shader.PropertyToID("_Health");
     
     private void Awake()
@@ -39,7 +42,6 @@ public class UIInGame : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("UI");
         if (playerStats != null)
         {
             UpdateHealthUI();
@@ -65,7 +67,7 @@ public class UIInGame : MonoBehaviour
             SetCooldown(swordImage);
         }
         
-        if (player.OnPlayerInputs.Player.Ultimate.WasPressedThisFrame() && skill.Blackhole.baseUpgradeUnlock)
+        if (player.OnPlayerInputs.Player.Ultimate.WasPressedThisFrame() && skill.Blackhole.BaseUpgradeUnlock)
         {
             SetCooldown(ultimateImage);
         }

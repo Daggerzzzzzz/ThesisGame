@@ -127,7 +127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951926e1b3d82b04aa4997f07570b6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentTransform: {fileID: 0}
 --- !u!61 &7080235674947183930
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -747,7 +746,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951926e1b3d82b04aa4997f07570b6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentTransform: {fileID: 0}
 --- !u!61 &7368665163233226422
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -911,8 +909,8 @@ GameObject:
   - component: {fileID: 8291436548246768545}
   - component: {fileID: 5193896573802485703}
   m_Layer: 7
-  m_Name: weapon
-  m_TagString: Untagged
+  m_Name: Gonryomaru
+  m_TagString: Equipments
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1126,7 +1124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951926e1b3d82b04aa4997f07570b6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentTransform: {fileID: 0}
 --- !u!61 &8487817807600279301
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1508,8 +1505,8 @@ GameObject:
   - component: {fileID: 8364580559741989686}
   - component: {fileID: 3028339647980624960}
   m_Layer: 7
-  m_Name: weapon
-  m_TagString: Untagged
+  m_Name: Zangetsu
+  m_TagString: Equipments
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4125,7 +4122,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 790233563
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -4179,7 +4176,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951926e1b3d82b04aa4997f07570b6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentTransform: {fileID: 0}
 --- !u!61 &5484406271059796012
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4237,8 +4233,8 @@ GameObject:
   - component: {fileID: 3913873760903896590}
   - component: {fileID: 7213294287182992965}
   m_Layer: 7
-  m_Name: armor
-  m_TagString: Untagged
+  m_Name: Guardian Angel
+  m_TagString: Equipments
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4370,7 +4366,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951926e1b3d82b04aa4997f07570b6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentTransform: {fileID: 0}
 --- !u!61 &5910897216732313801
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4665,8 +4660,8 @@ GameObject:
   - component: {fileID: 3195341393083075725}
   - component: {fileID: 6408625548290278880}
   m_Layer: 7
-  m_Name: armor
-  m_TagString: Untagged
+  m_Name: Warmogs
+  m_TagString: Equipments
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5416,7 +5411,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951926e1b3d82b04aa4997f07570b6f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentTransform: {fileID: 0}
 --- !u!61 &8997604247153141761
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6122,8 +6116,8 @@ GameObject:
   - component: {fileID: 6172402332071707720}
   - component: {fileID: 5565881349600249764}
   m_Layer: 7
-  m_Name: weapon
-  m_TagString: Untagged
+  m_Name: Ryujin Jakka
+  m_TagString: Equipments
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6328,8 +6322,8 @@ GameObject:
   - component: {fileID: 8763640710192475182}
   - component: {fileID: 8035503979939494485}
   m_Layer: 7
-  m_Name: armor
-  m_TagString: Untagged
+  m_Name: Thornmail
+  m_TagString: Equipments
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6506,6 +6500,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4357619937880997954}
     m_Modifications:
+    - target: {fileID: 1792780306398401303, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1792780306398401303, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[5]
+      value: -1277430277
+      objectReference: {fileID: 0}
+    - target: {fileID: 1792780306398401303, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[6]
+      value: -836387209
+      objectReference: {fileID: 0}
     - target: {fileID: 3507404308279629762, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
       propertyPath: m_SortingLayer
       value: 4
@@ -6576,6 +6582,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4357619937880997954}
     m_Modifications:
+    - target: {fileID: 1792780306398401303, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1792780306398401303, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[5]
+      value: -1277430277
+      objectReference: {fileID: 0}
+    - target: {fileID: 1792780306398401303, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[6]
+      value: -836387209
+      objectReference: {fileID: 0}
     - target: {fileID: 3507404308279629762, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
       propertyPath: m_SortingLayer
       value: 4

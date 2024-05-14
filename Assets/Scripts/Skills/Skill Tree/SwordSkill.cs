@@ -47,10 +47,10 @@ public class SwordSkill : Skill
     [Header("Passive Skills")] 
     [SerializeField]
     private SkillTreeSlot timeStopUnlockedButton; 
-    public bool timeStopUnlocked { get; private set; }
+    public bool TimeStopUnlocked { get; private set; }
     [SerializeField]
     private SkillTreeSlot vulnerableUnlockedButton;
-    public bool vulnerableUnlocked { get; private set; }
+    public bool VulnerableUnlocked { get; private set; }
     
     [Header("Freeze Time Skill Info")] 
     [SerializeField]
@@ -109,7 +109,7 @@ public class SwordSkill : Skill
     {
         if (timeStopUnlockedButton.unlocked)
         {
-            timeStopUnlocked = true;
+            TimeStopUnlocked = true;
         }
     }
     
@@ -117,7 +117,7 @@ public class SwordSkill : Skill
     {
         if (vulnerableUnlockedButton.unlocked)
         {
-            vulnerableUnlocked = true;
+            VulnerableUnlocked = true;
         }
     }
 
@@ -144,5 +144,12 @@ public class SwordSkill : Skill
         {
             swordType = SwordType.SPIN;
         }
+    }
+
+    protected override void CheckUnlocked()
+    {
+        UnlockSwordFlying();
+        UnlockSwordBounce();
+        UnlockSwordSpin();
     }
 }
