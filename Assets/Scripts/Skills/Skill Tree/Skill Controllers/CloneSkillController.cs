@@ -88,7 +88,7 @@ public class CloneSkillController : MonoBehaviour
             Enemy enemy = hit.GetComponent<Enemy>();
             if (enemy != null)
             {
-                player.OnEntityStats.StatusAilments(hit.GetComponent<EntityStats>());
+                player.OnEntityStats.DoDamage(hit.GetComponent<EntityStats>(), gameObject);
             }
         }
     }

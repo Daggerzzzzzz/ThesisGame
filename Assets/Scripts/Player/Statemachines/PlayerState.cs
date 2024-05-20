@@ -17,7 +17,6 @@ public class PlayerState
    
    protected PlayerInputs playerInputs;
    
-
    protected PlayerState(Player playerState, PlayerStateMachine stateMachineState, string animationNameState)
    {
       player = playerState;
@@ -45,7 +44,7 @@ public class PlayerState
          stateMachine.ChangeState(player.OnPlayerAimState);
       }
 
-      if (playerInputs.Player.Ultimate.IsPressed() && player.OnSkill.Blackhole.BaseUpgradeUnlock && player.OnSkill.Blackhole.CanUseSkill())
+      if (playerInputs.Player.Ultimate.WasPressedThisFrame() && player.OnSkill.Blackhole.BaseUpgradeUnlock && player.OnSkill.Blackhole.CanUseSkill())
       {
          stateMachine.ChangeState(player.OnPlayerBlackholeState);
       }

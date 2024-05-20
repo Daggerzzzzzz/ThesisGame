@@ -14,15 +14,24 @@ public class Player : Entity
     
     [Header("Movement Inputs")]
     public float moveSpeed = 10f;
-    private Transform playerTransform;
     private float normalMoveSpeed;
+    private float defaultMovementSpeed;
 
     [Header("Equipment Tooltip")] 
     public GameObject eKey;
     public GameObject equipmentInfo;
     public ItemTooltip itemTooltip;
     
-    public static Transform OnTransformPosition { get; private set; }
+    [Header("Hit Stop Effect")] 
+    [SerializeField] 
+    private float shakeForce;
+    [SerializeField] 
+    private float changeTime;
+    [SerializeField] 
+    private int restoreSpeed;
+    [SerializeField] 
+    private float delay;
+    
     public SkillManager OnSkill { get; private set; }
     public GameObject OnSword { get; private set; }
 
@@ -45,8 +54,7 @@ public class Player : Entity
     public float lastImageYpos;
     public bool OnIsBusy { get; private set; }
     public PlayerInputs OnPlayerInputs { get; private set; }
-    private CameraController cameraController;
-    
+    private HitStopEffect hitStopEffect;
     protected override void Awake()
     {
         base.Awake();
@@ -70,36 +78,27 @@ public class Player : Entity
     protected override void Start()
     {
         base.Start();
+        hitStopEffect = GetComponent<HitStopEffect>();
+        
         OnSkill = SkillManager.Instance;
         OnStateMachine.Initialize(OnIdleState);
-
+        
         normalMoveSpeed = moveSpeed;
         normalDashSpeed = dashSpeed;
-        cameraController = CameraController.Instance;
+        defaultMovementSpeed = moveSpeed;
     }
 
     protected override void Update()
     {
         base.Update();
+        
         OnStateMachine.OnCurrentState.Update();
+        
         CheckForDashInput();
-        OnTransformPosition = playerTransform;
-
+        
         if (OnPlayerInputs.Player.Teleport.WasPressedThisFrame() && OnSkill.Kunai.KunaiUnlocked)
         {
             OnSkill.Kunai.CanUseSkill();
-        }
-        
-        if (OnPlayerInputs.Player.BigMapPanel.WasPressedThisFrame())
-        {
-            if (!cameraController.bigMapActive)
-            {
-                cameraController.ActivateBigMap();
-            }
-            else
-            {
-                cameraController.DeactivateBigMap();
-            }
         }
     }
 
@@ -170,12 +169,41 @@ public class Player : Entity
         Invoke(nameof(ReturnToNormalSpeed), slowDuration);
     }
 
+    public override void DamageEffect(GameObject sender)
+    {
+        base.DamageEffect(sender);
+        StartCoroutine(FreezeTimeFor(0.25f));
+        hitStopEffect.Shake(sender.transform.position, shakeForce);
+        hitStopEffect.StopTime(changeTime, restoreSpeed, delay);
+    }
+    
     protected override void ReturnToNormalSpeed()
     {
         base.ReturnToNormalSpeed();
 
         moveSpeed = normalMoveSpeed;
         dashSpeed = normalDashSpeed;
+    }
+    
+    public void TimeFreeze(bool timeFrozen)
+    {
+        if (timeFrozen)
+        {
+            moveSpeed = 0;
+            OnAnim.speed = 0;
+        }
+        else
+        {
+            moveSpeed = defaultMovementSpeed;
+            OnAnim.speed = 1;
+        }
+    }
+
+    protected IEnumerator FreezeTimeFor(float seconds)
+    {
+        TimeFreeze(true);
+        yield return new WaitForSeconds(seconds);
+        TimeFreeze(false);
     }
 }
 

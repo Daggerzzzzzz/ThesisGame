@@ -38,6 +38,12 @@ public class ItemTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (itemObject.ItemDataSo.itemType == ItemType.MATERIAL)
+            {
+                //Fix This one
+                return;
+            }
+            
             canEquip = true;
             player = other.GetComponent<Player>();
             player.eKey.SetActive(true);

@@ -39,8 +39,6 @@ public class KunaiSkillController : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(pressedTwice);
-        
         if (canGrow)
         {
             transform.localScale = Vector2.Lerp(transform.localScale, new Vector2(3, 3), speedOfGrowth * Time.deltaTime);
@@ -89,7 +87,7 @@ public class KunaiSkillController : MonoBehaviour
             if (hit.CompareTag("Enemy"))
             {
                 Debug.Log(hit.name);
-                player.OnEntityStats.StatusAilments(hit.GetComponent<EntityStats>());
+                player.OnEntityStats.DoDamage(hit.GetComponent<EntityStats>(), gameObject);
             }
         }
     }

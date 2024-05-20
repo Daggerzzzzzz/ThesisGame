@@ -22,6 +22,9 @@ public class Enemy : Entity
     public bool OnIsPlayerFollowing { get; private set; }
     public bool OnIsPlayerAttacking { get; private set; }
     public Vector2 EnemyDirection { get; private set; }
+    
+    public int enemyExperienceDrop;
+
 
     protected override void Awake()
     {
@@ -43,7 +46,7 @@ public class Enemy : Entity
         base.Update();
         OnStateMachine.OnCurrentState.Update();
     }
-    
+
     private IEnumerator MaterializeEnemy()
     {
         EnemyEnable(false);
@@ -54,10 +57,10 @@ public class Enemy : Entity
     private void EnemyEnable(bool check)
     {
         OnCapsuleCollider2D.enabled = check;
-        //enemyAI.enabled = check;
+        enemyAI.enabled = check;
     }
 
-    public virtual void TimeFreeze(bool timeFrozen)
+    public void TimeFreeze(bool timeFrozen)
     {
         if (timeFrozen)
         {
@@ -110,5 +113,12 @@ public class Enemy : Entity
     {
         base.ReturnToNormalSpeed();
         moveSpeed = defaultMovementSpeed;
+    }
+
+    public override void DamageEffect(GameObject sender)
+    {
+        Debug.Log("sender" + sender);
+        base.DamageEffect(sender);
+        StartCoroutine(HitKnockBack(sender));
     }
 }

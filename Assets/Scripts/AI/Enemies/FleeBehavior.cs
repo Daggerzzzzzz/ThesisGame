@@ -9,8 +9,20 @@ public class FleeBehavior : SteeringBehavior
     [SerializeField]
     private bool showGizmo = true;
 
+    [SerializeField]
+    private float centerAttractionStrength = 0.3f;
+
     private Vector2 targetPositionCached;
     private float[] interestsTemp;
+
+    private Vector2 roomCenterPosition;
+    private RoomCenter roomCenter;
+
+    private void Start()
+    {
+        roomCenter = GetComponentInParent<RoomCenter>();
+        roomCenterPosition = roomCenter.roomCenterPos;
+    }
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)
     {
@@ -29,16 +41,22 @@ public class FleeBehavior : SteeringBehavior
         if (aiData.currentTarget != null)
         {
             Vector2 directionToTarget = (Vector2)transform.position - targetPositionCached;
+            Vector2 directionToCenter = roomCenterPosition - (Vector2)transform.position;
+
             for (int i = 0; i < interest.Length; i++)
             {
-                float result = Vector2.Dot(directionToTarget.normalized, Directions.eightDirections[i]);
-                if (result > 0)
+                float fleeDot = Vector2.Dot(directionToTarget.normalized, Directions.eightDirections[i]);
+                float centerDot = Vector2.Dot(directionToCenter.normalized, Directions.eightDirections[i]);
+
+                if (fleeDot > 0)
                 {
-                    float valueToPutIn = result;
-                    if (valueToPutIn > interest[i])
-                    {
-                        interest[i] = valueToPutIn;
-                    }
+                    interest[i] = Mathf.Max(interest[i], fleeDot);
+                }
+
+                if (centerDot > 0)
+                {
+                    float adjustedCenterDot = centerDot * centerAttractionStrength;
+                    interest[i] = Mathf.Max(interest[i], adjustedCenterDot);
                 }
             }
         }
@@ -59,6 +77,7 @@ public class FleeBehavior : SteeringBehavior
     {
         if (showGizmo == false)
             return;
+
         Gizmos.DrawSphere(targetPositionCached, 0.2f);
 
         if (Application.isPlaying && interestsTemp != null)
@@ -68,6 +87,7 @@ public class FleeBehavior : SteeringBehavior
             {
                 Gizmos.DrawRay(transform.position, Directions.eightDirections[i] * interestsTemp[i] * 2);
             }
+
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(targetPositionCached, 0.1f);
         }

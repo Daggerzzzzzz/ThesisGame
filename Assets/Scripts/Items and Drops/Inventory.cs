@@ -35,7 +35,18 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
     private WeaponSlot weaponSlot;
     private ArmorSlot armorSlot;
     private StatSlot[] statSlots;
-    
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        stashItemSlots = stashSlotParent.GetComponentsInChildren<ItemSlot>();
+        inventoryItemSlots = inventorySlotParent.GetComponentsInChildren<ItemSlot>();
+        weaponSlot = equipmentSlotParent.GetComponentInChildren<WeaponSlot>();
+        armorSlot = equipmentSlotParent.GetComponentInChildren<ArmorSlot>();
+        statSlots = statSlotParent.GetComponentsInChildren<StatSlot>();
+    }
+
     private void Start()
     {
         stash = new List<InventoryItem>();
@@ -43,12 +54,6 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         
         inventory = new List<InventoryItem>();
         inventoryDict = new Dictionary<EquipmentDataSO, InventoryItem>();
-        
-        stashItemSlots = stashSlotParent.GetComponentsInChildren<ItemSlot>();
-        inventoryItemSlots = inventorySlotParent.GetComponentsInChildren<ItemSlot>();
-        weaponSlot = equipmentSlotParent.GetComponentInChildren<WeaponSlot>();
-        armorSlot = equipmentSlotParent.GetComponentInChildren<ArmorSlot>();
-        statSlots = statSlotParent.GetComponentsInChildren<StatSlot>();
 
         AddStartingItems();
     }
@@ -208,9 +213,14 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
             inventoryItemSlots[i].UpdateSlot(inventory[i]);
         }
 
-        for (int i = 0; i < statSlots.Length; i++)
+        UIStatSlotUpdate();
+    }
+
+    public void UIStatSlotUpdate()
+    {
+        foreach (var stat in statSlots)
         {
-            statSlots[i].UpdateStatValue();
+            stat.UpdateStatValue();
         }
     }
 

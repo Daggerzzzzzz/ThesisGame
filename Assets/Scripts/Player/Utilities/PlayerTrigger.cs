@@ -19,7 +19,7 @@ public class PlayerTrigger : MonoBehaviour
             if (hit.CompareTag("Enemy") && !attackOnce)
             {
                 EnemyStats target = hit.GetComponent<EnemyStats>();
-                OnPlayer.OnEntityStats.DoDamage(target);
+                OnPlayer.OnEntityStats.DoDamage(target,gameObject);
                 attackOnce = true;
             }
         }

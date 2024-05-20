@@ -8,8 +8,7 @@ public class EnemyStats : EntityStats
     private HealthBar healthBar;
 
     [Header("Level Details")] 
-    [SerializeField]
-    private int level = 1;
+    public int level = 1;
     [Range(0f, 1f)] 
     [SerializeField]
     private float percentageModifier = .4f;
@@ -50,10 +49,10 @@ public class EnemyStats : EntityStats
         }
     }
 
-    public override void TakeDamage(int damage)
+    public override void TakeDamage(int damage, GameObject target)
     {
-        base.TakeDamage(damage);
-        enemy.DamageEffect();
+        base.TakeDamage(damage, target);
+        enemy.DamageEffect(target);
     }
 
     protected override void EntityDeath()
@@ -62,6 +61,7 @@ public class EnemyStats : EntityStats
         enemy.EntityDeath();
         StartCoroutine(DestroyUponDeath());
         healthBar.DisableSpriteRenderer();
+        PlayerManager.Instance.GainExperienceFlatRate(enemy.enemyExperienceDrop);
     }
 
     private IEnumerator DestroyUponDeath()

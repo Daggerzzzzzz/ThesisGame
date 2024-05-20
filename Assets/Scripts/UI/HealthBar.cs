@@ -1,38 +1,36 @@
+using System;
 using UnityEngine;
 
 public class HealthBar : MonoBehaviour
 {
     [SerializeField]
     private Material material;
-    private EntityStats entityStats;
     private SpriteRenderer sr;
+    private EntityStats entityStats;
     
     private static readonly int Health = Shader.PropertyToID("_Health");
-
-    private void Awake()
-    {
-        sr = GetComponentInChildren<SpriteRenderer>();
-    }
-
+    
     private void Start()
     {
+        sr = GetComponentInChildren<SpriteRenderer>();
+        
+        if (sr != null)
+        {
+            material = sr.material; 
+        }
+        
         entityStats = GetComponentInParent<EntityStats>();
-        material = sr.material;
         
         if (material != null)
         {
             UpdateHealthUI();
-        }
-        else
-        {
-            Debug.LogWarning("Material is null. Health UI update skipped.");
         }
     }
     
     public void UpdateHealthUI()
     {
         int maxHealth = entityStats.CalculateMaxHealthValue();
-        int currentHealth = entityStats.currentHealth;
+        int currentHealth = entityStats.CurrentHealth;
         
         float normalizedHealth = (float)currentHealth / maxHealth;
         

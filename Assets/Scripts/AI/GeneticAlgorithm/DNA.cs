@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class DNA
 {
@@ -8,14 +9,16 @@ public class DNA
     
     public int Distance { get; private set; }
     public int Generation { get; private set; }
+    public int MonsterLevel { get; private set; }
     public float ScoreEvaluation { get; private set; }
 
-    public DNA(List<int> batch, List<float> difficulty, int distance, int generation = 0)
+    public DNA(List<int> batch, List<float> difficulty, int distance, int monsterLevel, int generation = 0)
     {
         Batch = batch;
         Difficulty = difficulty;
         Distance = distance;
         Generation = generation;
+        MonsterLevel = monsterLevel;
         Chromosome = new List<int>();
 
         System.Random rand = new();
@@ -37,8 +40,11 @@ public class DNA
             if (Chromosome[i] == 1)
             {
                 score += Difficulty[i];
-            }
+            }   
         }
+
+        score *= Mathf.RoundToInt(MonsterLevel / Distance);
+        
         if (score > Distance)
             score = 0;
         ScoreEvaluation = score;
@@ -59,8 +65,8 @@ public class DNA
 
         List<DNA> children = new List<DNA>
         {
-            new DNA(Batch, Difficulty, Distance, Generation + 1),
-            new DNA(Batch, Difficulty, Distance, Generation + 1)
+            new DNA(Batch, Difficulty, Distance, MonsterLevel, Generation + 1),
+            new DNA(Batch, Difficulty, Distance, MonsterLevel, Generation + 1)
         };
 
         children[0].Chromosome = child1;
@@ -84,7 +90,7 @@ public class DNA
             }
         }
         
-        return new DNA(Batch, Difficulty, Distance, Generation)
+        return new DNA(Batch, Difficulty, Distance, MonsterLevel, Generation)
         {
             Chromosome = mutatedChromosome
         };

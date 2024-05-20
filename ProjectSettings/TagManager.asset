@@ -11,6 +11,7 @@ TagManager:
   - Movement Collider
   - Starting Center
   - Equipments
+  - Player Trigger Collider
   layers:
   - Default
   - TransparentFX

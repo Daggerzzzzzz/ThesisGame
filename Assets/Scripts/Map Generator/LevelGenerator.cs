@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LevelGenerator : MonoBehaviour
+public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManager
 {
     [Header("Room Layout Setup")]
     [SerializeField]
@@ -42,11 +42,18 @@ public class LevelGenerator : MonoBehaviour
     private GameObject skeleton;
     [SerializeField] 
     private GameObject zombie;
+    [SerializeField] 
+    private int monstersLevelPerDistance;
+    [SerializeField] 
+    private int monstersExperienceDropPerDistance;
     
-    private readonly List<GameObject> generatedOutlines = new();
-    private readonly List<GameObject> roomObjects = new();
+    [Header("Database")]
     private readonly List<RoomInfo> roomInfos = new();
-    private readonly List<RoomCenter> roomCenterDatas = new();
+    private readonly List<(GameObject, string)> loadedRoomObjects = new();
+    private readonly List<(GameObject, string)> loadedGeneratedOutlines = new();
+    
+    private readonly List<GameObject> roomObjects = new();
+    private readonly List<GameObject> generatedOutlines = new();
 
     private Dictionary<int, HashSet<string[]>> levelDangerProfiles = new();
     private Dictionary<string, float> enemyDifficulties = new();
@@ -61,8 +68,88 @@ public class LevelGenerator : MonoBehaviour
     private GameObject endRoom;
     private RoomCenter roomCenterDetails;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
+         if (roomInfos.Count > 0)
+        {
+            Debug.Log("There are save items");
+        
+            foreach (RoomInfo roomInfo in roomInfos)
+            {
+                GameObject loadedNewRoom = Instantiate(layoutRoom, roomInfo.position, Quaternion.identity);
+                loadedRoomObjects.Add((loadedNewRoom, roomInfo.individualRoomCenter.roomName));
+            }
+            
+            foreach((GameObject, string) loadedRoom in loadedRoomObjects)
+            {
+                loadedGeneratedOutlines.Add((CreateRoomOutline(loadedRoom.Item1.transform.position), loadedRoom.Item2));
+            }
+            
+            foreach((GameObject, string) loadedOutlines in loadedGeneratedOutlines)
+            {
+                RoomCenter loadedRoomCenter = GetRoomCenterByName(loadedOutlines.Item2);
+                RoomCenter loadedRoomCenterDetails = Instantiate(loadedRoomCenter, loadedOutlines.Item1.transform.position, transform.rotation);
+                loadedRoomCenterDetails.TheRoom = loadedOutlines.Item1.GetComponent<Room>();
+                loadedRoomCenterDetails.TheRoom.roomCenterName = loadedRoomCenter.name;
+                loadedRoomCenterDetails.name = loadedOutlines.Item2;
+                if (loadedRoomCenterDetails.name == "Starting Center")
+                {
+                    loadedRoomCenterDetails.tag = "Starting Center";
+                }
+
+                foreach (RoomInfo room in roomInfos)
+                {
+                    if (room.position == loadedRoomCenterDetails.transform.position)
+                    {
+                        room.individualRoomCenter.roomCenter = loadedRoomCenterDetails;
+                        break;
+                    }
+                }
+            }
+
+            foreach (RoomInfo room in roomInfos)
+            {
+                MonsterBatch monsterBatch = new MonsterBatch();
+                
+                if (room.monsterBatch != null)
+                {
+                    List<string> nameToUpdate = new();
+
+                    foreach (var monster in room.monsterBatch)
+                    {
+                        if (monster.monsterGameObject == null)
+                        {
+                            nameToUpdate.Add(monster.monsterName);
+                        }
+                    }
+
+                    foreach (string name in nameToUpdate)
+                    {
+                        float randomX = Random.Range(-9f, 7.5f);
+                        float randomY = Random.Range(-3.5f, 3f);
+                        Vector3 randomPosition = new Vector3(randomX, randomY, 0f);
+                        
+                        GameObject monsterObject = Instantiate(GetMonsterByName(name), room.individualRoomCenter.roomCenter.transform);
+                        monsterObject.GetComponent<EnemyStats>().level = room.monsterLevel;
+                        monsterObject.GetComponent<Enemy>().enemyExperienceDrop = room.monsterExperienceDrop;
+                        monsterObject.transform.localPosition = randomPosition;
+                        monsterObject.tag = "Enemy";
+                        monsterObject.name = name;
+                        room.individualRoomCenter.roomCenter.enemies.Add(monsterObject);
+                        monsterObject.SetActive(false);
+
+                        monsterBatch.AddMonster(name, monsterObject);
+                    }
+                }
+
+                room.monsterBatch = monsterBatch;
+            }
+            
+            return;
+        }
+        
         Instantiate(layoutRoom, generatorPoint.position, generatorPoint.rotation).GetComponent<SpriteRenderer>().color = startingColor;
         
         selectedDirection = (Direction)Random.Range(0, 4);
@@ -73,9 +160,37 @@ public class LevelGenerator : MonoBehaviour
         GenerateMultipleRooms();
         ConvertToGraph();
         PopulateRoomInfos();
-        PopulateRoomCenters();
     }
     
+    private void Update()
+    {
+        for (int i = 0; i < roomInfos.Count; i++)
+        {
+            RoomInfo room = roomInfos[i];
+            if (room.monsterBatch == null)
+            {
+                continue;
+            }
+            
+            List<int> monstersToRemove = new List<int>();
+            
+            for (int j = room.monsterBatch.monsters.Count - 1; j >= 0; j--)
+            {
+                MonsterInfo monster = room.monsterBatch.monsters[j];
+                if (monster.monsterGameObject == null)
+                {
+                    monstersToRemove.Add(j);
+                }
+            }
+            
+            foreach (int index in monstersToRemove)
+            {
+                room.monsterBatch.monsters.RemoveAt(index);
+            }
+        }
+    }
+
+
     private void MoveGenerationPoint()
     {
         switch(selectedDirection)
@@ -117,14 +232,14 @@ public class LevelGenerator : MonoBehaviour
                 MoveGenerationPoint();
             }
         }
-        CreateRoomOutline(Vector3.zero);
+        generatedOutlines.Add(CreateRoomOutline(Vector3.zero));
 
         foreach(GameObject room in roomObjects)
         {
-            CreateRoomOutline(room.transform.position);
+            generatedOutlines.Add(CreateRoomOutline(room.transform.position));
         }
 
-        CreateRoomOutline(endRoom.transform.position);
+        generatedOutlines.Add(CreateRoomOutline(endRoom.transform.position));
 
         foreach(GameObject outline in generatedOutlines)
         {
@@ -135,9 +250,10 @@ public class LevelGenerator : MonoBehaviour
                 roomCenterDetails = Instantiate(centerStart, outline.transform.position, transform.rotation);
                 roomCenterDetails.TheRoom = outline.GetComponent<Room>();
                 roomCenterDetails.name = "Starting Center";
-                RoomInfo roomInfo = new RoomInfo(new Vector3(0, 0, 0), currentRoomID, centerStart);
+                roomCenterDetails.TheRoom.roomCenterName = roomCenterDetails.name;
+                RoomCenterData roomCenterData = new RoomCenterData(roomCenterDetails.name, roomCenterDetails);
+                RoomInfo roomInfo = new RoomInfo(new Vector3(0, 0, 0), currentRoomID, roomCenterData);
                 roomInfos.Add(roomInfo);
-                roomCenterDatas.Add(roomCenterDetails);
                 
                 currentRoomID++;
                 generateCenter = true;
@@ -148,9 +264,10 @@ public class LevelGenerator : MonoBehaviour
                 roomCenterDetails = Instantiate(roomCenter, outline.transform.position, transform.rotation);
                 roomCenterDetails.TheRoom = outline.GetComponent<Room>();
                 roomCenterDetails.name = "Battle Center";
-                RoomInfo roomInfo = new RoomInfo(outline.transform.position, currentRoomID, roomCenter);
+                roomCenterDetails.TheRoom.roomCenterName = roomCenterDetails.name;
+                RoomCenterData roomCenterData = new RoomCenterData(roomCenterDetails.name, roomCenterDetails);
+                RoomInfo roomInfo = new RoomInfo(outline.transform.position, currentRoomID, roomCenterData);
                 roomInfos.Add(roomInfo);
-                roomCenterDatas.Add(roomCenterDetails);
                 
                 currentRoomID++;
             }
@@ -160,16 +277,17 @@ public class LevelGenerator : MonoBehaviour
                 roomCenterDetails = Instantiate(centerEnd, outline.transform.position, transform.rotation);
                 roomCenterDetails.TheRoom = outline.GetComponent<Room>();
                 roomCenterDetails.name = "End Center";
-                RoomInfo roomInfo = new RoomInfo(outline.transform.position, currentRoomID, centerEnd);
+                roomCenterDetails.TheRoom.roomCenterName = roomCenterDetails.name;
+                RoomCenterData roomCenterData = new RoomCenterData(roomCenterDetails.name, roomCenterDetails);
+                RoomInfo roomInfo = new RoomInfo(outline.transform.position, currentRoomID, roomCenterData);
                 roomInfos.Add(roomInfo);
-                roomCenterDatas.Add(roomCenterDetails);
                 
                 currentRoomID++;
             }
         }
     }
     
-    private void CreateRoomOutline(Vector3 roomPosition)
+    private GameObject CreateRoomOutline(Vector3 roomPosition)
     {
         bool roomAbove = Physics2D.OverlapCircle(roomPosition + new Vector3 (0f, YOffset, 0f), .2f, roomLayer);
         bool roomBelow = Physics2D.OverlapCircle(roomPosition + new Vector3 (0f, -YOffset, 0f), .2f, roomLayer);
@@ -178,6 +296,7 @@ public class LevelGenerator : MonoBehaviour
         bool[] directions = { roomAbove, roomBelow, roomLeft, roomRight };
         
         int directionCount = 0;
+        GameObject generatedOutline;
 
         foreach (bool direction in directions)
         {
@@ -195,75 +314,92 @@ public class LevelGenerator : MonoBehaviour
             case 1:
                 if(roomAbove)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.singleUp, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.singleUp, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if(roomBelow)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.singleDown, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.singleDown, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if(roomLeft)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.singleLeft, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.singleLeft, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if(roomRight)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.singleRight, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.singleRight, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 break;
             case 2:
                 if (roomAbove && roomBelow)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.doubleUpDown, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.doubleUpDown, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if (roomLeft && roomRight)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.doubleLeftRight, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.doubleLeftRight, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if (roomAbove && roomRight)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.doubleUpRight, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.doubleUpRight, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if (roomRight && roomBelow)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.doubleRightDown, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.doubleRightDown, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if (roomBelow && roomLeft)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.doubleDownLeft, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.doubleDownLeft, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if (roomLeft && roomAbove)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.doubleLeftUp, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.doubleLeftUp, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 break;
             case 3:
                 if (roomAbove && roomRight && roomBelow)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.tripleUpRightDown, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.tripleUpRightDown, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if (roomRight && roomBelow && roomLeft)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.tripleRightDownLeft, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.tripleRightDownLeft, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if (roomBelow && roomLeft && roomAbove)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.tripleDownLeftUp, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.tripleDownLeftUp, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 if (roomLeft && roomAbove && roomRight)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.tripleLeftUpRight, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.tripleLeftUpRight, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 break;
             case 4:
                 if (roomBelow && roomLeft && roomAbove && roomRight)
                 {
-                    generatedOutlines.Add(Instantiate(rooms.allFourSides, roomPosition, transform.rotation));
+                    generatedOutline = Instantiate(rooms.allFourSides, roomPosition, transform.rotation);
+                    return generatedOutline;
                 }
                 break;
         }
+
+        return null;
     }
 
-    public void ConvertToGraph()
+    private void ConvertToGraph()
     {
         Vector3 vertex = new();
         HashSet<Vector3> edges = new();
@@ -296,18 +432,18 @@ public class LevelGenerator : MonoBehaviour
             }
             foreach (var roomInfo in roomInfos)
             {
-                if (roomInfo.Position == vertex)
+                if (roomInfo.position == vertex)
                 {
-                    tempVertex = roomInfo.RoomID;
+                    tempVertex = roomInfo.roomID;
                     visitedVertex.Add(tempVertex);
                 }
             }
 
             foreach (var roomInfo in roomInfos)
             {
-                if (edges.Contains(roomInfo.Position))
+                if (edges.Contains(roomInfo.position))
                 {
-                    tempEdges.Add(roomInfo.RoomID);
+                    tempEdges.Add(roomInfo.roomID);
                 }
             }
             foreach (var edge in tempEdges)
@@ -327,9 +463,11 @@ public class LevelGenerator : MonoBehaviour
         {
             foreach ((int id, int danger) in distanceSet)
             {
-                if (room.RoomID == id)
+                if (room.roomID == id)
                 {
-                    room.DangerLevel = danger;
+                    room.dangerLevel = danger;
+                    room.monsterLevel = danger * monstersLevelPerDistance;
+                    room.monsterExperienceDrop = danger * monstersExperienceDropPerDistance;
                 }
             }
         }
@@ -406,7 +544,7 @@ public class LevelGenerator : MonoBehaviour
         enemyDifficulties.Add("zombies", 0.75f);
     }
 
-    private List<string[]> InitializeGeneticAlgorithm(int distance, out float passMonsterBatchDangerLevel)
+    private List<string[]> InitializeGeneticAlgorithm(int distance, int monsterLevel, out float passMonsterBatchDangerLevel)
     {
         List<int> levels = new ();
         List<float> difficultyScores = new ();
@@ -437,7 +575,7 @@ public class LevelGenerator : MonoBehaviour
         }
 
         GeneticAlgorithm solution = new GeneticAlgorithm(populationSize);
-        DNA result = solution.Solve(mutationRate, numberOfGenerations, levels, difficultyScores, distance);
+        DNA result = solution.Solve(mutationRate, numberOfGenerations, levels, difficultyScores, distance, monsterLevel);
         
         for (int i = 0; i < result.Chromosome.Count; i++)
         {
@@ -460,73 +598,121 @@ public class LevelGenerator : MonoBehaviour
     {
         foreach (var room in roomInfos)
         {
-            if (room.RoomID == 0 || room.RoomID == distanceToEnd)
+            if (room.roomID == 0 || room.roomID == distanceToEnd)
             {
-                continue;
+                continue; 
             }
-            List<string[]> dangerProfiles = InitializeGeneticAlgorithm(room.DangerLevel + 1, out float monsterBatchDangerLevel);
-            room.MonsterBatch = dangerProfiles;
-            room.MonsterBatchDangerLevel = monsterBatchDangerLevel;
-        }
-    }
-    
-    private void PopulateRoomCenters()
-    {
-        foreach (var room in roomInfos)
-        {
-            foreach (var center in roomCenterDatas)
+
+            List<string[]> dangerProfiles = InitializeGeneticAlgorithm(room.dangerLevel + 1, room.monsterLevel, out float monsterBatchDangerLevel);
+            room.monsterBatchDangerLevel = monsterBatchDangerLevel;
+
+            MonsterBatch monsterBatch = new MonsterBatch();
+
+            foreach (string[] batch in dangerProfiles)
             {
-                if (center.transform.position == room.Position)
+                foreach (string monsterName in batch)
                 {
-                    int counter = 0;
-                    if (room.MonsterBatch == null)
+                    GameObject monsterPrefab = GetMonsterByName(monsterName);
+                    if (monsterPrefab != null)
                     {
-                        center.NumberOfEnemies = 0;
-                        continue;
-                    }
-                    center.NumberOfEnemies = room.MonsterBatch.Count;
-                    foreach (var monsters in room.MonsterBatch)
-                    {
-                        foreach (var monster in monsters)
-                        {
-                            float randomX = Random.Range(-9f, 7.5f);
-                            float randomY = Random.Range(-3.5f, 3f);
-                            Vector3 randomPosition = new Vector3(randomX, randomY, 0f);
-                            
-                            if (monster == "slimes")
-                            {
-                                GameObject slimeInstance = Instantiate(slime, center.transform);
-                                slimeInstance.transform.localPosition = randomPosition;
-                                slimeInstance.name = "Slime Enemy " + counter;
-                                slimeInstance.tag = "Enemy";
-                                center.Enemies.Add(slimeInstance);
-                                slimeInstance.SetActive(false);
-                            }
-                            if (monster == "skeletons")
-                            {
-                                GameObject skeletonInstance = Instantiate(skeleton, center.transform);
-                                skeletonInstance.transform.localPosition = randomPosition;
-                                skeletonInstance.name = "Skeleton Enemy " + counter;
-                                skeletonInstance.tag = "Enemy";
-                                center.Enemies.Add(skeletonInstance);
-                                skeletonInstance.SetActive(false);
-                            }
-                            if (monster == "zombies")
-                            {
-                                GameObject zombieInstance = Instantiate(zombie, center.transform);
-                                zombieInstance.transform.localPosition = randomPosition;
-                                zombieInstance.name = "Zombie Enemy " + counter;
-                                zombieInstance.tag = "Enemy";
-                                center.Enemies.Add(zombieInstance);
-                                zombieInstance.SetActive(false);
-                            }
-                        }
+                        float randomX = Random.Range(-9f, 7.5f);
+                        float randomY = Random.Range(-3.5f, 3f);
+                        Vector3 randomPosition = new Vector3(randomX, randomY, 0f);
+
+                        GameObject monsterInstance = Instantiate(monsterPrefab, room.individualRoomCenter.roomCenter.transform);
+                        monsterInstance.GetComponent<EnemyStats>().level = room.monsterLevel;
+                        monsterInstance.GetComponent<Enemy>().enemyExperienceDrop = room.monsterExperienceDrop;
+                        monsterInstance.transform.localPosition = randomPosition;
+                        monsterInstance.tag = "Enemy";
+                        monsterInstance.name = monsterName;
+                        room.individualRoomCenter.roomCenter.enemies.Add(monsterInstance);
+                        monsterInstance.SetActive(false);
                         
-                        counter++;
+                        monsterBatch.AddMonster(monsterName, monsterInstance);
                     }
                 }
             }
+           
+            room.monsterBatch = monsterBatch;
         }
+    }
+    
+    private GameObject GetMonsterByName(string monsterName)
+    {
+        switch (monsterName)
+        {
+            case "slimes":
+                return slime;
+            case "skeletons":
+                return skeleton;
+            case "zombies":
+                return zombie;
+            default:
+                return null;
+        }
+    }
+    
+    private RoomCenter GetRoomCenterByName(string centerName)
+    {
+        switch (centerName)
+        {
+            case "Starting Center":
+                return centerStart;
+            case "End Center":
+                return centerEnd;
+            case "Battle Center":
+                return roomCenter;
+            default:
+                return null;
+        }
+    }
+
+    public void LoadData(GameData data)
+    {
+        Debug.Log("Load Data");
+        foreach (var savedRoomInfo in data.roomInfoSave)
+        {
+            RoomCenterData roomCenterData = new RoomCenterData(savedRoomInfo.individualRoomCenter.roomName, savedRoomInfo.individualRoomCenter.roomCenter);
+            RoomInfo roomInfo = new RoomInfo(savedRoomInfo.position, savedRoomInfo.roomID, roomCenterData)
+            {
+                dangerLevel = savedRoomInfo.dangerLevel,
+                monsterBatchDangerLevel = savedRoomInfo.monsterBatchDangerLevel,
+                monsterBatch = new MonsterBatch(),
+                monsterLevel = savedRoomInfo.monsterLevel,
+                monsterExperienceDrop = savedRoomInfo.monsterExperienceDrop
+            };
+            
+            foreach (var monsterInfo in savedRoomInfo.monsterBatch)
+            {
+                roomInfo.monsterBatch.AddMonster(monsterInfo.monsterName, null);
+            }
+
+            roomInfos.Add(roomInfo);
+        }
+    }
+    
+    public void SaveData(ref GameData data)
+    {
+        data.roomInfoSave.Clear();
+        
+        foreach (RoomInfo roomInfo in roomInfos)
+        {
+            RoomInfo newRoomInfoWithoutDuplicate = AddNewRoom(roomInfo);
+            data.roomInfoSave.Add(newRoomInfoWithoutDuplicate);
+        }
+    }
+
+    private RoomInfo AddNewRoom(RoomInfo roomInfo)
+    {
+        RoomInfo newRoomInfo = new RoomInfo(roomInfo.position, roomInfo.roomID, roomInfo.individualRoomCenter)
+        {
+            monsterBatch = roomInfo.monsterBatch,
+            monsterBatchDangerLevel = roomInfo.monsterBatchDangerLevel,
+            dangerLevel = roomInfo.dangerLevel,
+            monsterLevel = roomInfo.monsterLevel,
+            monsterExperienceDrop = roomInfo.monsterExperienceDrop
+        };
+        return newRoomInfo;
     }
 }
 

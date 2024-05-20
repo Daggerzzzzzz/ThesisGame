@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,26 +9,43 @@ public class Room : MonoBehaviour
     [SerializeField]
     private GameObject mapHider;
     
+    public string roomCenterName = "";
     public bool roomActive;
     public bool closeWhenEntered;
     
     private static readonly int Close = Animator.StringToHash("close");
 
+    private void Start()
+    {
+        if (roomCenterName == "Room End")
+        {
+            CheckForKunaiExistence();
+            StartCoroutine(DoorDelay());
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision) 
     {
-        if(collision.CompareTag("Player"))
+        if(collision.CompareTag("Player Trigger Collider"))
         {
-            if(closeWhenEntered)
+            if (roomCenterName == "Room End")
             {
-                CheckForKunaiExistence();
-                StartCoroutine(DoorDelay());
+                //Implement Key Mechanics
             }
+            else
+            {
+                if(closeWhenEntered)
+                {
+                    CheckForKunaiExistence();
+                    StartCoroutine(DoorDelay());
+                }
 
-            roomActive = true; 
-            mapHider.SetActive(false);
+                roomActive = true; 
+                mapHider.SetActive(false);
             
-            CameraController.Instance.ChangeTarget(transform);
-            CameraSwitch.Instance.PlayerEnter(); 
+                CameraController.Instance.ChangeTarget(transform);
+                CameraSwitch.Instance.PlayerEnter(); 
+            }
         }
     }
     

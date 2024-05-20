@@ -58,7 +58,7 @@ public class LightningController : MonoBehaviour
                     newLightning.GetComponent<LightningController>().SetupLightning(damage);
                     Instantiate(beenStruck, other.gameObject.transform);
                     entityStats = other.GetComponent<EntityStats>();
-                    entityStats.TakeDamage(damage);
+                    entityStats.TakeDamage(damage, gameObject);
                 }
             
                 anim.StopPlayback();

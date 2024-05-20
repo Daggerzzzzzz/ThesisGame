@@ -13,11 +13,11 @@ public class GeneticAlgorithm
         bestSolution = null;
     }
     
-    public void InitializePopulation(List<int> batch, List<float> difficulty, int distance)
+    public void InitializePopulation(List<int> batch, List<float> difficulty, int distance, int monsterLevel)
     {
         for (int i = 0; i < populationSize; i++)
         {
-            population.Add(new DNA(batch, difficulty, distance));
+            population.Add(new DNA(batch, difficulty, distance, monsterLevel));
         }
         bestSolution = population[0];
     }
@@ -63,9 +63,9 @@ public class GeneticAlgorithm
         return parent;
     }
     
-    public DNA Solve(float mutationProbability, int numberOfGenerations, List<int> batch, List<float> difficulty, int distance)
+    public DNA Solve(float mutationProbability, int numberOfGenerations, List<int> batch, List<float> difficulty, int distance, int monsterLevel)
     {
-        InitializePopulation(batch, difficulty, distance);
+        InitializePopulation(batch, difficulty, distance, monsterLevel);
 
         foreach (var dna in population)
         {

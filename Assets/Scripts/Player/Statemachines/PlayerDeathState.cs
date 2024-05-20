@@ -1,3 +1,6 @@
+using Unity.VisualScripting;
+using UnityEngine;
+
 public class PlayerDeathState : PlayerState
 {
     public PlayerDeathState(Player playerState, PlayerStateMachine stateMachineState, string animationNameState) : base(playerState, stateMachineState, animationNameState)
@@ -9,6 +12,8 @@ public class PlayerDeathState : PlayerState
     {
         base.Enter();
         player.OnPlayerInputs.Player.Disable();
+        
+        GameObject.Find("Pause").GetComponent<UI>().EnableEndScreen();
     }
 
     public override void Update()
@@ -16,6 +21,7 @@ public class PlayerDeathState : PlayerState
         base.Update();
         player.SetZeroVelocity();
         player.OnCapsuleCollider2D.enabled = false;
+        player.OnBoxCollider2D.enabled = false;
     }
 
     public override void Exit()

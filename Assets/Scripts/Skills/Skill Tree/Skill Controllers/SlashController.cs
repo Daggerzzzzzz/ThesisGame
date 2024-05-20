@@ -8,7 +8,7 @@ public class SlashController : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            player.OnEntityStats.StatusAilments(other.GetComponent<EntityStats>());
+            player.OnEntityStats.DoDamage(other.GetComponent<EntityStats>(), gameObject);
         }
     }
 

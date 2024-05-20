@@ -13,8 +13,8 @@ public class BlackholeSkillController : MonoBehaviour
     public bool PlayerCanExitUltimate { get; private set; }
     
     [Header("Sword Info")]
-    private float swordAttackCooldown;
-    private float swordAttackTimer;
+    private float swordSummonDelay;
+    private float swordSummonTimer;
     private int amountOfSwords;
     private int swordsSummoned; 
     private bool allSwordsSummoned;
@@ -58,13 +58,14 @@ public class BlackholeSkillController : MonoBehaviour
     {
         circleRadius = circleCollider2D.radius * maximumSize;
         angleIncrementRad = angleIncrement * Mathf.Deg2Rad;
-        canSlashAttackTimer = swordAttackCooldown * amountOfSwords;
+        canSlashAttackTimer = swordSummonDelay * amountOfSwords + 1;
         allSwordsSummoned = false;
         alreadyScattered = false;
         alreadyDisappear = false;
         canGrow = true;
         currentAngleRad = 0f;
         slashAttackCooldown = 0.5f;
+        swordsSummoned = 0;
         amountOfSlashAttacks = amountOfSwords / 2;
     }
 
@@ -137,12 +138,12 @@ public class BlackholeSkillController : MonoBehaviour
     {
         if (swordsSummoned < amountOfSwords)
         {
-            swordAttackTimer -= Time.deltaTime;
+            swordSummonTimer -= Time.deltaTime;
                 
-            if (swordAttackTimer <= 0)
+            if (swordSummonTimer <= 0)
             {
                 SummonSword();
-                swordAttackTimer = swordAttackCooldown;
+                swordSummonTimer = swordSummonDelay;
             }
         }
     }
@@ -214,12 +215,12 @@ public class BlackholeSkillController : MonoBehaviour
     private void SlashAttack()
     {
         Debug.Log(numberOfSlashAttacksExecuted);
-        int randomSlash = UnityEngine.Random.Range(0, slashesList.Count);
-        int randomTarget = UnityEngine.Random.Range(0, targets.Count);
+        int randomSlash = Random.Range(0, slashesList.Count);
+        int randomTarget = Random.Range(0, targets.Count);
         
         if (targets[randomTarget] != null)
         {
-            if (targets[randomTarget].GetComponent<EntityStats>().currentHealth <= 0)
+            if (targets[randomTarget].GetComponent<EntityStats>().CurrentHealth <= 0)
             {
                 numberOfSlashAttacksExecuted++;
                 slashAttackTimer = 0;
@@ -268,12 +269,12 @@ public class BlackholeSkillController : MonoBehaviour
         }
     }
 
-    public void SetupBlackhole(float maximumSize, float speedOfGrowth, int amountOfSwords, float swordAttackCooldown, float angleIncrement, Player player)
+    public void SetupBlackhole(float maximumSize, float speedOfGrowth, int amountOfSwords, float swordSummonDelay, float angleIncrement, Player player)
     {
         this.maximumSize = maximumSize;
         this.speedOfGrowth = speedOfGrowth;
         this.amountOfSwords = amountOfSwords;
-        this.swordAttackCooldown = swordAttackCooldown;
+        this.swordSummonDelay = swordSummonDelay;
         this.angleIncrement = angleIncrement;
         this.player = player;
     }

@@ -20,7 +20,7 @@ public class ZombieTrigger : MonoBehaviour
             if (hit.CompareTag("Player") && !attackOnce)
             {
                 PlayerStats target = hit.GetComponent<PlayerStats>();
-                OnEnemyZombie.OnEntityStats.DoDamage(target);
+                OnEnemyZombie.OnEntityStats.DoDamage(target, gameObject);
                 attackOnce = true;
             }
         }

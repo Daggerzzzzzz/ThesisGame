@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class EnemyZombie : Enemy
 {
     #region States
@@ -8,6 +10,7 @@ public class EnemyZombie : Enemy
     public ZombieDeathState OnDeathState { get; private set; }
 
     #endregion
+    
     protected override void Awake()
     {
         base.Awake();

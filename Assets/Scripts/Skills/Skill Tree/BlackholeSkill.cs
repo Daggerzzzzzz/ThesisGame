@@ -12,7 +12,7 @@ public class BlackholeSkill : Skill
     [SerializeField]
     private float speedOfGrowth;
     [SerializeField]
-    private float swordAttackCooldown;
+    private float swordSummonDelay;
 
     [Header("Base Upgrade")] 
     [SerializeField]
@@ -64,7 +64,7 @@ public class BlackholeSkill : Skill
 
         currentBlackhole = newBlackhole.GetComponent<BlackholeSkillController>();
         
-        currentBlackhole.SetupBlackhole( maximumSize, speedOfGrowth, amountOfSwords, swordAttackCooldown, angleIncrement, player);
+        currentBlackhole.SetupBlackhole( maximumSize, speedOfGrowth, amountOfSwords, swordSummonDelay, angleIncrement, player);
     }
 
     public bool BlackholeIsFinished()

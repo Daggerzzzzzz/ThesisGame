@@ -30,9 +30,6 @@ public class UIInGame : MonoBehaviour
     
     private SkillManager skill;
     
-    public GameObject miniMap;
-    public GameObject bigMapText;
-    
     private static readonly int Health = Shader.PropertyToID("_Health");
     
     private void Awake()
@@ -83,7 +80,7 @@ public class UIInGame : MonoBehaviour
     public void UpdateHealthUI()
     {
         int maxHealth = playerStats.CalculateMaxHealthValue();
-        int currentHealth = playerStats.currentHealth;
+        int currentHealth = playerStats.CurrentHealth;
         
         float normalizedHealth = (float)currentHealth / maxHealth;
         

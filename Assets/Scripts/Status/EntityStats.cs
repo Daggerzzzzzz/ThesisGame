@@ -59,8 +59,8 @@ public class EntityStats : MonoBehaviour
     private float burnDamageTimer;
     private int burnDamageOverTime;
     private int lightningDamage;
-    
-    public int currentHealth;
+
+    public int CurrentHealth { get; protected set; }
     private bool isDead;
     
     public UnityEvent onHealthChanged;
@@ -70,7 +70,7 @@ public class EntityStats : MonoBehaviour
     
     protected virtual void Awake()
     {
-        currentHealth = CalculateMaxHealthValue();
+        CurrentHealth = CalculateMaxHealthValue();
         criticalDamage.SetDefaultValue(150);
         entityFx = GetComponent<EntityFx>();
     }
@@ -102,7 +102,7 @@ public class EntityStats : MonoBehaviour
         {
             DecreaseHealthBy(burnDamageOverTime);
 
-            if (currentHealth < 0 && !isDead)
+            if (CurrentHealth < 0 && !isDead)
             {
                 EntityDeath();
             }
@@ -111,7 +111,7 @@ public class EntityStats : MonoBehaviour
         }
     }
 
-    public virtual void DoDamage(EntityStats entityStats)
+    public virtual void DoDamage(EntityStats entityStats, GameObject sender)
     {
         if(AvoidAttack(entityStats))
         {
@@ -126,8 +126,8 @@ public class EntityStats : MonoBehaviour
         }
 
         totalDamage = CalculateTargetsArmor(entityStats, totalDamage);
-        //entityStats.TakeDamage(totalDamage);
-        StatusAilments(entityStats);
+        entityStats.TakeDamage(totalDamage, sender);
+        //StatusAilments(entityStats);
     }
 
     private int CalculateTargetsArmor(EntityStats entityStats, int totalDamage)
@@ -160,37 +160,37 @@ public class EntityStats : MonoBehaviour
         return false;
     }
 
-    public virtual void TakeDamage(int damage)
+    public virtual void TakeDamage(int _damage, GameObject sender)
     {
-        DecreaseHealthBy(damage);
+        DecreaseHealthBy(_damage);
         
-        Debug.Log("Take Damage " + damage);
+        Debug.Log("Take Damage " + _damage);
         
-        if (currentHealth < 0 && !isDead)
+        if (CurrentHealth < 0 && !isDead)
         {
             EntityDeath();
         }
     }
 
-    private void DecreaseHealthBy(int damage)
+    private void DecreaseHealthBy(int _damage)
     {
         if (isVulnerable)
         {
-            damage = Mathf.RoundToInt(damage * 1.5f);
+            _damage = Mathf.RoundToInt(_damage * 1.5f);
         }
         
-        currentHealth -= damage;
+        CurrentHealth -= _damage;
 
         onHealthChanged?.Invoke();
     }
 
     public void IncreaseHealthBy(int amount)
     {
-        currentHealth += amount;
+        CurrentHealth += amount;
 
-        if (currentHealth > CalculateMaxHealthValue())
+        if (CurrentHealth > CalculateMaxHealthValue())
         {
-            currentHealth = CalculateMaxHealthValue();
+            CurrentHealth = CalculateMaxHealthValue();
         }
         
         onHealthChanged?.Invoke();
@@ -208,11 +208,11 @@ public class EntityStats : MonoBehaviour
         return false;
     }
 
-    private int CalculateCriticalDamage(int damage)
+    private int CalculateCriticalDamage(int _damage)
     {
         float totalCriticalDamage = (criticalDamage.GetValue() + strength.GetValue()) * .01f;
         
-        float critDamage = damage * totalCriticalDamage;
+        float critDamage = _damage * totalCriticalDamage;
         
         return Mathf.RoundToInt(critDamage);
     }
@@ -232,7 +232,7 @@ public class EntityStats : MonoBehaviour
         totalDamage -= target.vitality.GetValue() * 3;
         totalDamage = Mathf.Clamp(totalDamage, 0, int.MaxValue);
         
-        target.TakeDamage(totalDamage);
+        target.TakeDamage(totalDamage, null);
 
         if (Mathf.Max(fireDamage, iceDamage, electricDamage) <= 0)
         {
@@ -306,14 +306,14 @@ public class EntityStats : MonoBehaviour
         isVulnerable = false;
     }
 
-    private void SetupBurnDamage(int damage)
+    private void SetupBurnDamage(int _damage)
     {
-        burnDamageOverTime = damage;
+        burnDamageOverTime = _damage;
     }
     
-    private void SetupShockDamage(int damage)
+    private void SetupShockDamage(int _damage)
     {
-        lightningDamage = damage;
+        lightningDamage = _damage;
     }
     
     protected virtual void EntityDeath()

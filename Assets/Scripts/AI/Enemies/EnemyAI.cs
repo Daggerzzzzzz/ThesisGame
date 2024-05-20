@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -24,15 +25,14 @@ public class EnemyAI : MonoBehaviour
     private bool playerDetected;
     private bool attackPlayer;
 
-    [Header("Events")]
+    [FormerlySerializedAs("OnAttackPressed")] [Header("Events")]
     //Inputs sent from the Enemy AI to the Enemy controller
-    public UnityEvent<bool> OnAttackPressed;
-    public UnityEvent<Vector2> OnMovementInput;
-    public UnityEvent<bool> OnPlayerDetected;
-
+    public UnityEvent<bool> onAttackPressed;
+    public UnityEvent<Vector2> onMovementInput;
+    public UnityEvent<bool> onPlayerDetected;
+    
     private void Start()
     {
-        //Detecting Player and Obstacles around
         InvokeRepeating(nameof(PerformDetection), 0, detectionDelay);
     }
     private void PerformDetection()
@@ -58,9 +58,9 @@ public class EnemyAI : MonoBehaviour
             //Target acquisition logic
             aiData.currentTarget = aiData.targets[0];
         }
-        OnPlayerDetected?.Invoke(following);
+        onPlayerDetected?.Invoke(following);
         //Moving the Agent
-        OnMovementInput?.Invoke(movementInput);
+        onMovementInput?.Invoke(movementInput);
     }
 
     private IEnumerator ChaseAndAttack()
@@ -92,7 +92,7 @@ public class EnemyAI : MonoBehaviour
             yield return new WaitForSeconds(aiUpdateDelay);
             StartCoroutine(ChaseAndAttack());
         }
-        OnAttackPressed?.Invoke(attackPlayer);
+        onAttackPressed?.Invoke(attackPlayer);
     }
 }
 

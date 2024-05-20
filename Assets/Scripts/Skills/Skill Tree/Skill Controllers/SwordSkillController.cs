@@ -269,7 +269,7 @@ public class SwordSkillController : MonoBehaviour
     {
         EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
         
-        player.OnEntityStats.DoDamage(enemyStats);
+        player.OnEntityStats.DoDamage(enemyStats, gameObject);
 
         if (player.OnSkill.Sword.TimeStopUnlocked)
         { 

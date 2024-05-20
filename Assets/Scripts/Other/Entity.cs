@@ -9,24 +9,26 @@ public class Entity : MonoBehaviour
     public EntityFx OnEntityFx { get; private set; }
     public EntityStats OnEntityStats { get; private set; }
     public CapsuleCollider2D OnCapsuleCollider2D { get; private set; }
+    public BoxCollider2D OnBoxCollider2D { get; private set; }
     #endregion
 
-    public Vector2 OnMovementDirection { get; private set; }
+    protected Vector2 OnMovementDirection { get; private set; }
     public Vector2 OnAttackDirection { get; private set; }
 
     [Header("Collision Info")] 
     public Transform attackCheck;
     public float attackCheckRadius;
 
-    [Header("Knockback Info")]
+    [Header("KnockBack Info")]
     [SerializeField]
     protected float knockbackDuration;
     [SerializeField]
     protected bool isKnocked;
     [SerializeField] 
     protected float thrust;
-    private Vector2 difference;
     
+    [SerializeField] 
+    private Vector2 difference;
     public Vector2 animatorDirection;
     
     private static readonly int MoveX = Animator.StringToHash("moveX");
@@ -38,7 +40,8 @@ public class Entity : MonoBehaviour
         OnRb = GetComponent<Rigidbody2D>();
         OnEntityFx = GetComponent<EntityFx>();
         OnEntityStats = GetComponent<EntityStats>();
-        OnCapsuleCollider2D = GetComponent<CapsuleCollider2D>();
+        OnCapsuleCollider2D = GetComponentInChildren<CapsuleCollider2D>();
+        OnBoxCollider2D = GetComponent<BoxCollider2D>();
     }
 
     protected virtual void Start()
@@ -51,10 +54,9 @@ public class Entity : MonoBehaviour
         
     }
 
-    public void DamageEffect()
+    public virtual void DamageEffect(GameObject sender)
     {
         OnEntityFx.StartCoroutine("FlashEffects");
-        //StartCoroutine("HitKnockback");
     }
     
     public void SetVelocity(float xInput, float yInput, float entitySpeed)
@@ -88,14 +90,14 @@ public class Entity : MonoBehaviour
         OnRb.velocity = Vector2.zero;
     }
 
-    protected virtual IEnumerator HitKnockback()
+    protected IEnumerator HitKnockBack(GameObject sender)
     {
         isKnocked = true;
-        difference = (OnRb.transform.position - Player.OnTransformPosition.position);
-        difference = difference.normalized * thrust;
-        OnRb.AddForce(difference, ForceMode2D.Impulse);
+        difference = (transform.position - sender.transform.position).normalized;
+        OnRb.AddForce(difference * thrust, ForceMode2D.Impulse);
         yield return new WaitForSeconds(knockbackDuration);
         isKnocked = false;
+        SetZeroVelocity();
     }
     
     protected virtual void OnDrawGizmos()

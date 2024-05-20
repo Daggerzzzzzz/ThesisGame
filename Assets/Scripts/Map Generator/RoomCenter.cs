@@ -1,69 +1,105 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class RoomCenter : MonoBehaviour
 {
-    [field:SerializeField]
-    public Room TheRoom { get; set; }
-    [field: SerializeField] 
-    public int NumberOfEnemies { get; set; }
-    [field:SerializeField]
-    public List<GameObject> Enemies { get; set; } = new();
-    
     [SerializeField]
     private bool openWhenEnemiesCleared;
-
-    private bool canSummonTheNextBatch = true;
-    private int batchSize = 3;
-    private int destroyedCount = 0;
     
-    private void Start() 
+    public Room TheRoom { get; set; }
+    public List<GameObject> enemies = new();
+    
+    private bool canSummonTheNextBatch;
+    private int batchSize;
+    private int destroyedCount;
+    
+    private TilemapRenderer tilemapRenderer;
+    
+    public Vector2 roomCenterPos;
+
+    private void Awake()
+    {
+        tilemapRenderer = GetComponentInChildren<TilemapRenderer>();
+        roomCenterPos = tilemapRenderer.bounds.center;
+    }
+
+    private void Start()
     {
         if(openWhenEnemiesCleared)
         {
             TheRoom.closeWhenEntered = true;
         }
+        
+        canSummonTheNextBatch = true;
+        batchSize = 3;
+        destroyedCount = 0;
     }
 
     void Update()
     {
-        if(Enemies.Count > 0 && TheRoom.roomActive && openWhenEnemiesCleared)
+        if(enemies.Count > 0 && TheRoom.roomActive && openWhenEnemiesCleared)
         {
-            SummonNextBatch(); 
-            
-            for(int i = 0; i < Enemies.Count; i++)
-            {
-                if(Enemies[i] == null)
-                {
-                    Enemies.RemoveAt(i);
-                    i--;
-                    destroyedCount++;
-                }
-            }
+            RemoveMissingEnemies();
 
-            if(Enemies.Count == 0)
+            if(enemies.Count == 0)
             {
                TheRoom.OpenDoors();
             }
             
+            SummonNextBatch(); 
+            
             if (destroyedCount == batchSize) 
             {
-                if (Enemies.Count != 0)
+                if (enemies.Count != 0)
                 {
                     canSummonTheNextBatch = true;
                     SummonNextBatch(); 
                 }
             }
         }
+        else
+        {
+            RemoveMissingEnemies();
+
+            if (enemies.Count == 0)
+            {
+                TheRoom.closeWhenEntered = false;
+            }
+        }
     }
-    
+
+    private void RemoveMissingEnemies()
+    {
+        for(int i = 0; i < enemies.Count; i++)
+        {
+            if(enemies[i] == null)
+            {
+                enemies.RemoveAt(i);
+                i--;
+                destroyedCount++;
+            }
+        }
+    }
+
     private void SummonNextBatch()
     {
         if (canSummonTheNextBatch)
         {
-            for (int i = 0; i < batchSize; i++)
+            int remainder = enemies.Count % 3;
+            
+            if (remainder != 0)
             {
-                Enemies[i].SetActive(true);
+                batchSize =  remainder; 
+            }
+            else
+            {
+                batchSize = 3;
+            }
+            
+            for (int i = 0; i < batchSize && i < enemies.Count ; i++)
+            {
+                enemies[i].SetActive(true);
             }
 
             canSummonTheNextBatch = false;
