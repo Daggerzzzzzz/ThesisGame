@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,36 +7,78 @@ public class Room : MonoBehaviour
     private GameObject[] doors;
     [SerializeField]
     private GameObject mapHider;
+    [SerializeField]
+    private bool ifPressedOk;
     
-    public string roomCenterName = "";
+    private GameObject uiInGameObject;
+    private UIInGame uiInGame;
+    private BoxCollider2D boxCollider2D;
+
+    public string roomCenterName;
     public bool roomActive;
     public bool closeWhenEntered;
+
+    private bool startAlreadyOpened;
     
     private static readonly int Close = Animator.StringToHash("close");
 
     private void Start()
     {
-        if (roomCenterName == "Room End")
+        uiInGameObject = GameObject.FindGameObjectWithTag("UIInGame");
+        boxCollider2D = GetComponentInChildren<BoxCollider2D>();
+        uiInGame = uiInGameObject.GetComponent<UIInGame>();
+        
+        if (roomCenterName == "Room End" || roomCenterName == "End Center")
         {
-            CheckForKunaiExistence();
-            StartCoroutine(DoorDelay());
+            boxCollider2D.size = new Vector2(21.5f, 11.5f);
+            boxCollider2D.offset = new Vector2(-1.5f, -0.5f);
         }
     }
-
+    
     private void OnTriggerEnter2D(Collider2D collision) 
-    {
-        if(collision.CompareTag("Player Trigger Collider"))
+    { 
+        if ((roomCenterName == "Room Start" || roomCenterName == "Starting Center") && !startAlreadyOpened)
         {
-            if (roomCenterName == "Room End")
+            if (Inventory.Instance.armor.itemDataSo != null && Inventory.Instance.weapon.itemDataSo != null)
             {
-                //Implement Key Mechanics
+                Debug.Log("Pumasok Dito");
+                OpenDoors();
+                startAlreadyOpened = true;
+            }
+        }
+        
+        if(collision.CompareTag("Player"))
+        {
+            if ((roomCenterName == "Room End" || roomCenterName == "End Center") && !ifPressedOk)
+            {
+                bool hasKey = Inventory.Instance.CheckForKey();
+
+                if (hasKey)
+                {
+                    if (uiInGame.aboutToEnterBossUI != null)
+                    {
+                        uiInGame.aboutToEnterBossUI.SetActive(true);
+                    }
+                    uiInGame.okBossWarningButton.onClick.AddListener(PressedOkInBossWarning);
+                    uiInGame.cancelBossWarningButton.onClick.AddListener(PressedCancelInBossWarning);
+                }
+                else if (!hasKey)
+                {
+                    if (uiInGame.noKeyUI != null)
+                    {
+                        uiInGame.noKeyUI.SetActive(true);
+                    }
+                    uiInGame.okNoKeyButton.onClick.AddListener(PressedOkInNoKey);
+                }
             }
             else
             {
+                Debug.Log("Unlocked Now");
                 if(closeWhenEntered)
                 {
+                    Debug.Log("Closed When Entered");
                     CheckForKunaiExistence();
-                    StartCoroutine(DoorDelay());
+                    StartCoroutine(CloseDoorDelay());
                 }
 
                 roomActive = true; 
@@ -55,21 +96,31 @@ public class Room : MonoBehaviour
         {
             CameraSwitch.Instance.PlayerExit();
             roomActive = false;
+            if (uiInGame.aboutToEnterBossUI != null)
+            {
+                uiInGame.aboutToEnterBossUI.SetActive(false);
+            }
+            
+            if (uiInGame.noKeyUI != null)
+            {
+                uiInGame.noKeyUI.SetActive(false); 
+            }
         }
     }
 
     public void OpenDoors()
     {
+        SoundManager.Instance.PlaySoundEffects(2, gameObject.transform);
         foreach(GameObject door in doors)
         {
             door.GetComponent<Animator>().SetBool(Close, false);
-            closeWhenEntered = false;
-        } 
+        }
     }
     
-    private IEnumerator DoorDelay()
+    private IEnumerator CloseDoorDelay()
     {
         yield return new WaitForSeconds(0.5f);
+        SoundManager.Instance.PlaySoundEffects(2, gameObject.transform);
         
         foreach(GameObject door in doors)
         {
@@ -83,5 +134,29 @@ public class Room : MonoBehaviour
         {
             SkillManager.Instance.Kunai.currentKunaiSkillController.KunaiDestroy();
         }
+    }
+
+    public void CloseTheDoor()
+    {
+        StartCoroutine(CloseDoorDelay());
+    }
+
+    private void PressedOkInNoKey()
+    {
+        uiInGame.noKeyUI.SetActive(false);
+    }
+    
+    private void PressedOkInBossWarning()
+    {
+        uiInGame.aboutToEnterBossUI.SetActive(false);
+        OpenDoors();
+        ifPressedOk = true;
+        boxCollider2D.size = new Vector2(19, 9.25f);
+        boxCollider2D.offset = new Vector2(-1.6f, -0.5f);
+    }
+    
+    private void PressedCancelInBossWarning()
+    {
+        uiInGame.aboutToEnterBossUI.SetActive(false);
     }
 }

@@ -69,6 +69,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "UsePotion",
+                    "type": "Button",
+                    "id": "20c25a0d-cc40-4a0e-8f60-7d5b05a88544",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "CharacterPanel",
                     "type": "Button",
                     "id": "3912a755-6d19-4898-b96f-6d7bcb4e4b96",
@@ -312,6 +321,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "BigMapPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cdedeabf-6a48-4243-83d1-b2475479fcb1",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "UsePotion",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -38,13 +38,18 @@ public class ArmorDataSO : EquipmentDataSO
         AddItemDescription(vitality, "Vitality");
         AddItemDescription(armor, "Armor");
 
-        if (minDescLength < 5)
+        if (minDescLength < 3)
         {
-            for (int i = 0; i < 5 - minDescLength; i++)
+            for (int i = 0; i < 3 - minDescLength; i++)
             {
                 sb.AppendLine();
                 sb.Append("");
             }
+        }
+        
+        if (itemEffectDesc.Length > 0)
+        {
+            sb.Append(itemEffectDesc); 
         }
         
         return sb.ToString();

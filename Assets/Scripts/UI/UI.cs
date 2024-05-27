@@ -1,8 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class UI : MonoBehaviour
+public class UI : MonoBehaviour, ISaveManager
 {
     [Header("End Screen")]
     [SerializeField]
@@ -37,9 +38,13 @@ public class UI : MonoBehaviour
     [SerializeField] 
     private GameObject intelligenceButton;
     
+    [Header("Tooltips")]
     public ItemTooltip itemTooltip;
     public StatTooltip statTooltip;
     public SkillTooltip skillTooltip;
+
+    [Header("Sliders")] 
+    [SerializeField] private UIVolumeSlider[] volumeSettings;
 
     private void Awake()
     {
@@ -166,5 +171,29 @@ public class UI : MonoBehaviour
         fadeScreen.FadeOut();
         yield return new WaitForSeconds(delay);
         SceneManager.LoadScene(0);
+    }
+
+    public void LoadData(GameData data)
+    {
+        foreach (KeyValuePair <string, float> pair in data.volumeSettings)
+        {
+            foreach (UIVolumeSlider item in volumeSettings)
+            {
+                if (item.parameter == pair.Key)
+                {
+                    item.LoadSlider(pair.Value);
+                }
+            }
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.volumeSettings.Clear();
+
+        foreach (UIVolumeSlider item in volumeSettings)
+        {
+            data.volumeSettings.Add(item.parameter, item.slider.value);
+        }
     }
 }

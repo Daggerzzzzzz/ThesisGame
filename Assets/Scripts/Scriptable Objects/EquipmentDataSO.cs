@@ -9,8 +9,7 @@ public class EquipmentDataSO : ItemDataSO
 {
     public EquipmentType equipmentType;
     public Vector2 position;
-
-    protected int minDescLength;
+    
     protected void AddItemDescription(int value, string name)
     {
         if (value == 0)

@@ -35,6 +35,8 @@ public class Player : Entity
     public SkillManager OnSkill { get; private set; }
     public GameObject OnSword { get; private set; }
 
+    public GameObject guardianAngel;
+
     #region States
     public PlayerStateMachine OnStateMachine { get; private set; } 
     public PlayerIdleState OnIdleState { get; private set; }
@@ -45,6 +47,8 @@ public class Player : Entity
     public PlayerCatchState OnPlayerCatchState { get; private set; }
     public PlayerBlackholeState OnPlayerBlackholeState { get; private set; }
     public PlayerDeathState OnDeathState { get; private set; }
+    
+    public PlayerRessurrectState OnPlayerRessurrectState { get; private set; }
 
     #endregion
     
@@ -54,7 +58,9 @@ public class Player : Entity
     public float lastImageYpos;
     public bool OnIsBusy { get; private set; }
     public PlayerInputs OnPlayerInputs { get; private set; }
+
     private HitStopEffect hitStopEffect;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -68,6 +74,7 @@ public class Player : Entity
         OnPlayerCatchState = new PlayerCatchState(this, OnStateMachine, "catchSword");
         OnPlayerBlackholeState = new PlayerBlackholeState(this, OnStateMachine, "idle");
         OnDeathState = new PlayerDeathState(this, OnStateMachine, "death");
+        OnPlayerRessurrectState = new PlayerRessurrectState(this, OnStateMachine, "resurrection");
     }
 
     public void OnEnable()
@@ -99,6 +106,16 @@ public class Player : Entity
         if (OnPlayerInputs.Player.Teleport.WasPressedThisFrame() && OnSkill.Kunai.KunaiUnlocked)
         {
             OnSkill.Kunai.CanUseSkill();
+        }
+
+        if (OnPlayerInputs.Player.UsePotion.WasPressedThisFrame())
+        {
+            Inventory.Instance.UsePotion();
+        }
+
+        if (Inventory.Instance.CheckForKey())
+        {
+            Inventory.Instance.keyCheck?.Invoke();
         }
     }
 
@@ -172,7 +189,6 @@ public class Player : Entity
     public override void DamageEffect(GameObject sender)
     {
         base.DamageEffect(sender);
-        StartCoroutine(FreezeTimeFor(0.25f));
         hitStopEffect.Shake(sender.transform.position, shakeForce);
         hitStopEffect.StopTime(changeTime, restoreSpeed, delay);
     }
@@ -183,27 +199,6 @@ public class Player : Entity
 
         moveSpeed = normalMoveSpeed;
         dashSpeed = normalDashSpeed;
-    }
-    
-    public void TimeFreeze(bool timeFrozen)
-    {
-        if (timeFrozen)
-        {
-            moveSpeed = 0;
-            OnAnim.speed = 0;
-        }
-        else
-        {
-            moveSpeed = defaultMovementSpeed;
-            OnAnim.speed = 1;
-        }
-    }
-
-    protected IEnumerator FreezeTimeFor(float seconds)
-    {
-        TimeFreeze(true);
-        yield return new WaitForSeconds(seconds);
-        TimeFreeze(false);
     }
 }
 

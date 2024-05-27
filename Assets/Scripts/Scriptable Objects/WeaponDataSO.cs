@@ -2,10 +2,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item Data", menuName = "Data/Weapon")]
 public class WeaponDataSO : EquipmentDataSO
-{
-    [TextArea] 
-    public string itemEffectDesc;
-    
+{ 
     public int strength;
     public int agility;
     public int intelligence;
@@ -71,9 +68,9 @@ public class WeaponDataSO : EquipmentDataSO
         AddItemDescription(freezeDamage, "Freeze Damage");
         AddItemDescription(shockDamage, "Shock Damage");
         
-        if (minDescLength < 5)
+        if (minDescLength < 3)
         {
-            for (int i = 0; i < 5 - minDescLength; i++)
+            for (int i = 0; i < 3 - minDescLength; i++)
             {
                 sb.AppendLine();
                 sb.Append("");

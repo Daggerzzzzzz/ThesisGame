@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a29d51b1bc5b843a14fb886ca94770, type: 3}
+  m_Name: Key
+  m_EditorClassIdentifier: 
+  itemEffectDesc: Use this to unlock Doors in Boss Room
+  itemType: 0
+  icon: {fileID: 21300000, guid: ec55945cc61fa4f4db9c6d135eac2d2c, type: 3}
+  itemName: Key
+  itemID: d4f3ea8f4be4f594cbb0ad6c31cc3335
+  itemCooldown: 0
+  dropChance: 1
+  itemEffects: []

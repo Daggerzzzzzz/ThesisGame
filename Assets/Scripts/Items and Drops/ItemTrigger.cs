@@ -24,11 +24,9 @@ public class ItemTrigger : MonoBehaviour
                     {
                         itemObject.ItemPickup();
                     }
-
                     break;
                 }
                 case ItemType.MATERIAL:
-                    itemObject.ItemPickup();
                     break;
             }
         }
@@ -40,7 +38,7 @@ public class ItemTrigger : MonoBehaviour
         {
             if (itemObject.ItemDataSo.itemType == ItemType.MATERIAL)
             {
-                //Fix This one
+                itemObject.ItemPickup();
                 return;
             }
             

@@ -16,8 +16,9 @@ public class CloneSkillController : MonoBehaviour
     private SpriteRenderer srClone;
     private SpriteRenderer srCloneAttackCheck;
     private Animator anim;
-    private GameObject playerReference;
-    private Player player;
+
+    private Vector2 dashDirection;
+    private Vector2 hitBoxDirection;
     
     private static readonly int AttackNumber = Animator.StringToHash("attackNumber");
     private static readonly int MoveX = Animator.StringToHash("moveX");
@@ -28,27 +29,16 @@ public class CloneSkillController : MonoBehaviour
         srClone = GetComponent<SpriteRenderer>();
         srCloneAttackCheck = attackCheck.GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        playerReference = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Start()
     {
-        if (playerReference != null)
+        if (dashDirection != Vector2.zero)
         {
-            player = playerReference.GetComponent<Player>();
+            cloneAttackDirection = dashDirection;
         }
-        
-        if (player.dashDirection != Vector2.zero)
-        {
-            cloneAttackDirection = player.dashDirection;
-            cloneHitBoxDirection = cloneAttackDirection;
-        }
-
-        if (cloneHitBoxDirection != Vector2.zero)
-        {
-            AttackDirection();
-            attackCheck.transform.localPosition = cloneHitBoxDirection;
-        }
+       
+        attackCheck.transform.localPosition = hitBoxDirection;
     }
 
     private void Update()
@@ -62,10 +52,14 @@ public class CloneSkillController : MonoBehaviour
         {
             srClone.color = new Color(1, 1, 1, srClone.color.a - (Time.deltaTime * colorVanishingSpeed));
             srCloneAttackCheck.color = new Color(1, 1, 1, srCloneAttackCheck.color.a - (Time.deltaTime * colorVanishingSpeed));
+            if (srClone.color.a < 0)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
-    public void SetUpClone(Vector2 _newTransform, float _cloneDuration, bool canAttack)
+    public void SetUpClone(Vector2 _newTransform, float _cloneDuration, bool canAttack, Vector2 _dashDirection, Vector2 _hitBoxDirection)
     {
         if (canAttack)
         {
@@ -73,6 +67,8 @@ public class CloneSkillController : MonoBehaviour
         }
         transform.position = _newTransform;
         cloneTimer = _cloneDuration;
+        dashDirection = _dashDirection;
+        hitBoxDirection = _hitBoxDirection;
     }
     
     private void PlayerAnimation()
@@ -88,32 +84,18 @@ public class CloneSkillController : MonoBehaviour
             Enemy enemy = hit.GetComponent<Enemy>();
             if (enemy != null)
             {
-                player.OnEntityStats.DoDamage(hit.GetComponent<EntityStats>(), gameObject);
+                PlayerManager.Instance.player.OnEntityStats.DoDamage(hit.GetComponent<EntityStats>(), gameObject);
             }
         }
     }
     
-
-    private void AttackDirection()
+    private void OnDrawGizmos()
     {
-        if (cloneAttackDirection.x != 0)
+        Gizmos.color = Color.red;
+        
+        if (attackCheck != null)
         {
-            if (cloneAttackDirection.x > 0)
-            {
-                cloneHitBoxDirection= new Vector2(0.25f, 0f);
-            }
-            if (cloneAttackDirection.x < 0)
-            {
-                cloneHitBoxDirection = new Vector2(-0.25f, 0f); 
-            }
-        }
-        else if (cloneAttackDirection.y > 0)
-        {
-            cloneHitBoxDirection = new Vector2(0f, 0.15f);
-        }
-        else
-        {
-            cloneHitBoxDirection = new Vector2(0f, -0.25f);
+            Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
         }
     }
 }

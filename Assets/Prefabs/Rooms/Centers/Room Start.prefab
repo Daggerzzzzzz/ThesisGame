@@ -342,10 +342,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018afcd163d40dd438a3bbb4cd47976b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <TheRoom>k__BackingField: {fileID: 0}
-  <NumberOfEnemies>k__BackingField: 0
-  <Enemies>k__BackingField: []
   openWhenEnemiesCleared: 0
+  enemies: []
   roomCenterPos: {x: 0, y: 0}
 --- !u!1 &1692148663202439006
 GameObject:
@@ -946,6 +944,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ItemDataSo>k__BackingField: {fileID: 11400000, guid: 0a9286f81fb54ca4983e0540dcf9ae3a, type: 2}
+  rb: {fileID: 0}
+  itemTransform: {fileID: 0}
+  timeForMoving: 0
 --- !u!212 &5193896573802485703
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1542,6 +1543,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ItemDataSo>k__BackingField: {fileID: 11400000, guid: 0781d4a5b603054408c0650fedbe6d7e, type: 2}
+  rb: {fileID: 0}
+  itemTransform: {fileID: 0}
+  timeForMoving: 0
 --- !u!212 &3028339647980624960
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4270,6 +4274,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ItemDataSo>k__BackingField: {fileID: 11400000, guid: 815a592f73b640f41bc9fff8a7639f3b, type: 2}
+  rb: {fileID: 0}
+  itemTransform: {fileID: 0}
+  timeForMoving: 0
 --- !u!212 &7213294287182992965
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4697,6 +4704,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ItemDataSo>k__BackingField: {fileID: 11400000, guid: 35d501ac11dfdb34e98a4bf8d5e90ec8, type: 2}
+  rb: {fileID: 0}
+  itemTransform: {fileID: 0}
+  timeForMoving: 0
 --- !u!212 &6408625548290278880
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6153,6 +6163,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ItemDataSo>k__BackingField: {fileID: 11400000, guid: ec516bb3df4ac844e8687d61c3739a88, type: 2}
+  rb: {fileID: 0}
+  itemTransform: {fileID: 0}
+  timeForMoving: 0
 --- !u!212 &5565881349600249764
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6359,6 +6372,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ItemDataSo>k__BackingField: {fileID: 11400000, guid: 62e492984599ca748b12a86cd68a5dbf, type: 2}
+  rb: {fileID: 0}
+  itemTransform: {fileID: 0}
+  timeForMoving: 0
 --- !u!212 &8035503979939494485
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6463,6 +6479,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TorchUp (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6524,6 +6548,14 @@ PrefabInstance:
     - target: {fileID: 9076933151742304445, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
       propertyPath: m_Name
       value: TorchUp (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6587,6 +6619,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TorchDown
       objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 74b8a82da54fbde4b8e5254a7690aae1, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 74b8a82da54fbde4b8e5254a7690aae1, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6648,6 +6688,14 @@ PrefabInstance:
     - target: {fileID: 9076933151742304445, guid: 74b8a82da54fbde4b8e5254a7690aae1, type: 3}
       propertyPath: m_Name
       value: TorchDown (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 74b8a82da54fbde4b8e5254a7690aae1, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 74b8a82da54fbde4b8e5254a7690aae1, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

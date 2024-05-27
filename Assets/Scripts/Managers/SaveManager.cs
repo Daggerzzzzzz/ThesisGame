@@ -56,6 +56,22 @@ public class SaveManager : SingletonMonoBehavior<SaveManager>
 
     private void OnApplicationQuit()
     {
+        EquipmentDataSO currentWeapon = Inventory.Instance.GetEquipment(EquipmentType.WEAPON);
+        EquipmentDataSO currentArmor = Inventory.Instance.GetEquipment(EquipmentType.ARMOR);
+
+        WeaponDataSO equippedWeapon = currentWeapon as WeaponDataSO;
+        ArmorDataSO equippedArmor =  currentArmor as ArmorDataSO;
+
+        if (equippedArmor != null)
+        {
+            equippedArmor.RemoveModifiers();
+        }
+
+        if (equippedWeapon != null)
+        {
+            equippedWeapon.RemoveModifiers();
+        }
+        
         SaveGame();
     }
 

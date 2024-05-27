@@ -13,9 +13,17 @@ MonoBehaviour:
   m_Name: Warmogs
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: Warmogs
   icon: {fileID: 21300000, guid: 7cc4c691b0ce75744a15dc596249c6f1, type: 3}
+  itemName: Warmogs
+  itemID: 35d501ac11dfdb34e98a4bf8d5e90ec8
+  itemCooldown: 0
+  dropChance: 0
+  itemEffects:
+  - {fileID: 11400000, guid: cbe4bb8c68889f84db22d110aa01d7c4, type: 2}
   equipmentType: 0
   position: {x: 2, y: -0.4}
+  itemEffectDesc: 'Heal for .5% of Total Damage.
+
+    Cooldown 0 secs'
   vitality: 5
   armor: 5

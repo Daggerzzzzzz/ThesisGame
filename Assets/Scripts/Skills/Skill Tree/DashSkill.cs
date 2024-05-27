@@ -16,7 +16,7 @@ public class DashSkill : Skill
    [Header("Summon Kunai On Dash")] 
    [SerializeField] 
    private SkillTreeSlot unlockKunaiDashButton;
-   public bool KunaiDashUnlocked { get; private set; }
+   public bool DoubleCloneDashUnlocked { get; private set; }
 
    protected override void Start()
    {
@@ -24,7 +24,7 @@ public class DashSkill : Skill
 
       unlockDashButton.GetComponent<Button>().onClick.AddListener(UnlockDash);
       unlockCloneDashButton.GetComponent<Button>().onClick.AddListener(UnlockCloneDash);
-      unlockKunaiDashButton.GetComponent<Button>().onClick.AddListener(UnlockKunaiDash);
+      unlockKunaiDashButton.GetComponent<Button>().onClick.AddListener(UnlockDoubleCloneDash);
    }
 
    protected override void UseSkill()
@@ -48,11 +48,11 @@ public class DashSkill : Skill
       }
    }
    
-   private void UnlockKunaiDash()
+   private void UnlockDoubleCloneDash()
    {
       if (unlockKunaiDashButton.unlocked)
       {
-         KunaiDashUnlocked = true;
+         DoubleCloneDashUnlocked = true;
       }
    }
 
@@ -60,15 +60,36 @@ public class DashSkill : Skill
    {
       if (CloneDashUnlocked)
       {
-         SkillManager.Instance.Clone.CreateClone(player.transform.position);
+         EquipmentDataSO currentWeapon;
+         if (Inventory.Instance.GetEquipment(EquipmentType.WEAPON) != null)
+         {
+            currentWeapon = Inventory.Instance.GetEquipment(EquipmentType.WEAPON);
+            if (currentWeapon.itemName == "Zangetsu")
+            {
+               Inventory.Instance.GetEquipment(EquipmentType.WEAPON).UseEffect(player.dashDirection, player.GetComponent<PlayerStats>());
+            }
+         }
+         else
+         {
+            SkillManager.Instance.Clone.CreateClone(player.transform.position, player.dashDirection, player.OnAttackDirection);
+         }
       }
    }
 
-   public void KunaiDash()
+   public void DoubleCloneDash()
    {
-      if (KunaiDashUnlocked)
+      if (DoubleCloneDashUnlocked)
       {
-         //Implement Kunai on Dash
+         EquipmentDataSO currentWeapon;
+         currentWeapon = Inventory.Instance.GetEquipment(EquipmentType.WEAPON);
+         if (currentWeapon.itemName == "Zangetsu")
+         {
+            Inventory.Instance.GetEquipment(EquipmentType.WEAPON).UseEffect(-player.dashDirection, player.GetComponent<PlayerStats>());
+         }
+         else
+         {
+            SkillManager.Instance.Clone.CreateClone(player.transform.position, -player.dashDirection, -player.OnAttackDirection);
+         }
       }
    }
 
@@ -76,6 +97,6 @@ public class DashSkill : Skill
    {
       UnlockDash();
       UnlockCloneDash();
-      UnlockKunaiDash();
+      UnlockDoubleCloneDash();
    }
 }

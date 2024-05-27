@@ -30,7 +30,7 @@ public class HealthBar : MonoBehaviour
     public void UpdateHealthUI()
     {
         int maxHealth = entityStats.CalculateMaxHealthValue();
-        int currentHealth = entityStats.CurrentHealth;
+        int currentHealth = entityStats.currentHealth;
         
         float normalizedHealth = (float)currentHealth / maxHealth;
         

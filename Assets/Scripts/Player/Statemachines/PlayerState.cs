@@ -15,6 +15,13 @@ public class PlayerState
    protected bool triggerCalled;
    protected float distanceBetweenImages = 0.025f;
    
+   protected float resurrectionTimer;
+   protected float resurrectionDelay = 1f;
+   protected bool playerCanRevive;
+
+   protected float exitResurrectionTimer;
+   protected float exitRessurectionTimerDelay = 1f;
+   
    protected PlayerInputs playerInputs;
    
    protected PlayerState(Player playerState, PlayerStateMachine stateMachineState, string animationNameState)

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-    
+
 public class UIInGame : MonoBehaviour
 {
     [Header("Player")]
@@ -25,10 +25,30 @@ public class UIInGame : MonoBehaviour
     private Image swordImage;
     [SerializeField] 
     private Image ultimateImage;
+    
+    [Header("Inventory")]
+    [SerializeField] 
+    private Image potionImageCooldown;
+    [SerializeField] 
+    private Image potionImage;
+    [SerializeField] 
+    private Image armorImageCooldown;
+    
+    [Header("Warning UI")]
+    public GameObject noKeyUI;
+    public GameObject aboutToEnterBossUI;
+    public Button okNoKeyButton;
+    public Button okBossWarningButton;
+    public Button cancelBossWarningButton;
 
     [SerializeField] private TextMeshProUGUI currentSouls;
     
     private SkillManager skill;
+    
+    private int potionCooldown;
+    private int potionCount;
+
+    private int armorCooldown;
     
     private static readonly int Health = Shader.PropertyToID("_Health");
     
@@ -43,8 +63,17 @@ public class UIInGame : MonoBehaviour
         {
             UpdateHealthUI();
         }
-
+        
         skill = SkillManager.Instance;
+        
+        if (potionCount <= 0)
+        {
+            potionImage.color = potionImageCooldown.color;
+        }
+        else if (potionCount > 0)
+        {
+            potionImage.color = Color.white;
+        }
     }
 
     private void Update()
@@ -68,11 +97,22 @@ public class UIInGame : MonoBehaviour
         {
             SetCooldown(ultimateImage);
         }
-        
+
+        if (potionCount <= 0)
+        {
+            potionImage.color = potionImageCooldown.color;
+        }
+        else if (potionCount > 0)
+        {
+            potionImage.color = Color.white;
+        }
+       
         CheckCooldown(dashImage, skill.Dash.cooldown);
         CheckCooldown(kunaiImage, skill.Kunai.cooldown);
         CheckCooldown(swordImage, skill.Sword.cooldown);
         CheckCooldown(ultimateImage, skill.Blackhole.cooldown);
+        CheckCooldown(potionImageCooldown, potionCooldown);
+        CheckCooldown(armorImageCooldown, armorCooldown);
 
         currentSouls.text = PlayerManager.Instance.CurrentSouls().ToString();
     }
@@ -80,7 +120,7 @@ public class UIInGame : MonoBehaviour
     public void UpdateHealthUI()
     {
         int maxHealth = playerStats.CalculateMaxHealthValue();
-        int currentHealth = playerStats.CurrentHealth;
+        int currentHealth = playerStats.currentHealth;
         
         float normalizedHealth = (float)currentHealth / maxHealth;
         
@@ -101,5 +141,25 @@ public class UIInGame : MonoBehaviour
         {
             image.fillAmount -= 1 / cooldown * Time.deltaTime;
         }
+    }
+
+    public void CheckForPotionInput(int cooldown)
+    {
+        potionCooldown = cooldown;
+        if (potionCount > 1)
+        {
+            SetCooldown(potionImageCooldown);
+        }
+    }
+    
+    public void NumberOfPotion(int stack)
+    {
+        potionCount = stack;
+    }
+
+    public void CheckForArmorInput(int cooldown)
+    {
+        armorCooldown = cooldown;
+        SetCooldown(armorImageCooldown);
     }
 }

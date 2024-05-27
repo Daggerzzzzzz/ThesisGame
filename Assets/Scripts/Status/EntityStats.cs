@@ -23,8 +23,6 @@ public class EntityStats : MonoBehaviour
 {
     [SerializeField] 
     private float statusEffectsDuration = 4;
-    [SerializeField] 
-    private GameObject lightningPrefab;
     
     [Header("Main Stats")]
     public Stats strength; //1 point increase damage by 1 and crit damage by 1%
@@ -60,17 +58,17 @@ public class EntityStats : MonoBehaviour
     private int burnDamageOverTime;
     private int lightningDamage;
 
-    public int CurrentHealth { get; protected set; }
-    private bool isDead;
+    public int currentHealth;
+    public bool isDead;
     
     public UnityEvent onHealthChanged;
     private EntityFx entityFx;
     private bool isVulnerable;
-    protected bool playerAttack;
-    
-    protected virtual void Awake()
+    public int TotalDamage { get; private set; }
+
+    protected virtual void Start()
     {
-        CurrentHealth = CalculateMaxHealthValue();
+        currentHealth = CalculateMaxHealthValue();
         criticalDamage.SetDefaultValue(150);
         entityFx = GetComponent<EntityFx>();
     }
@@ -102,7 +100,7 @@ public class EntityStats : MonoBehaviour
         {
             DecreaseHealthBy(burnDamageOverTime);
 
-            if (CurrentHealth < 0 && !isDead)
+            if (currentHealth <= 0 && !isDead)
             {
                 EntityDeath();
             }
@@ -118,16 +116,16 @@ public class EntityStats : MonoBehaviour
             return;
         }
 
-        int totalDamage = damage.GetValue() + strength.GetValue();
+        TotalDamage = damage.GetValue() + strength.GetValue();
 
         if (CritEntity())
         {
-            totalDamage = CalculateCriticalDamage(totalDamage);
+            TotalDamage = CalculateCriticalDamage(TotalDamage);
         }
 
-        totalDamage = CalculateTargetsArmor(entityStats, totalDamage);
-        entityStats.TakeDamage(totalDamage, sender);
-        //StatusAilments(entityStats);
+        TotalDamage = CalculateTargetsArmor(entityStats, TotalDamage);
+        entityStats.TakeDamage(TotalDamage, sender);
+        StatusAilments(entityStats, sender);
     }
 
     private int CalculateTargetsArmor(EntityStats entityStats, int totalDamage)
@@ -164,9 +162,7 @@ public class EntityStats : MonoBehaviour
     {
         DecreaseHealthBy(_damage);
         
-        Debug.Log("Take Damage " + _damage);
-        
-        if (CurrentHealth < 0 && !isDead)
+        if (currentHealth <= 0 && !isDead)
         {
             EntityDeath();
         }
@@ -179,18 +175,18 @@ public class EntityStats : MonoBehaviour
             _damage = Mathf.RoundToInt(_damage * 1.5f);
         }
         
-        CurrentHealth -= _damage;
+        currentHealth -= _damage;
 
         onHealthChanged?.Invoke();
     }
 
     public void IncreaseHealthBy(int amount)
     {
-        CurrentHealth += amount;
+        currentHealth += amount;
 
-        if (CurrentHealth > CalculateMaxHealthValue())
+        if (currentHealth > CalculateMaxHealthValue())
         {
-            CurrentHealth = CalculateMaxHealthValue();
+            currentHealth = CalculateMaxHealthValue();
         }
         
         onHealthChanged?.Invoke();
@@ -222,7 +218,7 @@ public class EntityStats : MonoBehaviour
         return maxHealth.GetValue() + vitality.GetValue() * 5;
     }
 
-    public virtual void StatusAilments(EntityStats target)
+    public virtual void StatusAilments(EntityStats target, GameObject sender)
     {
         int fireDamage = burnDamage.GetValue();
         int iceDamage = freezeDamage.GetValue();
@@ -232,7 +228,7 @@ public class EntityStats : MonoBehaviour
         totalDamage -= target.vitality.GetValue() * 3;
         totalDamage = Mathf.Clamp(totalDamage, 0, int.MaxValue);
         
-        target.TakeDamage(totalDamage, null);
+        target.TakeDamage(totalDamage, sender);
 
         if (Mathf.Max(fireDamage, iceDamage, electricDamage) <= 0)
         {

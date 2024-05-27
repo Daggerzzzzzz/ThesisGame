@@ -7203,6 +7203,8 @@ MonoBehaviour:
   doors:
   - {fileID: 7887174021783870735}
   mapHider: {fileID: 2285038225781188001}
+  ifPressedOk: 0
+  roomCenterName: 
   roomActive: 0
   closeWhenEntered: 0
 --- !u!50 &7537942363353348173
@@ -7291,7 +7293,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4839778633914285610, guid: 8cddd093bb659d04bb59c769d1c8d4cc, type: 3}
       propertyPath: m_SortingLayer
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4839778633914285610, guid: 8cddd093bb659d04bb59c769d1c8d4cc, type: 3}
       propertyPath: m_SortingOrder
@@ -7299,7 +7301,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4839778633914285610, guid: 8cddd093bb659d04bb59c769d1c8d4cc, type: 3}
       propertyPath: m_SortingLayerID
-      value: -1277430277
+      value: 786107415
       objectReference: {fileID: 0}
     - target: {fileID: 6096604125933376394, guid: 8cddd093bb659d04bb59c769d1c8d4cc, type: 3}
       propertyPath: m_Name
@@ -7415,6 +7417,14 @@ PrefabInstance:
     - target: {fileID: 9076933151742304445, guid: 5d475b1ec18cd334fa6dc415c1b78411, type: 3}
       propertyPath: m_Name
       value: TorchLeft
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 5d475b1ec18cd334fa6dc415c1b78411, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 5d475b1ec18cd334fa6dc415c1b78411, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

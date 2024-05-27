@@ -220,7 +220,7 @@ public class BlackholeSkillController : MonoBehaviour
         
         if (targets[randomTarget] != null)
         {
-            if (targets[randomTarget].GetComponent<EntityStats>().CurrentHealth <= 0)
+            if (targets[randomTarget].GetComponent<EntityStats>().currentHealth <= 0)
             {
                 numberOfSlashAttacksExecuted++;
                 slashAttackTimer = 0;

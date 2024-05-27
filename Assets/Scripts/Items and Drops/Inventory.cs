@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
 {
@@ -30,11 +31,22 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
     private List<EquipmentDataSO> equipmentDatabase;
     public List<InventoryItem> loadedEquipments;
 
+    [Header("Skill Effects")] 
+    public bool firstTimeUsed = true;
+    private float lastTimeUsedPotion;
+    private float lastTimeUsedArmor;
+
     private ItemSlot[] stashItemSlots;
     private ItemSlot[] inventoryItemSlots;
     private WeaponSlot weaponSlot;
     private ArmorSlot armorSlot;
     private StatSlot[] statSlots;
+    
+    public UnityEvent<int> onPotionUsed;
+    public UnityEvent<int> numberOfPotionInStack;
+    public UnityEvent<int> guardianAngelUsed;
+    public UnityEvent keyCheck;
+    private int potionCount;
 
     protected override void Awake()
     {
@@ -54,7 +66,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         
         inventory = new List<InventoryItem>();
         inventoryDict = new Dictionary<EquipmentDataSO, InventoryItem>();
-
+        
         AddStartingItems();
     }
 
@@ -162,9 +174,12 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
             stash.Add(newItem);
             stashDict.Add(item, newItem);
         }
+        
+        potionCount = GetStackValue("Potion");
+        numberOfPotionInStack?.Invoke(potionCount);
     }
 
-    public void RemoveItem(ItemDataSO item)
+    private void RemoveItem(ItemDataSO item)
     {
         if (stashDict.TryGetValue(item, out InventoryItem value))
         {
@@ -179,6 +194,8 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
                 value.RemoveToStack();
             }
         }
+
+        UpdateUISlot();
     }
     
     private void UpdateUISlot()
@@ -303,7 +320,106 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
             
             itemDatabase.Add(itemData);
         }
-
+        
         return itemDatabase;
+    }
+
+    public EquipmentDataSO GetEquipment(EquipmentType type)
+    {
+        EquipmentDataSO equippedEquipment = null;
+
+        foreach (KeyValuePair<EquipmentDataSO, InventoryItem> equipment in  inventoryDict)
+        {
+            if (equipment.Key.equipmentType == type)
+            {
+                equippedEquipment = equipment.Key;
+            }
+        }
+
+        return equippedEquipment;
+    }
+
+    private ItemDataSO GetItemInStash(string name)
+    {
+        ItemDataSO itemToGet = null;
+        
+        foreach (KeyValuePair<ItemDataSO, InventoryItem> item in stashDict)
+        {
+            if (item.Key.itemName == name)
+            {
+                itemToGet = item.Key;
+            }
+        }
+
+        return itemToGet;
+    }
+
+    private int GetStackValue(string name)
+    {
+        int stackValue = 0;
+        
+        foreach (KeyValuePair<ItemDataSO, InventoryItem> item in stashDict)
+        {
+            if (item.Key.itemName == name)
+            {
+                stackValue = item.Value.stackSize;
+            }
+        }
+
+        return stackValue;
+    }
+    
+
+    public void UsePotion()
+    {
+        ItemDataSO currentPotion = GetItemInStash("Potion");
+        
+        if (currentPotion == null)
+        {
+            return;
+        }
+        
+        bool canUsePotion = Time.time > lastTimeUsedPotion + currentPotion.itemCooldown;
+        
+        if (canUsePotion)
+        {
+            currentPotion.UseEffect(Vector2.zero, PlayerManager.Instance.player.GetComponent<PlayerStats>());
+            RemoveItem(currentPotion);
+            potionCount = GetStackValue("Potion");
+            lastTimeUsedPotion = Time.time;
+            onPotionUsed?.Invoke(currentPotion.itemCooldown);
+            numberOfPotionInStack?.Invoke(potionCount);
+        }
+        else
+        {
+            Debug.Log("Potion is on Cooldown");
+        }
+    }
+
+    public bool UseArmor()
+    {
+        EquipmentDataSO currentArmor = GetEquipment(EquipmentType.ARMOR);
+
+        if (Time.time > lastTimeUsedArmor + currentArmor.itemCooldown || firstTimeUsed)
+        {
+            lastTimeUsedArmor = Time.time;
+            guardianAngelUsed?.Invoke(currentArmor.itemCooldown);
+            return true;
+        }
+        
+        Debug.Log("Armor on Cooldown");
+        return false;
+    }
+
+    public bool CheckForKey()
+    {
+        ItemDataSO currentKey = GetItemInStash("Key");
+        
+        if (currentKey == null)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

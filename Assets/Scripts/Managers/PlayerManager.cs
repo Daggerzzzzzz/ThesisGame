@@ -19,6 +19,7 @@ public class PlayerManager : SingletonMonoBehavior<PlayerManager>, ISaveManager
    public Image backExpBar;
    public float timerDelay;
    public TextMeshProUGUI levelText;
+   public TextMeshProUGUI statText;
    
    [Header("Multipliers")] 
    [Range(1f, 300f)]
@@ -36,18 +37,14 @@ public class PlayerManager : SingletonMonoBehavior<PlayerManager>, ISaveManager
       frontExpBar.fillAmount = currentExp / requiredExp;
       backExpBar.fillAmount = currentExp / requiredExp;
       requiredExp = CalculateRequiredExperience();
-      levelText.text = "LEVEL: " + level;
+      levelText.text = "LVL." + level;
+      statText.text = "POINTS: " + statPoints;
    }
 
    private void Update()
    {
       UpdateExpUI();
-
-      if (Input.GetKeyDown(KeyCode.Q))
-      {
-         GainExperienceFlatRate(20);
-      }
-
+      
       if (currentExp > requiredExp)
       {
          LevelUp();
@@ -105,7 +102,8 @@ public class PlayerManager : SingletonMonoBehavior<PlayerManager>, ISaveManager
       backExpBar.fillAmount = 0f;
       currentExp = Mathf.RoundToInt(currentExp - requiredExp);
       requiredExp = CalculateRequiredExperience();
-      levelText.text = "LEVEL: " + level;
+      levelText.text = "LVL." + level;
+      statText.text = "POINTS: " + statPoints;
    }
 
    private int CalculateRequiredExperience()
@@ -134,5 +132,10 @@ public class PlayerManager : SingletonMonoBehavior<PlayerManager>, ISaveManager
       data.statPoints = statPoints;
       data.level = level;
       data.currentExp = currentExp;
+   }
+
+   public void UpdateStatPointsUI()
+   {
+      statText.text = "POINTS: " + statPoints;
    }
 }

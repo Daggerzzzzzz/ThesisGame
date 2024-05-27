@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a29d51b1bc5b843a14fb886ca94770, type: 3}
+  m_Name: Potion
+  m_EditorClassIdentifier: 
+  itemEffectDesc: 'Heals for 20% of your health
+
+    Cooldown 5 secs'
+  itemType: 0
+  icon: {fileID: 2622213409082645890, guid: ce9b0fcd06c36d541912c391dbdef096, type: 3}
+  itemName: Potion
+  itemID: 38ed9939493fc9f4eb2b1705e16bcb4e
+  itemCooldown: 5
+  dropChance: 1
+  itemEffects:
+  - {fileID: 11400000, guid: 356163839a0aa524fbea4f1d7547a419, type: 2}

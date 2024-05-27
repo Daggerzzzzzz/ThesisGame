@@ -91,6 +91,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""UsePotion"",
+                    ""type"": ""Button"",
+                    ""id"": ""20c25a0d-cc40-4a0e-8f60-7d5b05a88544"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""CharacterPanel"",
                     ""type"": ""Button"",
                     ""id"": ""3912a755-6d19-4898-b96f-6d7bcb4e4b96"",
@@ -334,6 +343,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""BigMapPanel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cdedeabf-6a48-4243-83d1-b2475479fcb1"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""UsePotion"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -928,6 +948,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Ultimate = m_Player.FindAction("Ultimate", throwIfNotFound: true);
         m_Player_Teleport = m_Player.FindAction("Teleport", throwIfNotFound: true);
         m_Player_Equip = m_Player.FindAction("Equip", throwIfNotFound: true);
+        m_Player_UsePotion = m_Player.FindAction("UsePotion", throwIfNotFound: true);
         m_Player_CharacterPanel = m_Player.FindAction("CharacterPanel", throwIfNotFound: true);
         m_Player_SkillTreePanel = m_Player.FindAction("SkillTreePanel", throwIfNotFound: true);
         m_Player_SettingsPanel = m_Player.FindAction("SettingsPanel", throwIfNotFound: true);
@@ -1012,6 +1033,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Ultimate;
     private readonly InputAction m_Player_Teleport;
     private readonly InputAction m_Player_Equip;
+    private readonly InputAction m_Player_UsePotion;
     private readonly InputAction m_Player_CharacterPanel;
     private readonly InputAction m_Player_SkillTreePanel;
     private readonly InputAction m_Player_SettingsPanel;
@@ -1027,6 +1049,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Ultimate => m_Wrapper.m_Player_Ultimate;
         public InputAction @Teleport => m_Wrapper.m_Player_Teleport;
         public InputAction @Equip => m_Wrapper.m_Player_Equip;
+        public InputAction @UsePotion => m_Wrapper.m_Player_UsePotion;
         public InputAction @CharacterPanel => m_Wrapper.m_Player_CharacterPanel;
         public InputAction @SkillTreePanel => m_Wrapper.m_Player_SkillTreePanel;
         public InputAction @SettingsPanel => m_Wrapper.m_Player_SettingsPanel;
@@ -1061,6 +1084,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Equip.started += instance.OnEquip;
             @Equip.performed += instance.OnEquip;
             @Equip.canceled += instance.OnEquip;
+            @UsePotion.started += instance.OnUsePotion;
+            @UsePotion.performed += instance.OnUsePotion;
+            @UsePotion.canceled += instance.OnUsePotion;
             @CharacterPanel.started += instance.OnCharacterPanel;
             @CharacterPanel.performed += instance.OnCharacterPanel;
             @CharacterPanel.canceled += instance.OnCharacterPanel;
@@ -1098,6 +1124,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Equip.started -= instance.OnEquip;
             @Equip.performed -= instance.OnEquip;
             @Equip.canceled -= instance.OnEquip;
+            @UsePotion.started -= instance.OnUsePotion;
+            @UsePotion.performed -= instance.OnUsePotion;
+            @UsePotion.canceled -= instance.OnUsePotion;
             @CharacterPanel.started -= instance.OnCharacterPanel;
             @CharacterPanel.performed -= instance.OnCharacterPanel;
             @CharacterPanel.canceled -= instance.OnCharacterPanel;
@@ -1299,6 +1328,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnUltimate(InputAction.CallbackContext context);
         void OnTeleport(InputAction.CallbackContext context);
         void OnEquip(InputAction.CallbackContext context);
+        void OnUsePotion(InputAction.CallbackContext context);
         void OnCharacterPanel(InputAction.CallbackContext context);
         void OnSkillTreePanel(InputAction.CallbackContext context);
         void OnSettingsPanel(InputAction.CallbackContext context);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -11,11 +12,12 @@ public class EnemyStats : EntityStats
     public int level = 1;
     [Range(0f, 1f)] 
     [SerializeField]
-    private float percentageModifier = .4f;
+    private float percentageModifier = .2f;
     
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        ApplyModifiers();
+        base.Start();
         enemy = GetComponent<Enemy>();
         itemDrop = GetComponent<ItemDrop>();
         healthBar = GetComponentInChildren<HealthBar>();
@@ -26,6 +28,7 @@ public class EnemyStats : EntityStats
         Modify(strength);
         Modify(agility);
         Modify(vitality);
+        Modify(intelligence);
         
         Modify(damage);
         Modify(criticalChance);
@@ -45,7 +48,7 @@ public class EnemyStats : EntityStats
         for (int i = 0; i < level; i++)
         {
             float modifier = stats.GetValue() * percentageModifier;
-            stats.AddModifiers(Mathf.RoundToInt(modifier));
+            stats.AddModifiers(Mathf.CeilToInt(modifier));
         }
     }
 
@@ -59,6 +62,7 @@ public class EnemyStats : EntityStats
     {
         base.EntityDeath();
         enemy.EntityDeath();
+        itemDrop.GenerateDrop();
         StartCoroutine(DestroyUponDeath());
         healthBar.DisableSpriteRenderer();
         PlayerManager.Instance.GainExperienceFlatRate(enemy.enemyExperienceDrop);
@@ -68,13 +72,5 @@ public class EnemyStats : EntityStats
     {
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
-        itemDrop.GenerateDrop();
-    }
-
-    protected override void ApplyStatusAilments(bool burn, bool freeze, bool shock)
-    {
-        playerAttack = false;
-        
-        base.ApplyStatusAilments(burn, freeze, shock);
     }
 }

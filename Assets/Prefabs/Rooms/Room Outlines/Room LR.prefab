@@ -53,6 +53,8 @@ MonoBehaviour:
   - {fileID: 7725184306651443890}
   - {fileID: 3451676926138354658}
   mapHider: {fileID: 7738140567014701583}
+  ifPressedOk: 0
+  roomCenterName: 
   roomActive: 0
   closeWhenEntered: 0
 --- !u!50 &8125926653274065689
@@ -8046,6 +8048,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TorchUp
       objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8106,7 +8116,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4318013814138772365, guid: e415d40b1ecfe4741a140592ed1a1697, type: 3}
       propertyPath: m_SortingLayer
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4318013814138772365, guid: e415d40b1ecfe4741a140592ed1a1697, type: 3}
       propertyPath: m_SortingOrder
@@ -8114,7 +8124,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4318013814138772365, guid: e415d40b1ecfe4741a140592ed1a1697, type: 3}
       propertyPath: m_SortingLayerID
-      value: -1277430277
+      value: 786107415
       objectReference: {fileID: 0}
     - target: {fileID: 7030315356454563696, guid: e415d40b1ecfe4741a140592ed1a1697, type: 3}
       propertyPath: m_Name
@@ -8149,7 +8159,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3196746456139186383, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_SortingLayer
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3196746456139186383, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_SortingOrder
@@ -8157,7 +8167,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3196746456139186383, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_SortingLayerID
-      value: -1277430277
+      value: 786107415
       objectReference: {fileID: 0}
     - target: {fileID: 3404958617374078763, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8273,6 +8283,14 @@ PrefabInstance:
     - target: {fileID: 9076933151742304445, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
       propertyPath: m_Name
       value: TorchUp (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

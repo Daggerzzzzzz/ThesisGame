@@ -31,15 +31,24 @@ public class PlayerStats : EntityStats, ISaveManager
         Inventory.Instance.UIStatSlotUpdate();
     }
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         player = GetComponent<Player>();
     }
 
     public override void TakeDamage(int damage, GameObject sender)
     {
         base.TakeDamage(damage, sender);
+        EquipmentDataSO currentArmor;
+        
+        currentArmor = Inventory.Instance.GetEquipment(EquipmentType.ARMOR);
+        
+        if (currentArmor.itemName == "Thornmail")
+        {
+            Inventory.Instance.GetEquipment(EquipmentType.ARMOR).UseEffect(sender.transform.position, sender.GetComponentInParent<EnemyStats>());
+        }
+        
         player.DamageEffect(sender);
     }
 
@@ -48,21 +57,14 @@ public class PlayerStats : EntityStats, ISaveManager
         base.EntityDeath();
         player.EntityDeath();
     }
-
-    protected override void ApplyStatusAilments(bool burn, bool freeze, bool shock)
-    {
-        playerAttack = true;
-        
-        base.ApplyStatusAilments(burn, freeze, shock);
-    }
-
+    
     public void LoadData(GameData data)
     {
-        strength.AddModifiers(data.strength);
-        agility.AddModifiers(data.agility);
-        intelligence.AddModifiers(data.intelligence);
-        vitality.AddModifiers(data.vitality);
-        CurrentHealth = data.currentHealth;
+        strength.baseValue = data.strength;
+        agility.baseValue = data.agility;
+        intelligence.baseValue = data.intelligence;
+        vitality.baseValue = data.vitality;
+        currentHealth = data.currentHealth;
         
         Inventory.Instance.UIStatSlotUpdate();
     }
@@ -73,6 +75,6 @@ public class PlayerStats : EntityStats, ISaveManager
         data.agility = agility.GetValue();
         data.intelligence = agility.GetValue();
         data.vitality = vitality.GetValue();
-        data.currentHealth = CurrentHealth;
+        data.currentHealth = currentHealth;
     }
 }

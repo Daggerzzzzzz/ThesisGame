@@ -12,7 +12,7 @@ public class Entity : MonoBehaviour
     public BoxCollider2D OnBoxCollider2D { get; private set; }
     #endregion
 
-    protected Vector2 OnMovementDirection { get; private set; }
+    public Vector2 OnMovementDirection { get; private set; }
     public Vector2 OnAttackDirection { get; private set; }
 
     [Header("Collision Info")] 
@@ -111,11 +111,11 @@ public class Entity : MonoBehaviour
         {
             if (movementInput.x > 0)
             {
-                OnAttackDirection = new Vector2(1.2f, -0.3f);
+                OnAttackDirection = new Vector2(1.2f, 0f);
             }
             if (movementInput.x < 0)
             {
-                OnAttackDirection = new Vector2(-1.2f, -0.3f);
+                OnAttackDirection = new Vector2(-1.2f, 0f);
             }
         }
         if (Mathf.Abs(movementInput.x) < Mathf.Abs(movementInput.y))

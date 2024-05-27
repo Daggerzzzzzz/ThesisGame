@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ItemDrop : MonoBehaviour
 {
@@ -7,16 +9,27 @@ public class ItemDrop : MonoBehaviour
     private GameObject dropPrefab;
     [SerializeField] 
     private ItemDataSO[] possibleDrop;
-
+    [SerializeField] 
+    private List<ItemDataSO> dropList = new();
+    
     public virtual void GenerateDrop()
     {
-        for (int i = 0; i < possibleDrop.Length; i++)
+        foreach (var drop in possibleDrop)
         {
-            DropItem(possibleDrop[i]);
+            float randomValue = Random.Range(0f, 1f);
+            if (randomValue <= drop.dropChance)
+            {
+                dropList.Add(drop);
+            }
+        }
+
+        for (int i = 0; i < dropList.Count; i++)
+        {
+            DropItem(dropList[i]);
         }
     }
     
-    public void DropItem(ItemDataSO itemDataSo)
+    private void DropItem(ItemDataSO itemDataSo)
     {
         GameObject newDrop = Instantiate(dropPrefab, transform.position, quaternion.identity);
         newDrop.GetComponent<ItemObject>().SetupItem(itemDataSo);

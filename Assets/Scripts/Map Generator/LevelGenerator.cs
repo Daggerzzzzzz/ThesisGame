@@ -11,7 +11,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
     [SerializeField]
     private int distanceToEnd;
     [SerializeField]
-    private Color startingColor, endingColor;
+    private Color startingColor, endingColor, chestColor;
     [SerializeField]
     private Transform generatorPoint;
     [SerializeField]
@@ -25,7 +25,17 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
     [SerializeField]
     private RoomCenter centerEnd;
     [SerializeField]
+    private RoomCenter chestCenter;
+    [SerializeField]
     private RoomCenter roomCenter;
+    [SerializeField]
+    private int minDistanceToChest;
+    [SerializeField]
+    private int maxDistanceToChest;
+    [SerializeField]
+    private bool haveKey;
+    private bool keyAlreadyAcquired;
+    private GameObject chestRoom;
 
     [Header("Genetic Algorithm Setup")] 
     [SerializeField]
@@ -72,83 +82,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
     {
         base.Awake();
         
-         if (roomInfos.Count > 0)
-        {
-            Debug.Log("There are save items");
-        
-            foreach (RoomInfo roomInfo in roomInfos)
-            {
-                GameObject loadedNewRoom = Instantiate(layoutRoom, roomInfo.position, Quaternion.identity);
-                loadedRoomObjects.Add((loadedNewRoom, roomInfo.individualRoomCenter.roomName));
-            }
-            
-            foreach((GameObject, string) loadedRoom in loadedRoomObjects)
-            {
-                loadedGeneratedOutlines.Add((CreateRoomOutline(loadedRoom.Item1.transform.position), loadedRoom.Item2));
-            }
-            
-            foreach((GameObject, string) loadedOutlines in loadedGeneratedOutlines)
-            {
-                RoomCenter loadedRoomCenter = GetRoomCenterByName(loadedOutlines.Item2);
-                RoomCenter loadedRoomCenterDetails = Instantiate(loadedRoomCenter, loadedOutlines.Item1.transform.position, transform.rotation);
-                loadedRoomCenterDetails.TheRoom = loadedOutlines.Item1.GetComponent<Room>();
-                loadedRoomCenterDetails.TheRoom.roomCenterName = loadedRoomCenter.name;
-                loadedRoomCenterDetails.name = loadedOutlines.Item2;
-                if (loadedRoomCenterDetails.name == "Starting Center")
-                {
-                    loadedRoomCenterDetails.tag = "Starting Center";
-                }
-
-                foreach (RoomInfo room in roomInfos)
-                {
-                    if (room.position == loadedRoomCenterDetails.transform.position)
-                    {
-                        room.individualRoomCenter.roomCenter = loadedRoomCenterDetails;
-                        break;
-                    }
-                }
-            }
-
-            foreach (RoomInfo room in roomInfos)
-            {
-                MonsterBatch monsterBatch = new MonsterBatch();
-                
-                if (room.monsterBatch != null)
-                {
-                    List<string> nameToUpdate = new();
-
-                    foreach (var monster in room.monsterBatch)
-                    {
-                        if (monster.monsterGameObject == null)
-                        {
-                            nameToUpdate.Add(monster.monsterName);
-                        }
-                    }
-
-                    foreach (string name in nameToUpdate)
-                    {
-                        float randomX = Random.Range(-9f, 7.5f);
-                        float randomY = Random.Range(-3.5f, 3f);
-                        Vector3 randomPosition = new Vector3(randomX, randomY, 0f);
-                        
-                        GameObject monsterObject = Instantiate(GetMonsterByName(name), room.individualRoomCenter.roomCenter.transform);
-                        monsterObject.GetComponent<EnemyStats>().level = room.monsterLevel;
-                        monsterObject.GetComponent<Enemy>().enemyExperienceDrop = room.monsterExperienceDrop;
-                        monsterObject.transform.localPosition = randomPosition;
-                        monsterObject.tag = "Enemy";
-                        monsterObject.name = name;
-                        room.individualRoomCenter.roomCenter.enemies.Add(monsterObject);
-                        monsterObject.SetActive(false);
-
-                        monsterBatch.AddMonster(name, monsterObject);
-                    }
-                }
-
-                room.monsterBatch = monsterBatch;
-            }
-            
-            return;
-        }
+        if (GenerateRoomBasedOnSaveData()) return;
         
         Instantiate(layoutRoom, generatorPoint.position, generatorPoint.rotation).GetComponent<SpriteRenderer>().color = startingColor;
         
@@ -161,7 +95,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
         ConvertToGraph();
         PopulateRoomInfos();
     }
-    
+
     private void Update()
     {
         for (int i = 0; i < roomInfos.Count; i++)
@@ -212,6 +146,8 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
     
     private void GenerateMultipleRooms()
     {
+        int chestSelected = Random.Range(minDistanceToChest, maxDistanceToChest + 1);
+        
         for(int i = 0; i < distanceToEnd; i++)
         {
             GameObject newRoom = Instantiate(layoutRoom, generatorPoint.position, generatorPoint.rotation);
@@ -232,6 +168,20 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
                 MoveGenerationPoint();
             }
         }
+        
+        chestRoom = roomObjects[chestSelected];
+
+        for (int i = 0; i < roomObjects.Count; i++)
+        {
+            if (roomObjects[i].transform.position == chestRoom.transform.position)
+            {
+                roomObjects[i] = chestRoom; 
+                break; 
+            }
+        }
+        
+        chestRoom.GetComponent<SpriteRenderer>().color = chestColor;
+        
         generatedOutlines.Add(CreateRoomOutline(Vector3.zero));
 
         foreach(GameObject room in roomObjects)
@@ -249,6 +199,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
             {
                 roomCenterDetails = Instantiate(centerStart, outline.transform.position, transform.rotation);
                 roomCenterDetails.TheRoom = outline.GetComponent<Room>();
+                roomCenterDetails.TheRoom.CloseTheDoor();
                 roomCenterDetails.name = "Starting Center";
                 roomCenterDetails.TheRoom.roomCenterName = roomCenterDetails.name;
                 RoomCenterData roomCenterData = new RoomCenterData(roomCenterDetails.name, roomCenterDetails);
@@ -259,7 +210,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
                 generateCenter = true;
             }
             
-            if(!generateCenter && outline.transform.position != endRoom.transform.position)
+            if(!generateCenter && outline.transform.position != endRoom.transform.position && outline.transform.position != chestRoom.transform.position)
             {
                 roomCenterDetails = Instantiate(roomCenter, outline.transform.position, transform.rotation);
                 roomCenterDetails.TheRoom = outline.GetComponent<Room>();
@@ -276,7 +227,21 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
             {
                 roomCenterDetails = Instantiate(centerEnd, outline.transform.position, transform.rotation);
                 roomCenterDetails.TheRoom = outline.GetComponent<Room>();
+                roomCenterDetails.TheRoom.CloseTheDoor();
                 roomCenterDetails.name = "End Center";
+                roomCenterDetails.TheRoom.roomCenterName = roomCenterDetails.name;
+                RoomCenterData roomCenterData = new RoomCenterData(roomCenterDetails.name, roomCenterDetails);
+                RoomInfo roomInfo = new RoomInfo(outline.transform.position, currentRoomID, roomCenterData);
+                roomInfos.Add(roomInfo);
+                
+                currentRoomID++;
+            }
+            
+            if(outline.transform.position == chestRoom.transform.position)
+            {
+                roomCenterDetails = Instantiate(chestCenter, outline.transform.position, transform.rotation);
+                roomCenterDetails.TheRoom = outline.GetComponent<Room>();
+                roomCenterDetails.name = "Chest Center";
                 roomCenterDetails.TheRoom.roomCenterName = roomCenterDetails.name;
                 RoomCenterData roomCenterData = new RoomCenterData(roomCenterDetails.name, roomCenterDetails);
                 RoomInfo roomInfo = new RoomInfo(outline.transform.position, currentRoomID, roomCenterData);
@@ -455,6 +420,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
             }
         }
         graphTraversal.BFS(0);
+        graphTraversal.PrintTraversal();
         graphTraversal.SortByDistance();
         
         distanceSet = graphTraversal.GetDistancesAsHashSet();
@@ -598,7 +564,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
     {
         foreach (var room in roomInfos)
         {
-            if (room.roomID == 0 || room.roomID == distanceToEnd)
+            if (room.roomID == 0 || room.roomID == distanceToEnd || room.position == chestRoom.transform.position)
             {
                 continue; 
             }
@@ -662,6 +628,8 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
                 return centerEnd;
             case "Battle Center":
                 return roomCenter;
+            case "Chest Center":
+                return chestCenter;
             default:
                 return null;
         }
@@ -689,6 +657,8 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
 
             roomInfos.Add(roomInfo);
         }
+
+        haveKey = data.haveKey;
     }
     
     public void SaveData(ref GameData data)
@@ -700,6 +670,8 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
             RoomInfo newRoomInfoWithoutDuplicate = AddNewRoom(roomInfo);
             data.roomInfoSave.Add(newRoomInfoWithoutDuplicate);
         }
+
+        data.haveKey = haveKey;
     }
 
     private RoomInfo AddNewRoom(RoomInfo roomInfo)
@@ -713,6 +685,107 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
             monsterExperienceDrop = roomInfo.monsterExperienceDrop
         };
         return newRoomInfo;
+    }
+    
+    private bool GenerateRoomBasedOnSaveData()
+    {
+        if (roomInfos.Count > 0)
+        {
+            Debug.Log("There are save items");
+        
+            foreach (RoomInfo roomInfo in roomInfos)
+            {
+                GameObject loadedNewRoom = Instantiate(layoutRoom, roomInfo.position, Quaternion.identity);
+                loadedRoomObjects.Add((loadedNewRoom, roomInfo.individualRoomCenter.roomName));
+            }
+            
+            foreach((GameObject, string) loadedRoom in loadedRoomObjects)
+            {
+                loadedGeneratedOutlines.Add((CreateRoomOutline(loadedRoom.Item1.transform.position), loadedRoom.Item2));
+            }
+            
+            foreach((GameObject, string) loadedOutlines in loadedGeneratedOutlines)
+            {
+                RoomCenter loadedRoomCenter = GetRoomCenterByName(loadedOutlines.Item2);
+                RoomCenter loadedRoomCenterDetails = Instantiate(loadedRoomCenter, loadedOutlines.Item1.transform.position, transform.rotation);
+                loadedRoomCenterDetails.TheRoom = loadedOutlines.Item1.GetComponent<Room>();
+                loadedRoomCenterDetails.TheRoom.roomCenterName = loadedRoomCenter.name;
+                loadedRoomCenterDetails.name = loadedOutlines.Item2;
+                if (loadedRoomCenterDetails.name == "Starting Center")
+                {
+                    loadedRoomCenterDetails.tag = "Starting Center";
+                    loadedRoomCenterDetails.TheRoom.CloseTheDoor();
+                }
+                else if (loadedRoomCenterDetails.name == "End Center")
+                {
+                    loadedRoomCenterDetails.TheRoom.CloseTheDoor();
+                }
+                else if (loadedRoomCenterDetails.name == "Chest Center")
+                {
+                    if (haveKey)
+                    {
+                        GameObject chest = loadedRoomCenterDetails.GetComponentInChildren<ChestController>().gameObject;
+                        Destroy(chest);
+                    }
+                }
+
+                foreach (RoomInfo room in roomInfos)
+                {
+                    if (room.position == loadedRoomCenterDetails.transform.position)
+                    {
+                        room.individualRoomCenter.roomCenter = loadedRoomCenterDetails;
+                        break;
+                    }
+                }
+            }
+
+            foreach (RoomInfo room in roomInfos)
+            {
+                MonsterBatch monsterBatch = new MonsterBatch();
+                
+                if (room.monsterBatch != null)
+                {
+                    List<string> nameToUpdate = new();
+
+                    foreach (var monster in room.monsterBatch)
+                    {
+                        if (monster.monsterGameObject == null)
+                        {
+                            nameToUpdate.Add(monster.monsterName);
+                        }
+                    }
+
+                    foreach (string name in nameToUpdate)
+                    {
+                        float randomX = Random.Range(-9f, 7.5f);
+                        float randomY = Random.Range(-3.5f, 3f);
+                        Vector3 randomPosition = new Vector3(randomX, randomY, 0f);
+                        
+                        GameObject monsterObject = Instantiate(GetMonsterByName(name), room.individualRoomCenter.roomCenter.transform);
+                        monsterObject.GetComponent<EnemyStats>().level = room.monsterLevel;
+                        monsterObject.GetComponent<Enemy>().enemyExperienceDrop = room.monsterExperienceDrop;
+                        monsterObject.transform.localPosition = randomPosition;
+                        monsterObject.tag = "Enemy";
+                        monsterObject.name = name;
+                        room.individualRoomCenter.roomCenter.enemies.Add(monsterObject);
+                        monsterObject.SetActive(false);
+
+                        monsterBatch.AddMonster(name, monsterObject);
+                    }
+                }
+
+                room.monsterBatch = monsterBatch;
+            }
+            
+            return true;
+        }
+
+        return false;
+    }
+
+    public void CheckKeyInInventory()
+    {
+        haveKey = true;
     }
 }
 

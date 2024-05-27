@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1a29d51b1bc5b843a14fb886ca94770, type: 3}
   m_Name: SoulsItemData
   m_EditorClassIdentifier: 
+  itemEffectDesc: Use for Unlocking Skills in Skill Tree.
   itemType: 0
-  itemName: Souls
   icon: {fileID: -1882962326, guid: 4ffb9d660dc490b499e2ef4f91139bb1, type: 3}
+  itemName: Souls
   itemID: f98cab7d2c52a05448c3c1b2b074faff
+  itemCooldown: 0
+  dropChance: 1
+  itemEffects: []

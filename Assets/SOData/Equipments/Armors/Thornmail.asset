@@ -13,9 +13,18 @@ MonoBehaviour:
   m_Name: Thornmail
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: Thornmail
   icon: {fileID: 21300000, guid: 6d49cbbbb2c1a194e91f2a3201e55d36, type: 3}
+  itemName: Thornmail
+  itemID: 62e492984599ca748b12a86cd68a5dbf
+  itemCooldown: 0
+  dropChance: 0
+  itemEffects:
+  - {fileID: 11400000, guid: 5793b9559fa7af34f880df51fea0b646, type: 2}
   equipmentType: 0
   position: {x: -4, y: -0.4}
+  itemEffectDesc: 'Reflect 1% of Player''s max health as damage.
+
+    Cooldown 0
+    secs'
   vitality: 0
   armor: 20

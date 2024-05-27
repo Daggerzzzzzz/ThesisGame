@@ -34,6 +34,15 @@ public class ItemTooltip : MonoBehaviour
         itemTypeText.text = armorDataSo.equipmentType.ToString();
         itemDescription.text = armorDataSo.GetDescription();
     }
+    
+    public void ShowItemTooltip(ItemDataSO itemDataSo)
+    {
+        gameObject.SetActive(true);
+        
+        itemNameText.text = itemDataSo.itemName.ToUpper();
+        itemTypeText.text = "Stash";
+        itemDescription.text = itemDataSo.GetDescription();
+    }
 
     public void HideTooltip()
     {

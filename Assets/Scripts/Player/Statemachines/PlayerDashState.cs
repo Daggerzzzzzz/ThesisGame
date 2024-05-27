@@ -10,6 +10,7 @@ public class PlayerDashState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        SoundManager.Instance.PlaySoundEffects(10, null);
         player.OnPlayerInputs.Player.Move.Disable();
         player.OnSkill.Dash.CloneDash();
         stateTimer = player.dashDuration;
@@ -38,8 +39,9 @@ public class PlayerDashState : PlayerState
     public override void Exit()
     {
         base.Exit();
+        SoundManager.Instance.StopSoundEffects(10);
         player.OnPlayerInputs.Player.Move.Enable();
-        player.OnSkill.Dash.CloneDash();
+        player.OnSkill.Dash.DoubleCloneDash();
         player.SetVelocity(0, 0, player.moveSpeed);
         player.dashDirection = Vector2.zero;
     }

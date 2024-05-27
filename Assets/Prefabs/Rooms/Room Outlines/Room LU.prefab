@@ -673,6 +673,8 @@ MonoBehaviour:
   - {fileID: 1384072491589907004}
   - {fileID: 1315163441245070700}
   mapHider: {fileID: 6029864634080713538}
+  ifPressedOk: 0
+  roomCenterName: 
   roomActive: 0
   closeWhenEntered: 0
 --- !u!50 &7965227593329394444
@@ -8072,6 +8074,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TorchLeft
       objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 5d475b1ec18cd334fa6dc415c1b78411, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 5d475b1ec18cd334fa6dc415c1b78411, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8092,7 +8102,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3196746456139186383, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_SortingLayer
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3196746456139186383, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_SortingOrder
@@ -8100,7 +8110,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3196746456139186383, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_SortingLayerID
-      value: -1277430277
+      value: 786107415
       objectReference: {fileID: 0}
     - target: {fileID: 3404958617374078763, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8217,6 +8227,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TorchUp
       objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8237,7 +8255,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4280311608312251461, guid: bec4c405ba31caf45988d5e5c276d8de, type: 3}
       propertyPath: m_SortingLayer
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4280311608312251461, guid: bec4c405ba31caf45988d5e5c276d8de, type: 3}
       propertyPath: m_SortingOrder
@@ -8245,7 +8263,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4280311608312251461, guid: bec4c405ba31caf45988d5e5c276d8de, type: 3}
       propertyPath: m_SortingLayerID
-      value: -1277430277
+      value: 786107415
       objectReference: {fileID: 0}
     - target: {fileID: 6625635125228776324, guid: bec4c405ba31caf45988d5e5c276d8de, type: 3}
       propertyPath: m_LocalPosition.x

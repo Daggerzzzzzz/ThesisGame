@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class LightningController : MonoBehaviour
@@ -44,8 +45,8 @@ public class LightningController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("damage" + damage);
-        if (enemyLayer == (enemyLayer | (1 << other.gameObject.layer)) && !other.GetComponentInChildren<EnemyStruck>())
+        bool isInEnemyLayer = (enemyLayer & (1 << other.gameObject.layer)) != 0;
+        if (isInEnemyLayer && !other.GetComponentInChildren<EnemyStruck>())
         {
             if (singleSpawns != 0)
             {
@@ -58,11 +59,11 @@ public class LightningController : MonoBehaviour
                     newLightning.GetComponent<LightningController>().SetupLightning(damage);
                     Instantiate(beenStruck, other.gameObject.transform);
                     entityStats = other.GetComponent<EntityStats>();
-                    entityStats.TakeDamage(damage, gameObject);
+                    PlayerManager.Instance.player.GetComponent<EntityStats>().DoDamage(entityStats, gameObject);
                 }
             
                 anim.StopPlayback();
-                Destroy();
+                DestroyLightning();
                 ParticleAnimation();
                 singleSpawns--;
             }
@@ -74,7 +75,7 @@ public class LightningController : MonoBehaviour
         this.damage = damage;
     }
     
-    private void Destroy()
+    private void DestroyLightning()
     {
         circleCollider2D.enabled = false;
         Destroy(gameObject, 1f);
@@ -93,5 +94,19 @@ public class LightningController : MonoBehaviour
 
         emitParams.position = (startObject.transform.position + endObject.transform.position) / 2;
         part.Emit(emitParams, 1);
+    }
+    
+    private IEnumerator EnsureDestruction()
+    {
+        yield return new WaitForSeconds(2f); 
+        if (amountToChain > 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(EnsureDestruction());
     }
 }

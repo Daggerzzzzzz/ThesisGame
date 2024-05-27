@@ -13,10 +13,18 @@ MonoBehaviour:
   m_Name: Gonryomaru
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: Gonryomaru
   icon: {fileID: 21300000, guid: 92447612000401a4db0233b302793031, type: 3}
+  itemName: Gonryomaru
+  itemID: 0a9286f81fb54ca4983e0540dcf9ae3a
+  itemCooldown: 0
+  dropChance: 0
+  itemEffects:
+  - {fileID: 11400000, guid: c83e6f704073ac147ba5ebc7e1d2f9fa, type: 2}
   equipmentType: 1
   position: {x: 2, y: -2.2}
+  itemEffectDesc: 'Summon an Electric Arc each attack.
+
+    Cooldown 0 secs'
   strength: 5
   agility: 0
   intelligence: 0

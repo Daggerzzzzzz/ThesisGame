@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 8838301694610973295}
   - component: {fileID: 3431077117811062637}
   m_Layer: 9
-  m_Name: Sprite
+  m_Name: Skeleton Sprite
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -225,7 +225,7 @@ MonoBehaviour:
   - {x: 0.05029416, y: -0.07057181, z: 0}
   m_ShapePathHash: 1973608341
   m_Mesh: {fileID: 0}
-  m_InstanceId: 75002
+  m_InstanceId: 174006
   m_LocalBounds:
     m_Center: {x: 0.00010201335, y: -0.010157958, z: 0}
     m_Extent: {x: 0.050192147, y: 0.060413852, z: 0}
@@ -632,7 +632,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statusEffectsDuration: 2
-  lightningPrefab: {fileID: 8030014435009751533, guid: 2bb539423e04ae5459463ea44fde9196, type: 3}
   strength:
     baseValue: 1
     modifiers: 
@@ -640,7 +639,7 @@ MonoBehaviour:
     baseValue: 1
     modifiers: 
   vitality:
-    baseValue: 0
+    baseValue: 1
     modifiers: 
   intelligence:
     baseValue: 0
@@ -675,6 +674,8 @@ MonoBehaviour:
   isBurning: 0
   isFreezing: 0
   isOnShock: 0
+  currentHealth: 0
+  isDead: 0
   onHealthChanged:
     m_PersistentCalls:
       m_Calls:
@@ -691,7 +692,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   level: 1
-  percentageModifier: 0.4
+  percentageModifier: 0.05
 --- !u!114 &7806706815812815089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -866,6 +867,8 @@ MonoBehaviour:
   dropPrefab: {fileID: 4251107263930516463, guid: df7c027103ddd1d4785c600f53be13e7, type: 3}
   possibleDrop:
   - {fileID: 11400000, guid: f98cab7d2c52a05448c3c1b2b074faff, type: 2}
+  - {fileID: 11400000, guid: 38ed9939493fc9f4eb2b1705e16bcb4e, type: 2}
+  dropList: []
 --- !u!1 &7347122353188072923
 GameObject:
   m_ObjectHideFlags: 0

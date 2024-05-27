@@ -4898,9 +4898,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5374714744394458552}
+  - component: {fileID: 8821910291057748202}
   - component: {fileID: 652628627395532298}
   - component: {fileID: 2186254214832637623}
-  - component: {fileID: 8821910291057748202}
   - component: {fileID: 8446855365414476637}
   - component: {fileID: 224759427569709683}
   m_Layer: 0
@@ -4926,6 +4926,27 @@ Transform:
   - {fileID: 7108191754352004464}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8821910291057748202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8030014435009751533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33cac2efff23e1d4f8184f1aaf422a2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityStats: {fileID: 0}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  lightningController: {fileID: 8030014435009751533}
+  beenStruck: {fileID: 3561898094954029611, guid: 7287520f970e10246bc50c9d604f46d9, type: 3}
+  endObject: {fileID: 0}
+  amountToChain: 3
+  startObject: {fileID: 0}
 --- !u!199 &652628627395532298
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -9782,27 +9803,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &8821910291057748202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8030014435009751533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33cac2efff23e1d4f8184f1aaf422a2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityStats: {fileID: 0}
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  lightningController: {fileID: 8030014435009751533}
-  beenStruck: {fileID: 398871499061640560, guid: a6fd0265a7bf11c4c809cfb4f181c6f0, type: 3}
-  endObject: {fileID: 0}
-  amountToChain: 2
-  startObject: {fileID: 0}
 --- !u!58 &8446855365414476637
 CircleCollider2D:
   m_ObjectHideFlags: 0

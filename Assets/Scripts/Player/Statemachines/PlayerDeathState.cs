@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerDeathState : PlayerState
@@ -7,18 +6,44 @@ public class PlayerDeathState : PlayerState
     {
         
     }
-
+    
     public override void Enter()
     {
         base.Enter();
+        
         player.OnPlayerInputs.Player.Disable();
         
-        GameObject.Find("Pause").GetComponent<UI>().EnableEndScreen();
+        EquipmentDataSO currentArmor = Inventory.Instance.GetEquipment(EquipmentType.ARMOR);
+        
+        if (currentArmor.itemName == "Guardian Angel")
+        {
+            Inventory.Instance.GetEquipment(EquipmentType.ARMOR).UseEffect(player.transform.position, player.OnEntityStats);
+            
+            player.OnEntityStats.isDead = false;
+            resurrectionTimer = resurrectionDelay;
+        }
+        
+        if (player.OnEntityStats.currentHealth < 0)
+        { 
+            GameObject.Find("Pause").GetComponent<UI>().EnableEndScreen();
+        }
     }
 
     public override void Update()
     {
         base.Update();
+        
+        if (player.OnEntityStats.currentHealth > 0)
+        { 
+            if (resurrectionTimer > 0)
+            {
+                resurrectionTimer -= Time.deltaTime;
+                if (resurrectionTimer <= 0)
+                {
+                    ResurrectionDelay();
+                }
+            }
+        }
         player.SetZeroVelocity();
         player.OnCapsuleCollider2D.enabled = false;
         player.OnBoxCollider2D.enabled = false;
@@ -32,5 +57,10 @@ public class PlayerDeathState : PlayerState
     public override void PlayerAnimationFinishTrigger()
     {
         base.PlayerAnimationFinishTrigger();
+    }
+
+    private void ResurrectionDelay()
+    { 
+        player.OnStateMachine.ChangeState(player.OnPlayerRessurrectState);
     }
 }

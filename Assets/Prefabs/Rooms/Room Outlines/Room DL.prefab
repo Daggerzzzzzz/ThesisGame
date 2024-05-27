@@ -7012,6 +7012,8 @@ MonoBehaviour:
   - {fileID: 6986848125718061902}
   - {fileID: 9178212228751929152}
   mapHider: {fileID: 3559672804165603912}
+  ifPressedOk: 0
+  roomCenterName: 
   roomActive: 0
   closeWhenEntered: 0
 --- !u!50 &4191523807836721155
@@ -8072,6 +8074,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TorchLeft
       objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 5d475b1ec18cd334fa6dc415c1b78411, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 5d475b1ec18cd334fa6dc415c1b78411, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8134,6 +8144,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TorchUp
       objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8154,7 +8172,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4839778633914285610, guid: 8cddd093bb659d04bb59c769d1c8d4cc, type: 3}
       propertyPath: m_SortingLayer
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4839778633914285610, guid: 8cddd093bb659d04bb59c769d1c8d4cc, type: 3}
       propertyPath: m_SortingOrder
@@ -8162,7 +8180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4839778633914285610, guid: 8cddd093bb659d04bb59c769d1c8d4cc, type: 3}
       propertyPath: m_SortingLayerID
-      value: -1277430277
+      value: 786107415
       objectReference: {fileID: 0}
     - target: {fileID: 6096604125933376394, guid: 8cddd093bb659d04bb59c769d1c8d4cc, type: 3}
       propertyPath: m_Name
@@ -8237,7 +8255,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3196746456139186383, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_SortingLayer
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3196746456139186383, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_SortingOrder
@@ -8245,7 +8263,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3196746456139186383, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_SortingLayerID
-      value: -1277430277
+      value: 786107415
       objectReference: {fileID: 0}
     - target: {fileID: 3404958617374078763, guid: 55f0abb4f913dc546983e6e9debfe28b, type: 3}
       propertyPath: m_LocalPosition.x

@@ -53,6 +53,8 @@ MonoBehaviour:
   - {fileID: 8067668981653143382}
   - {fileID: 5086198154337742132}
   mapHider: {fileID: 6122166697104056712}
+  ifPressedOk: 0
+  roomCenterName: 
   roomActive: 0
   closeWhenEntered: 0
 --- !u!50 &224842501880563049
@@ -8022,7 +8024,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4280311608312251461, guid: bec4c405ba31caf45988d5e5c276d8de, type: 3}
       propertyPath: m_SortingLayer
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4280311608312251461, guid: bec4c405ba31caf45988d5e5c276d8de, type: 3}
       propertyPath: m_SortingOrder
@@ -8030,7 +8032,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4280311608312251461, guid: bec4c405ba31caf45988d5e5c276d8de, type: 3}
       propertyPath: m_SortingLayerID
-      value: -1277430277
+      value: 786107415
       objectReference: {fileID: 0}
     - target: {fileID: 6625635125228776324, guid: bec4c405ba31caf45988d5e5c276d8de, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8145,7 +8147,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4318013814138772365, guid: e415d40b1ecfe4741a140592ed1a1697, type: 3}
       propertyPath: m_SortingLayer
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4318013814138772365, guid: e415d40b1ecfe4741a140592ed1a1697, type: 3}
       propertyPath: m_SortingOrder
@@ -8153,7 +8155,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4318013814138772365, guid: e415d40b1ecfe4741a140592ed1a1697, type: 3}
       propertyPath: m_SortingLayerID
-      value: -1277430277
+      value: 786107415
       objectReference: {fileID: 0}
     - target: {fileID: 7030315356454563696, guid: e415d40b1ecfe4741a140592ed1a1697, type: 3}
       propertyPath: m_Name
@@ -8230,6 +8232,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TorchLeft
       objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 5d475b1ec18cd334fa6dc415c1b78411, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 5d475b1ec18cd334fa6dc415c1b78411, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8291,6 +8301,14 @@ PrefabInstance:
     - target: {fileID: 9076933151742304445, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
       propertyPath: m_Name
       value: TorchUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139115673814426924, guid: 6fb2fc783849aa4499032038e6a90582, type: 3}
+      propertyPath: m_Size.y
+      value: 27.125
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

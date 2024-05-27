@@ -43,7 +43,7 @@ public class DNA
             }   
         }
 
-        score *= Mathf.RoundToInt(MonsterLevel / Distance);
+        score *= Mathf.FloorToInt(MonsterLevel / Distance + 1);
         
         if (score > Distance)
             score = 0;

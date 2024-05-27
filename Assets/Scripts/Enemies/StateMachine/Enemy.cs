@@ -117,7 +117,6 @@ public class Enemy : Entity
 
     public override void DamageEffect(GameObject sender)
     {
-        Debug.Log("sender" + sender);
         base.DamageEffect(sender);
         StartCoroutine(HitKnockBack(sender));
     }

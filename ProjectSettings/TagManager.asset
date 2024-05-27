@@ -12,6 +12,7 @@ TagManager:
   - Starting Center
   - Equipments
   - Player Trigger Collider
+  - UIInGame
   layers:
   - Default
   - TransparentFX
