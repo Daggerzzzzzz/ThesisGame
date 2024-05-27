@@ -42,6 +42,7 @@ public class ItemTrigger : MonoBehaviour
                 return;
             }
             
+            SoundManager.Instance.PlaySoundEffects(29, null);
             canEquip = true;
             player = other.GetComponent<Player>();
             player.eKey.SetActive(true);
@@ -66,6 +67,7 @@ public class ItemTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            SoundManager.Instance.PlaySoundEffects(28, null);
             canEquip = false;
             player = other.GetComponent<Player>();
 

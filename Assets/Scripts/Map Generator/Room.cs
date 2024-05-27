@@ -37,13 +37,11 @@ public class Room : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision) 
     { 
-        if ((roomCenterName == "Room Start" || roomCenterName == "Starting Center") && !startAlreadyOpened)
+        if (roomCenterName == "Room Start" || roomCenterName == "Starting Center")
         {
             if (Inventory.Instance.armor.itemDataSo != null && Inventory.Instance.weapon.itemDataSo != null)
             {
-                Debug.Log("Pumasok Dito");
                 OpenDoors();
-                startAlreadyOpened = true;
             }
         }
         
@@ -110,7 +108,8 @@ public class Room : MonoBehaviour
 
     public void OpenDoors()
     {
-        SoundManager.Instance.PlaySoundEffects(2, gameObject.transform);
+        SoundManager.Instance.PlaySoundEffects(3, gameObject.transform);
+        Debug.Log("Open Doors");
         foreach(GameObject door in doors)
         {
             door.GetComponent<Animator>().SetBool(Close, false);
@@ -120,12 +119,18 @@ public class Room : MonoBehaviour
     private IEnumerator CloseDoorDelay()
     {
         yield return new WaitForSeconds(0.5f);
-        SoundManager.Instance.PlaySoundEffects(2, gameObject.transform);
+        StartCoroutine(CloseDoorDelaySounds());
         
         foreach(GameObject door in doors)
         {
             door.GetComponent<Animator>().SetBool(Close, true);
         }
+    }
+    
+    private IEnumerator CloseDoorDelaySounds()
+    {
+        yield return new WaitForSeconds(1f);
+        SoundManager.Instance.PlaySoundEffects(2, gameObject.transform);
     }
 
     private void CheckForKunaiExistence()

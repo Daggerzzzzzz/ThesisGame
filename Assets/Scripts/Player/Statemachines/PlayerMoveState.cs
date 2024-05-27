@@ -10,7 +10,7 @@ public class PlayerMoveState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        SoundManager.Instance.PlaySoundEffects(14, null);
+        //SoundManager.Instance.PlaySoundEffects(14, null);
     }
 
     public override void Update()
@@ -31,6 +31,6 @@ public class PlayerMoveState : PlayerState
     public override void Exit()
     {
         base.Exit();
-        SoundManager.Instance.StopSoundEffects(14);
+        //SoundManager.Instance.StopSoundEffects(14);
     }
 }
