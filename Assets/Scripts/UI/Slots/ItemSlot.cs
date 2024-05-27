@@ -52,40 +52,37 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         Vector2 mousePos;
 
-        if (item == null)
+        if (item.itemDataSo != null)
         {
-            return;
-        }
-       
-        if (item.itemDataSo.itemType == ItemType.EQUIPMENT)
-        {
-            EquipmentDataSO equipmentDataSo = item.itemDataSo as EquipmentDataSO;
-
-            if (equipmentDataSo != null && equipmentDataSo.equipmentType == EquipmentType.ARMOR)
+            if (item.itemDataSo.itemType == ItemType.EQUIPMENT)
             {
-                ArmorDataSO armorDataSo = equipmentDataSo as ArmorDataSO;
-                ui.itemTooltip.ShowArmorTooltip(armorDataSo);
+                EquipmentDataSO equipmentDataSo = item.itemDataSo as EquipmentDataSO;
+
+                if (equipmentDataSo != null && equipmentDataSo.equipmentType == EquipmentType.ARMOR)
+                {
+                    ArmorDataSO armorDataSo = equipmentDataSo as ArmorDataSO;
+                    ui.itemTooltip.ShowArmorTooltip(armorDataSo);
+                }
+                else if (equipmentDataSo != null && equipmentDataSo.equipmentType == EquipmentType.WEAPON)
+                {
+                    WeaponDataSO weaponDataSo = equipmentDataSo as WeaponDataSO;
+                    ui.itemTooltip.ShowWeaponTooltip(weaponDataSo);
+                }
             }
-            else if (equipmentDataSo != null && equipmentDataSo.equipmentType == EquipmentType.WEAPON)
+            else if (item.itemDataSo.itemType == ItemType.MATERIAL)
             {
-                WeaponDataSO weaponDataSo = equipmentDataSo as WeaponDataSO;
-                ui.itemTooltip.ShowWeaponTooltip(weaponDataSo);
+                ui.itemTooltip.ShowItemTooltip(item.itemDataSo);
             }
+
+            mousePos = UIInputManager.GetMousePosition();
+
+            float pivotX = mousePos.x / Screen.width;
+            float pivotY = mousePos.y / Screen.height + 0.80f;
+
+            ui.itemTooltip.itemRectTransform.pivot = new Vector2(pivotX, pivotY);
+
+            ui.itemTooltip.transform.position = mousePos;
         }
-        else if (item.itemDataSo.itemType == ItemType.MATERIAL)
-        {
-            ui.itemTooltip.ShowItemTooltip(item.itemDataSo);
-        }
-
-        mousePos = UIInputManager.GetMousePosition();
-
-        float pivotX = mousePos.x / Screen.width;
-        float pivotY = mousePos.y / Screen.height + 0.80f;
-
-        ui.itemTooltip.itemRectTransform.pivot = new Vector2(pivotX, pivotY);
-
-        ui.itemTooltip.transform.position = mousePos;
-        
     }
 
     public void OnPointerExit(PointerEventData eventData)

@@ -14,6 +14,7 @@ public class KunaiSkillController : MonoBehaviour
     private float speedOfGrowth = 3;
 
     private bool pressedTwice;
+    private bool alreadyPlayExplosion;
 
     private static readonly int CanExplode = Animator.StringToHash("canExplode");
     
@@ -65,6 +66,12 @@ public class KunaiSkillController : MonoBehaviour
         if (canExplode || canMultiStack)
         {
             canGrow = true;
+            if (!alreadyPlayExplosion)
+            {
+                SoundManager.Instance.StopSoundEffects(13);
+                SoundManager.Instance.PlaySoundEffects(5, null, true);
+                alreadyPlayExplosion = true;
+            }
             anim.SetBool(CanExplode, true);
         }
         else

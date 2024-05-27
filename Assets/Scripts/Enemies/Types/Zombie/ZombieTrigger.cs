@@ -17,9 +17,9 @@ public class ZombieTrigger : MonoBehaviour
         
         foreach (var hit in colliders)
         {
-            if (hit.CompareTag("Player") && !attackOnce)
+            if (hit.CompareTag("Player Trigger Collider") && !attackOnce)
             {
-                PlayerStats target = hit.GetComponent<PlayerStats>();
+                PlayerStats target = hit.GetComponentInParent<PlayerStats>();
                 OnEnemyZombie.OnEntityStats.DoDamage(target, gameObject);
                 attackOnce = true;
             }

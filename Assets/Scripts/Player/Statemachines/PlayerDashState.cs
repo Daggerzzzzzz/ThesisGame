@@ -10,7 +10,7 @@ public class PlayerDashState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        SoundManager.Instance.PlaySoundEffects(10, null);
+        SoundManager.Instance.PlaySoundEffects(10, null, true);
         player.OnPlayerInputs.Player.Move.Disable();
         player.OnSkill.Dash.CloneDash();
         stateTimer = player.dashDuration;

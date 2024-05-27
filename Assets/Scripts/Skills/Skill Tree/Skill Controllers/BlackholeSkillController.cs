@@ -44,6 +44,8 @@ public class BlackholeSkillController : MonoBehaviour
     private List<GameObject> targets = new();
     private CircleCollider2D circleCollider2D;
     private Player player;
+    private bool alreadySaidBankai;
+    private bool alreadySaidSenbonsakura;
     
     private static readonly int Scatter = Animator.StringToHash("scatter");
     private static readonly int NoEnemies = Animator.StringToHash("noEnemies");
@@ -136,6 +138,11 @@ public class BlackholeSkillController : MonoBehaviour
 
     private void BulkSwordSummon()
     {
+        if (!alreadySaidBankai)
+        {
+            SoundManager.Instance.PlaySoundEffects(31, null, false);
+            alreadySaidBankai = true;
+        }
         if (swordsSummoned < amountOfSwords)
         {
             swordSummonTimer -= Time.deltaTime;
@@ -150,6 +157,11 @@ public class BlackholeSkillController : MonoBehaviour
     
     private void BulkSlashSummon()
     {
+        if (!alreadySaidSenbonsakura)
+        {
+            SoundManager.Instance.PlaySoundEffects(30, null, false);
+            alreadySaidSenbonsakura = true;
+        }
         if (targets.Count == 0)
         {
             numberOfSlashAttacksExecuted = amountOfSlashAttacks;
@@ -235,7 +247,7 @@ public class BlackholeSkillController : MonoBehaviour
     private void SummonSword()
     {
         float x = transform.position.x + circleRadius * Mathf.Cos(currentAngleRad);
-        float y = transform.position.y + circleRadius * Mathf.Sin(currentAngleRad);
+        float y = transform.position.y + circleRadius * Mathf.Sin(currentAngleRad) + 0.6f;
         Vector3 spawnPosition = new Vector3(x, y, 0f);
 
         GameObject newSword = Instantiate(swordPrefab, spawnPosition, Quaternion.identity);

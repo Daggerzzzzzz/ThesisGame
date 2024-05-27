@@ -376,6 +376,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         
         if (currentPotion == null)
         {
+            SoundManager.Instance.PlaySoundEffects(32, null, false);
             return;
         }
         
@@ -383,6 +384,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         
         if (canUsePotion)
         {
+            SoundManager.Instance.PlaySoundEffects(11, null, true);
             currentPotion.UseEffect(Vector2.zero, PlayerManager.Instance.player.GetComponent<PlayerStats>());
             RemoveItem(currentPotion);
             potionCount = GetStackValue("Potion");
@@ -392,6 +394,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         }
         else
         {
+            SoundManager.Instance.PlaySoundEffects(32, null, false);
             Debug.Log("Potion is on Cooldown");
         }
     }

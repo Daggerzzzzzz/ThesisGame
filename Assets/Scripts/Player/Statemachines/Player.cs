@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Player : Entity
@@ -105,7 +106,14 @@ public class Player : Entity
         
         if (OnPlayerInputs.Player.Teleport.WasPressedThisFrame() && OnSkill.Kunai.KunaiUnlocked)
         {
-            OnSkill.Kunai.CanUseSkill();
+            if (!OnSkill.Kunai.CanUseSkill())
+            {
+                SoundManager.Instance.PlaySoundEffects(32, null, false);
+            }
+        }
+        if (OnPlayerInputs.Player.Teleport.WasPressedThisFrame() && !OnSkill.Kunai.KunaiUnlocked)
+        {
+            SoundManager.Instance.PlaySoundEffects(32, null, false);
         }
 
         if (OnPlayerInputs.Player.UsePotion.WasPressedThisFrame())
@@ -137,12 +145,7 @@ public class Player : Entity
 
     private void CheckForDashInput()
     {
-        if (OnSkill.Dash.DashUnlocked == false)
-        {
-            return;
-        }
-        
-        if (OnPlayerInputs.Player.Dash.IsPressed() && SkillManager.Instance.Dash.CanUseSkill())
+        if (OnPlayerInputs.Player.Dash.WasPressedThisFrame() && SkillManager.Instance.Dash.CanUseSkill() && OnSkill.Dash.DashUnlocked)
         {
             if (transform != null)
             {
@@ -156,6 +159,11 @@ public class Player : Entity
                     OnStateMachine.ChangeState(OnDashState);
                 }
             }
+        }
+        else if (OnPlayerInputs.Player.Dash.WasPressedThisFrame() && !SkillManager.Instance.Dash.CanUseSkill())
+        {
+            Debug.Log("Error");
+            SoundManager.Instance.PlaySoundEffects(32, null, false);
         }
     }
     

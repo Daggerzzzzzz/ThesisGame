@@ -81,8 +81,7 @@ public class CloneSkillController : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(attackCheck.position, attackCheckRadius);
         foreach (var hit in colliders)
         {
-            Enemy enemy = hit.GetComponent<Enemy>();
-            if (enemy != null)
+            if (hit.CompareTag("Enemy"))
             {
                 PlayerManager.Instance.player.OnEntityStats.DoDamage(hit.GetComponent<EntityStats>(), gameObject);
             }

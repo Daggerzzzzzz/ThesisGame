@@ -24,7 +24,7 @@ public class Enemy : Entity
     public Vector2 EnemyDirection { get; private set; }
     
     public int enemyExperienceDrop;
-
+    private bool isTimeFrozen;
 
     protected override void Awake()
     {
@@ -62,6 +62,8 @@ public class Enemy : Entity
 
     public void TimeFreeze(bool timeFrozen)
     {
+        isTimeFrozen = true;
+        
         if (timeFrozen)
         {
             moveSpeed = 0;
@@ -79,6 +81,7 @@ public class Enemy : Entity
         TimeFreeze(true);
         yield return new WaitForSeconds(seconds);
         TimeFreeze(false);
+        isTimeFrozen = false;
     }
     
     public void PlayerFollowCheck(bool isFollowing)
@@ -103,10 +106,13 @@ public class Enemy : Entity
 
     public override void SlowEntityBy(float slowPercent, float slowDuration)
     {
-        moveSpeed *= (1 - slowPercent);
-        OnAnim.speed *= (1 - slowPercent);
+        if (!isTimeFrozen)
+        {
+            moveSpeed *= (1 - slowPercent);
+            OnAnim.speed *= (1 - slowPercent);
         
-        Invoke(nameof(ReturnToNormalSpeed), slowDuration);
+            Invoke(nameof(ReturnToNormalSpeed), slowDuration);
+        }
     }
 
     protected override void ReturnToNormalSpeed()
@@ -118,6 +124,9 @@ public class Enemy : Entity
     public override void DamageEffect(GameObject sender)
     {
         base.DamageEffect(sender);
-        StartCoroutine(HitKnockBack(sender));
+        if (!isTimeFrozen)
+        {
+            StartCoroutine(HitKnockBack(sender));
+        }
     }
 }

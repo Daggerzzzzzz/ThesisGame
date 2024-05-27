@@ -22,6 +22,7 @@ public class ItemTrigger : MonoBehaviour
                 {
                     if (PlayerManager.Instance.player.OnPlayerInputs.Player.Equip.IsPressed())
                     {
+                        SoundManager.Instance.PlaySoundEffects(22, null, true);
                         itemObject.ItemPickup();
                     }
                     break;
@@ -38,11 +39,13 @@ public class ItemTrigger : MonoBehaviour
         {
             if (itemObject.ItemDataSo.itemType == ItemType.MATERIAL)
             {
+                SoundManager.Instance.PlaySoundEffects(12, null, true);
                 itemObject.ItemPickup();
                 return;
             }
             
-            SoundManager.Instance.PlaySoundEffects(29, null);
+            SoundManager.Instance.PlaySoundEffects(29, null, true);
+            SoundManager.Instance.StopSoundEffects(28);
             canEquip = true;
             player = other.GetComponent<Player>();
             player.eKey.SetActive(true);
@@ -67,7 +70,11 @@ public class ItemTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            SoundManager.Instance.PlaySoundEffects(28, null);
+            if (itemObject.ItemDataSo.itemType == ItemType.EQUIPMENT)
+            {
+                SoundManager.Instance.PlaySoundEffects(28, null, true);
+            }
+
             canEquip = false;
             player = other.GetComponent<Player>();
 

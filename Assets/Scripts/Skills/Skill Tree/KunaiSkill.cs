@@ -73,6 +73,11 @@ public class KunaiSkill : Skill
     {
         if (unlockKunaiSwitchExplodeButton.unlocked)
         {
+            if (SkillManager.Instance.Kunai.CurrentKunai != null)
+            {
+                SkillManager.Instance.Kunai.currentKunaiSkillController.KunaiDestroy();
+            }
+            
             KunaiSwitchExplodeUnlocked = true;
         }
     }
@@ -81,6 +86,11 @@ public class KunaiSkill : Skill
     {
         if (unlockKunaiStackExplodeButton.unlocked)
         {
+            if (SkillManager.Instance.Kunai.CurrentKunai != null)
+            {
+                SkillManager.Instance.Kunai.currentKunaiSkillController.KunaiDestroy();
+            }
+            
             KunaiStackExplodeUnlocked = true;
         }
     }
@@ -115,6 +125,7 @@ public class KunaiSkill : Skill
             }
             else if (CurrentKunai != null)
             {
+                SoundManager.Instance.PlaySoundEffects(13, null, true);
                 Vector2 playerBeforePos = player.transform.position;
         
                 player.transform.position = CurrentKunai.transform.position;

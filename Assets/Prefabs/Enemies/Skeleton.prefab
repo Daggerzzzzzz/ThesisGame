@@ -225,7 +225,7 @@ MonoBehaviour:
   - {x: 0.05029416, y: -0.07057181, z: 0}
   m_ShapePathHash: 1973608341
   m_Mesh: {fileID: 0}
-  m_InstanceId: 174006
+  m_InstanceId: 312208
   m_LocalBounds:
     m_Center: {x: 0.00010201335, y: -0.010157958, z: 0}
     m_Extent: {x: 0.050192147, y: 0.060413852, z: 0}
@@ -565,6 +565,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7187871910770813356}
   - {fileID: 7651944050058992098}
   - {fileID: 7459780654212544958}
   - {fileID: 6455702434803471360}
@@ -869,6 +870,73 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f98cab7d2c52a05448c3c1b2b074faff, type: 2}
   - {fileID: 11400000, guid: 38ed9939493fc9f4eb2b1705e16bcb4e, type: 2}
   dropList: []
+--- !u!1 &5821035774593126535
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7187871910770813356}
+  - component: {fileID: 8003546243856288106}
+  m_Layer: 0
+  m_Name: Skeleton Trigger Collider
+  m_TagString: Enemy Trigger Collider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7187871910770813356
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5821035774593126535}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9120066860667693685}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &8003546243856288106
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5821035774593126535}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.03, y: -0.13}
+  m_Size: {x: 1.03, y: 1.6}
+  m_Direction: 0
 --- !u!1 &7347122353188072923
 GameObject:
   m_ObjectHideFlags: 0

@@ -79,6 +79,7 @@ public class SwordSkillController : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, player.transform.position, swordSpeed * Time.deltaTime);
             if (Vector2.Distance(transform.position, player.transform.position) < 1)
             {
+                SoundManager.Instance.StopSoundEffects(9);
                 player.ClearNewSword();
             }
         }
@@ -96,7 +97,7 @@ public class SwordSkillController : MonoBehaviour
 
         if (other.CompareTag("Enemy"))
         {
-            Enemy enemy = other.GetComponent<Enemy>();
+            Enemy enemy = other.GetComponentInParent<Enemy>();
             SwordSkillDamage(enemy);
         }
         
@@ -114,7 +115,8 @@ public class SwordSkillController : MonoBehaviour
         rb.velocity = movementDirection;
         anim.SetBool(Rotation, true);
         targetPosition = playerFacingDirection * 20f;
-        Invoke(nameof(DestroySword), 10f);
+        SoundManager.Instance.PlaySoundEffects(9, null, false);
+        Invoke(nameof(DestroySword), 5f);
     }
 
     public void InitializeSpin(bool isSpinning, float maxDistance, float spinDuration, float onHitCooldown)
@@ -168,6 +170,7 @@ public class SwordSkillController : MonoBehaviour
         }
         
         transform.parent = other.transform;
+        SoundManager.Instance.StopSoundEffects(9);
         anim.SetBool(Rotation, false);
         anim.SetBool(Stuck, true);
     }
@@ -234,9 +237,9 @@ public class SwordSkillController : MonoBehaviour
                     Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.75f);
                     foreach (var hit in colliders)
                     {
-                        if (hit.CompareTag("Enemy"))
+                        if (hit.CompareTag("Enemy Trigger Collider"))
                         {
-                            SwordSkillDamage(hit.GetComponent<Enemy>());
+                            SwordSkillDamage(hit.GetComponentInParent<Enemy>());
                         }
                     }
                 }
@@ -269,6 +272,7 @@ public class SwordSkillController : MonoBehaviour
     {
         EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
         
+        SoundManager.Instance.PlaySoundEffects(8, null, false);
         player.OnEntityStats.DoDamage(enemyStats, gameObject);
 
         if (player.OnSkill.Sword.TimeStopUnlocked)

@@ -68,16 +68,22 @@ public class UI : MonoBehaviour, ISaveManager
 
         if (player.OnPlayerInputs.Player.CharacterPanel.WasPressedThisFrame())
         {
+            SoundManager.Instance.StopSoundEffects(23);
+            SoundManager.Instance.PlaySoundEffects(23, null, false);
             SwitchMenusWithKeyboard(characterUI);
         }
         
         if (player.OnPlayerInputs.Player.SkillTreePanel.WasPressedThisFrame())
         {
+            SoundManager.Instance.StopSoundEffects(23);
+            SoundManager.Instance.PlaySoundEffects(23, null, false);
             SwitchMenusWithKeyboard(skillTreeUI);
         }
         
         if (player.OnPlayerInputs.Player.SettingsPanel.WasPressedThisFrame())
         {
+            SoundManager.Instance.StopSoundEffects(23);
+            SoundManager.Instance.PlaySoundEffects(23, null, false);
             SwitchMenusWithKeyboard(settingsUI);
         }
     }
@@ -195,5 +201,10 @@ public class UI : MonoBehaviour, ISaveManager
         {
             data.volumeSettings.Add(item.parameter, item.slider.value);
         }
+    }
+
+    public void HoverEnterSound()
+    {
+        SoundManager.Instance.PlaySoundEffects(23, null, false);
     }
 }

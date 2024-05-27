@@ -5,6 +5,7 @@ public class Skill : MonoBehaviour
     public float cooldown;
 
     private float cooldownTimer;
+    private bool alreadyPlaySound;
 
     public float tempCooldown;
 

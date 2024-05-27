@@ -13,6 +13,7 @@ TagManager:
   - Equipments
   - Player Trigger Collider
   - UIInGame
+  - Enemy Trigger Collider
   layers:
   - Default
   - TransparentFX

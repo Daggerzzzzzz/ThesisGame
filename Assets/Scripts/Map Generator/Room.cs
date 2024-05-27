@@ -37,11 +37,12 @@ public class Room : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision) 
     { 
-        if (roomCenterName == "Room Start" || roomCenterName == "Starting Center")
+        if ((roomCenterName == "Room Start" || roomCenterName == "Starting Center") & !startAlreadyOpened)
         {
             if (Inventory.Instance.armor.itemDataSo != null && Inventory.Instance.weapon.itemDataSo != null)
             {
                 OpenDoors();
+                startAlreadyOpened = true;
             }
         }
         
@@ -69,9 +70,25 @@ public class Room : MonoBehaviour
                     uiInGame.okNoKeyButton.onClick.AddListener(PressedOkInNoKey);
                 }
             }
+            else if ((roomCenterName == "Room End" || roomCenterName == "End Center") && ifPressedOk)
+            {
+                SoundManager.Instance.PlayBackgroundMusic(1);
+                
+                if(closeWhenEntered)
+                {
+                    Debug.Log("Closed When Entered");
+                    CheckForKunaiExistence();
+                    StartCoroutine(CloseDoorDelay());
+                }
+
+                roomActive = true; 
+                mapHider.SetActive(false);
+            
+                CameraController.Instance.ChangeTarget(transform);
+                CameraSwitch.Instance.PlayerEnter(); 
+            }
             else
             {
-                Debug.Log("Unlocked Now");
                 if(closeWhenEntered)
                 {
                     Debug.Log("Closed When Entered");
@@ -108,7 +125,7 @@ public class Room : MonoBehaviour
 
     public void OpenDoors()
     {
-        SoundManager.Instance.PlaySoundEffects(3, gameObject.transform);
+        SoundManager.Instance.PlaySoundEffects(3, gameObject.transform, true);
         Debug.Log("Open Doors");
         foreach(GameObject door in doors)
         {
@@ -119,6 +136,7 @@ public class Room : MonoBehaviour
     private IEnumerator CloseDoorDelay()
     {
         yield return new WaitForSeconds(0.5f);
+        startAlreadyOpened = false;
         StartCoroutine(CloseDoorDelaySounds());
         
         foreach(GameObject door in doors)
@@ -129,8 +147,8 @@ public class Room : MonoBehaviour
     
     private IEnumerator CloseDoorDelaySounds()
     {
-        yield return new WaitForSeconds(1f);
-        SoundManager.Instance.PlaySoundEffects(2, gameObject.transform);
+        yield return new WaitForSeconds(0.75f);
+        SoundManager.Instance.PlaySoundEffects(2, gameObject.transform, true);
     }
 
     private void CheckForKunaiExistence()
@@ -149,11 +167,13 @@ public class Room : MonoBehaviour
     private void PressedOkInNoKey()
     {
         uiInGame.noKeyUI.SetActive(false);
+        SoundManager.Instance.PlaySoundEffects(20, null, false);
     }
     
     private void PressedOkInBossWarning()
     {
         uiInGame.aboutToEnterBossUI.SetActive(false);
+        SoundManager.Instance.PlaySoundEffects(21, null, false);
         OpenDoors();
         ifPressedOk = true;
         boxCollider2D.size = new Vector2(19, 9.25f);
@@ -163,5 +183,6 @@ public class Room : MonoBehaviour
     private void PressedCancelInBossWarning()
     {
         uiInGame.aboutToEnterBossUI.SetActive(false);
+        SoundManager.Instance.PlaySoundEffects(20, null, false);
     }
 }

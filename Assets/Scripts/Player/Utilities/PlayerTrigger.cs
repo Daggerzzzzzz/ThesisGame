@@ -21,16 +21,16 @@ public class PlayerTrigger : MonoBehaviour
 
     private void AttackTrigger()
     {
-        SoundManager.Instance.PlaySoundEffects(7, null);
+        SoundManager.Instance.PlaySoundEffects(7, null, true);
         Collider2D[] colliders = Physics2D.OverlapCircleAll(OnPlayer.attackCheck.position, OnPlayer.attackCheckRadius);
         EquipmentDataSO currentWeapon;
         EquipmentDataSO currentArmor;
         foreach (var hit in colliders)
         {
-            if (hit.CompareTag("Enemy") && !attackOnce)
+            if (hit.CompareTag("Enemy Trigger Collider") && !attackOnce)
             {
-                SoundManager.Instance.PlaySoundEffects(8, null);
-                EnemyStats target = hit.GetComponent<EnemyStats>();
+                SoundManager.Instance.PlaySoundEffects(8, null, true);
+                EnemyStats target = hit.GetComponentInParent<EnemyStats>();
                 
                 OnPlayer.OnEntityStats.DoDamage(target,gameObject);
                 

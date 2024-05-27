@@ -15,6 +15,7 @@ public class RoomCenter : MonoBehaviour
     private int destroyedCount;
     
     private TilemapRenderer tilemapRenderer;
+    private bool alreadyPlaySounds;
     
     public Vector2 roomCenterPos;
 
@@ -88,20 +89,13 @@ public class RoomCenter : MonoBehaviour
         {
             int remainder = enemies.Count % 3;
             
-            if (remainder != 0)
-            {
-                batchSize =  remainder; 
-            }
-            else
-            {
-                batchSize = 3;
-            }
+            batchSize = remainder != 0 ? remainder : 3;
             
             for (int i = 0; i < batchSize && i < enemies.Count ; i++)
             {
                 enemies[i].SetActive(true);
             }
-
+            
             canSummonTheNextBatch = false;
             destroyedCount = 0;
         }

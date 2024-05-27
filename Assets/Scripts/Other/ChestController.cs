@@ -4,6 +4,7 @@ using UnityEngine;
 public class ChestController : MonoBehaviour
 {
     private Animator anim;
+    private bool alreadyPlayedSound;
     
     private static readonly int Open = Animator.StringToHash("Open");
 
@@ -16,6 +17,11 @@ public class ChestController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (!alreadyPlayedSound)
+            {
+                SoundManager.Instance.PlaySoundEffects(1, null, true);
+                alreadyPlayedSound = true;
+            }
             anim.SetTrigger(Open);
             StartCoroutine(DestroyChest());
         }

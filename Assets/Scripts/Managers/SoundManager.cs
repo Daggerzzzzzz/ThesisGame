@@ -37,13 +37,10 @@ public class SoundManager : SingletonMonoBehavior<SoundManager>
         }
     }
 
-    public void PlaySoundEffects(int _soundEffectsIndex, Transform _source)
+    public void PlaySoundEffects(int _soundEffectsIndex, Transform _source, bool changePitch)
     {
-        /*if (soundEffects[_soundEffectsIndex].isPlaying)
-        {
-            return;
-        }*/
-
+        Debug.Log(_soundEffectsIndex);
+        
         if (canPlaySoundEffects == false)
         {
             return;
@@ -56,7 +53,10 @@ public class SoundManager : SingletonMonoBehavior<SoundManager>
         
         if (_soundEffectsIndex < soundEffects.Length)
         {
-            soundEffects[_soundEffectsIndex].pitch = Random.Range(.9f, 1.1f);
+            if (changePitch)
+            {
+                soundEffects[_soundEffectsIndex].pitch = Random.Range(.9f, 1.1f);
+            }
             soundEffects[_soundEffectsIndex].Play();
         }
     }
