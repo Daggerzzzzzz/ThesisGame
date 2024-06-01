@@ -1,12 +1,30 @@
+
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : SingletonMonoBehavior<GameManager>
 {
+   [SerializeField] 
+   private UILoadingScreen uiLoadingScreen;
+   
    public void RestartScene()
    {
-      Scene gameScene = SceneManager.GetActiveScene();
-
-      SceneManager.LoadScene(gameScene.name);
+      uiLoadingScreen.LoadLevel(2);
+   }
+   
+   public void ReturnToMainMenu()
+   {
+      uiLoadingScreen.LoadLevel(1);
+   }
+   
+   public void PauseGame(bool pause)
+   {
+      if (pause)
+      {
+         Time.timeScale = 0;
+      }
+      else
+      {
+         Time.timeScale = 1;
+      }
    }
 }

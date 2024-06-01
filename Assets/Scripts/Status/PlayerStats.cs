@@ -40,6 +40,7 @@ public class PlayerStats : EntityStats, ISaveManager
     public override void TakeDamage(int damage, GameObject sender)
     {
         base.TakeDamage(damage, sender);
+        
         EquipmentDataSO currentArmor;
         
         currentArmor = Inventory.Instance.GetEquipment(EquipmentType.ARMOR);
@@ -50,6 +51,11 @@ public class PlayerStats : EntityStats, ISaveManager
         }
         
         player.DamageEffect(sender);
+        
+        if (!isInvincible && !isDead)
+        {
+            MakeInvincible(2f);
+        }
     }
 
     protected override void EntityDeath()

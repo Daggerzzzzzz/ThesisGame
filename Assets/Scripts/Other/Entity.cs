@@ -13,7 +13,7 @@ public class Entity : MonoBehaviour
     #endregion
 
     public Vector2 OnMovementDirection { get; private set; }
-    public Vector2 OnAttackDirection { get; private set; }
+    public Vector2 OnAttackDirection { get;  set; }
 
     [Header("Collision Info")] 
     public Transform attackCheck;
@@ -105,7 +105,7 @@ public class Entity : MonoBehaviour
         Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
     }
 
-    public void AttackDirection(Vector2 movementInput)
+    public virtual void AttackDirection(Vector2 movementInput)
     {
         if (Mathf.Abs(movementInput.x) > Mathf.Abs(movementInput.y))
         {

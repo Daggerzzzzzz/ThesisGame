@@ -10,6 +10,9 @@ public class PlayerRessurrectState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        
+        player.OnEntityStats.MakeInvincible(10f);
+        
         SoundManager.Instance.PlaySoundEffects(11, null, false);
         exitResurrectionTimer = exitRessurectionTimerDelay;
         player.guardianAngel.SetActive(true);
@@ -34,7 +37,6 @@ public class PlayerRessurrectState : PlayerState
         base.Exit();
         SoundManager.Instance.StopSoundEffects(11);
         player.guardianAngel.SetActive(false);
-        playerCanRevive = false;
         player.OnCapsuleCollider2D.enabled = true;
         player.OnBoxCollider2D.enabled = true;
     }

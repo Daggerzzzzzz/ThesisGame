@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class ItemDrop : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class ItemDrop : MonoBehaviour
     {
         foreach (var drop in possibleDrop)
         {
-            float randomValue = Random.Range(0f, 1f);
+            float randomValue = UnityEngine.Random.Range(0f, 1f);
             if (randomValue <= drop.dropChance)
             {
                 dropList.Add(drop);

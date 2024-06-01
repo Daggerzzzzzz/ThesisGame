@@ -51,6 +51,7 @@ public class Room : MonoBehaviour
             if ((roomCenterName == "Room End" || roomCenterName == "End Center") && !ifPressedOk)
             {
                 bool hasKey = Inventory.Instance.CheckForKey();
+                GameManager.Instance.PauseGame(true);
 
                 if (hasKey)
                 {
@@ -167,12 +168,14 @@ public class Room : MonoBehaviour
     private void PressedOkInNoKey()
     {
         uiInGame.noKeyUI.SetActive(false);
+        GameManager.Instance.PauseGame(false);
         SoundManager.Instance.PlaySoundEffects(20, null, false);
     }
     
     private void PressedOkInBossWarning()
     {
         uiInGame.aboutToEnterBossUI.SetActive(false);
+        GameManager.Instance.PauseGame(false);
         SoundManager.Instance.PlaySoundEffects(21, null, false);
         OpenDoors();
         ifPressedOk = true;
@@ -183,6 +186,7 @@ public class Room : MonoBehaviour
     private void PressedCancelInBossWarning()
     {
         uiInGame.aboutToEnterBossUI.SetActive(false);
+        GameManager.Instance.PauseGame(false);
         SoundManager.Instance.PlaySoundEffects(20, null, false);
     }
 }

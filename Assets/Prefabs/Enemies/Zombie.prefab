@@ -1,52 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &34775085491833249
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6486057992995690555}
-  - component: {fileID: 3372541098542882379}
-  m_Layer: 0
-  m_Name: Flee Behavior
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6486057992995690555
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 34775085491833249}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6455702434803471360}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3372541098542882379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 34775085491833249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfdae67bb5489e94daea590575dbcd96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dangerThreshold: 0.5
-  showGizmo: 1
-  centerAttractionStrength: 0.1
 --- !u!1 &134852947048485892
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,8 +95,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.03, y: -0.13}
-  m_Size: {x: 1.03, y: 1.6}
+  m_Offset: {x: -0.03, y: 0.05}
+  m_Size: {x: 0.7, y: 1.1}
   m_Direction: 0
 --- !u!1 &650391393103793617
 GameObject:
@@ -158,7 +111,7 @@ GameObject:
   - component: {fileID: 8331722377458159556}
   - component: {fileID: 8838301694610973295}
   - component: {fileID: 3431077117811062637}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Zombie Sprite
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -222,7 +175,7 @@ SpriteRenderer:
   m_SortingLayerID: -836387209
   m_SortingLayer: 6
   m_SortingOrder: 0
-  m_Sprite: {fileID: -204736800, guid: 61b4412bba805994b84c62e0a4b2cda0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b5bfee73ab47b85488c9724fd8bbb517, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -266,6 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 126bdc70c90acef4ba2379f30c6c0f6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  darkPillar: {fileID: 8859076875557452564, guid: 4063424ef6c442c4598b441dee8d13a0, type: 3}
 --- !u!114 &3431077117811062637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,7 +246,7 @@ MonoBehaviour:
   - {x: 0.05029416, y: -0.07057181, z: 0}
   m_ShapePathHash: 1973608341
   m_Mesh: {fileID: 0}
-  m_InstanceId: 312454
+  m_InstanceId: 78346
   m_LocalBounds:
     m_Center: {x: 0.00010201335, y: -0.010157958, z: 0}
     m_Extent: {x: 0.050192147, y: 0.060413852, z: 0}
@@ -343,7 +297,7 @@ MonoBehaviour:
   detectionRadius: 2
   layerMask:
     serializedVersion: 2
-    m_Bits: 2944
+    m_Bits: 2688
   showGizmos: 1
 --- !u!1 &3182234451877804592
 GameObject:
@@ -474,7 +428,6 @@ Transform:
   - {fileID: 3458291973528954385}
   - {fileID: 1745145124149610049}
   - {fileID: 6661978175175671449}
-  - {fileID: 6486057992995690555}
   m_Father: {fileID: 9120066860667693685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4039703235153700938
@@ -660,7 +613,7 @@ MonoBehaviour:
   animatorDirection: {x: 0, y: 0}
   moveSpeed: 5
   idleTime: 0.5
-  attackCooldown: 0.5
+  attackCooldown: 2
   lastTimeAttacked: 0
   enemyDataSo: {fileID: 11400000, guid: c1dec0fbcd0eda249bea0250e086505d, type: 2}
   enemyExperienceDrop: 0
@@ -676,6 +629,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e39ed992f5651c944b1957d8ee225269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sr: {fileID: 0}
+  color: {r: 0, g: 0, b: 0, a: 0}
   hitEffect: {fileID: 2100000, guid: e219f0f867111324986053c63303258e, type: 2}
   spriteLitDefault: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   freezeColor:
@@ -701,7 +656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statusEffectsDuration: 2
   strength:
-    baseValue: 1
+    baseValue: 10
     modifiers: 
   agility:
     baseValue: 1
@@ -710,10 +665,10 @@ MonoBehaviour:
     baseValue: 1
     modifiers: 
   intelligence:
-    baseValue: 0
+    baseValue: 1
     modifiers: 
   damage:
-    baseValue: 13
+    baseValue: 20
     modifiers: 
   criticalChance:
     baseValue: 99
@@ -731,13 +686,13 @@ MonoBehaviour:
     baseValue: 0
     modifiers: 
   burnDamage:
-    baseValue: 1
+    baseValue: 20
     modifiers: 
   freezeDamage:
     baseValue: 10
     modifiers: 
   shockDamage:
-    baseValue: 1
+    baseValue: 10
     modifiers: 
   isBurning: 0
   isFreezing: 0
@@ -786,6 +741,8 @@ MonoBehaviour:
   movementInput: {x: 0, y: 0}
   movementDirectionSolver: {fileID: 791293977004205909}
   attackDistance: 1.5
+  fleeDistance: 0.25
+  enemyName: 
   onAttackPressed:
     m_PersistentCalls:
       m_Calls:
@@ -801,6 +758,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onMagicPressed:
+    m_PersistentCalls:
+      m_Calls: []
   onMovementInput:
     m_PersistentCalls:
       m_Calls:
@@ -917,8 +877,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.05, y: -0.7}
-  m_Size: {x: 0.71, y: 0.22}
+  m_Offset: {x: -0.025, y: -0.4}
+  m_Size: {x: 0.55, y: 0.20000002}
   m_Direction: 1
 --- !u!114 &6233619008098079565
 MonoBehaviour:
@@ -1009,7 +969,7 @@ Transform:
   m_GameObject: {fileID: 7801608598922050204}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

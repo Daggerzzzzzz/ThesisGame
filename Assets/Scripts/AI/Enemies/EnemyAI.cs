@@ -20,6 +20,10 @@ public class EnemyAI : MonoBehaviour
     private ContextSolver movementDirectionSolver;
     [SerializeField]
     private float attackDistance = 0.5f;
+    [SerializeField]
+    private float fleeDistance = 0.25f;
+    [SerializeField] 
+    private string enemyName;
 
     private bool following;
     private bool playerDetected;
@@ -28,11 +32,13 @@ public class EnemyAI : MonoBehaviour
     [FormerlySerializedAs("OnAttackPressed")] [Header("Events")]
     //Inputs sent from the Enemy AI to the Enemy controller
     public UnityEvent<bool> onAttackPressed;
+    public UnityEvent<bool> onMagicPressed;
     public UnityEvent<Vector2> onMovementInput;
     public UnityEvent<bool> onPlayerDetected;
     
     private void Start()
     {
+        enemyName = gameObject.name;
         InvokeRepeating(nameof(PerformDetection), 0, detectionDelay);
     }
     private void PerformDetection()
@@ -50,7 +56,16 @@ public class EnemyAI : MonoBehaviour
             if (following == false)
             {
                 following = true;
-                StartCoroutine(ChaseAndAttack());
+                if (enemyName == "Wizard" || enemyName == "wizards")
+                {
+                    Debug.Log("Flee And Attack");
+                    StartCoroutine(FleeAndAttack());
+                }
+                else
+                {
+                    Debug.Log("Chase And Attack");
+                    StartCoroutine(ChaseAndAttack());
+                }
             }
         }
         else if (aiData.GetTargetsCount() > 0)
@@ -93,6 +108,42 @@ public class EnemyAI : MonoBehaviour
             StartCoroutine(ChaseAndAttack());
         }
         onAttackPressed?.Invoke(attackPlayer);
+    }
+    
+    private IEnumerator FleeAndAttack()
+    {
+        if (aiData.currentTarget == null)
+        {
+            //Stopping Logic
+            Debug.Log("Stopping");
+            movementInput = Vector2.zero;
+            following = false;
+            yield break;
+        }
+        
+        float distance = Vector2.Distance(aiData.currentTarget.position, transform.position);
+        
+        if (distance < fleeDistance)
+        {
+            Debug.Log("not attacking");
+            attackPlayer = false;
+            movementInput = movementDirectionSolver.GetDirectionToMove(steeringBehaviors, aiData);
+            
+            yield return new WaitForSeconds(aiUpdateDelay);
+            StartCoroutine(FleeAndAttack());
+        }
+        else if (distance < attackDistance)
+        {
+            //Attack logic
+            Debug.Log("attacking");
+            attackPlayer = true;
+            movementInput = Vector2.zero;
+        }
+        
+        onMagicPressed?.Invoke(attackPlayer);
+        
+        yield return new WaitForSeconds(attackDelay);
+        StartCoroutine(FleeAndAttack());
     }
 }
 

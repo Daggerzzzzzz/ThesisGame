@@ -1,12 +1,9 @@
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Player : Entity
 {
     [Header("Dash Inputs")] 
-    [SerializeField]
-    private float distance;
     [HideInInspector]
     public Vector2 dashDirection;
     public float dashSpeed;
@@ -48,7 +45,6 @@ public class Player : Entity
     public PlayerCatchState OnPlayerCatchState { get; private set; }
     public PlayerBlackholeState OnPlayerBlackholeState { get; private set; }
     public PlayerDeathState OnDeathState { get; private set; }
-    
     public PlayerRessurrectState OnPlayerRessurrectState { get; private set; }
 
     #endregion
@@ -77,12 +73,7 @@ public class Player : Entity
         OnDeathState = new PlayerDeathState(this, OnStateMachine, "death");
         OnPlayerRessurrectState = new PlayerRessurrectState(this, OnStateMachine, "resurrection");
     }
-
-    public void OnEnable()
-    {
-        OnPlayerInputs.Enable();
-    }
-
+    
     protected override void Start()
     {
         base.Start();
@@ -98,6 +89,11 @@ public class Player : Entity
 
     protected override void Update()
     {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
+        
         base.Update();
         
         OnStateMachine.OnCurrentState.Update();
@@ -127,11 +123,11 @@ public class Player : Entity
         }
     }
 
-    public void OnDisable()
+    private void OnEnable()
     {
-        OnPlayerInputs.Disable();
+        OnPlayerInputs.Player.Enable();
     }
-    
+
     public void NewSwordAssignment(GameObject newSword)
     {
         OnSword = newSword;
@@ -162,7 +158,6 @@ public class Player : Entity
         }
         else if (OnPlayerInputs.Player.Dash.WasPressedThisFrame() && !SkillManager.Instance.Dash.CanUseSkill())
         {
-            Debug.Log("Error");
             SoundManager.Instance.PlaySoundEffects(32, null, false);
         }
     }
@@ -196,6 +191,11 @@ public class Player : Entity
 
     public override void DamageEffect(GameObject sender)
     {
+        if (OnEntityStats.isInvincible)
+        {
+            OnEntityFx.InvincibleEffect(2f);
+            return;
+        }
         base.DamageEffect(sender);
         hitStopEffect.Shake(sender.transform.position, shakeForce);
         hitStopEffect.StopTime(changeTime, restoreSpeed, delay);

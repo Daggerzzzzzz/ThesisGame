@@ -20,6 +20,6 @@ MonoBehaviour:
   itemName: Potion
   itemID: 38ed9939493fc9f4eb2b1705e16bcb4e
   itemCooldown: 5
-  dropChance: 1
+  dropChance: 0.1
   itemEffects:
   - {fileID: 11400000, guid: 356163839a0aa524fbea4f1d7547a419, type: 2}

@@ -1,19 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class UI : MonoBehaviour, ISaveManager
 {
     [Header("End Screen")]
-    [SerializeField]
-    private UiFadeScreen fadeScreen;
-    [SerializeField]
-    private GameObject endText;
-    [SerializeField] 
-    private GameObject restartButton;
-    [SerializeField] 
-    private GameObject mainMenuButton;
+    public UiFadeScreen fadeScreen;
+    public TextMeshProUGUI text;
+    public GameObject endText;
+    public GameObject restartButton;
+    public GameObject mainMenuButton;
     [Space]
     
     [Header("Navigation")]
@@ -53,6 +50,9 @@ public class UI : MonoBehaviour, ISaveManager
 
     private void Start()
     {
+        text = endText.GetComponent<TextMeshProUGUI>();
+        text.text = "YOU DIED";
+        
         SwitchMenus(inGameUI);
         DisableTooltips();
     }
@@ -92,17 +92,25 @@ public class UI : MonoBehaviour, ISaveManager
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            bool isFadingScreen = transform.GetChild(i).GetComponent<UiFadeScreen>() != null;
-            if (!isFadingScreen)
-            { 
-                transform.GetChild(i).gameObject.SetActive(false);
-                DisableTooltips();
-            }
+            transform.GetChild(i).gameObject.SetActive(false);
+            DisableTooltips();
         }   
 
         if (menu != null)
         {
             menu.SetActive(true);
+        }
+
+        if (GameManager.Instance != null)
+        {
+            if (menu == inGameUI)
+            {
+                GameManager.Instance.PauseGame(false);
+            }
+            else
+            {
+                GameManager.Instance.PauseGame(true);
+            }
         }
     }
 
@@ -138,7 +146,7 @@ public class UI : MonoBehaviour, ISaveManager
     
     public void ReturnToMainMenu()
     {
-        StartCoroutine(LoadSceneWithEffect(1f));
+        GameManager.Instance.ReturnToMainMenu();
     }
 
     public void EnableEndScreen()
@@ -172,13 +180,6 @@ public class UI : MonoBehaviour, ISaveManager
         mainMenuButton.SetActive(true);
     }
     
-    private IEnumerator LoadSceneWithEffect(float delay)
-    {
-        fadeScreen.FadeOut();
-        yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene(0);
-    }
-
     public void LoadData(GameData data)
     {
         foreach (KeyValuePair <string, float> pair in data.volumeSettings)
@@ -206,5 +207,11 @@ public class UI : MonoBehaviour, ISaveManager
     public void HoverEnterSound()
     {
         SoundManager.Instance.PlaySoundEffects(23, null, false);
+    }
+    
+    public void PlayClickSoundEffects()
+    {
+        SoundManager.Instance.StopSoundEffects(23);
+        SoundManager.Instance.PlaySoundEffects(21, null, false);
     }
 }

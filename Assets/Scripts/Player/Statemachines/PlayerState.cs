@@ -17,7 +17,6 @@ public class PlayerState
    
    protected float resurrectionTimer;
    protected float resurrectionDelay = 1f;
-   protected bool playerCanRevive;
 
    protected float exitResurrectionTimer;
    protected float exitRessurectionTimerDelay = 1f;

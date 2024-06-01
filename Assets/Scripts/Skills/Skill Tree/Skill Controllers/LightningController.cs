@@ -99,10 +99,7 @@ public class LightningController : MonoBehaviour
     private IEnumerator EnsureDestruction()
     {
         yield return new WaitForSeconds(2f); 
-        if (amountToChain > 0)
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 
     private void OnEnable()

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Item Data", menuName = "Data/ItemEffect/GetsugaT")]
+[CreateAssetMenu(fileName = "New Item Data", menuName = "Data/ItemEffect/GetsugaTenshou")]
 public class GetsugaTenshou : ItemEffectSO
 {
     [SerializeField] 

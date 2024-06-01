@@ -52,7 +52,7 @@ public class ItemSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         Vector2 mousePos;
 
-        if (item.itemDataSo != null)
+        if (item != null && item.itemDataSo != null)
         {
             if (item.itemDataSo.itemType == ItemType.EQUIPMENT)
             {

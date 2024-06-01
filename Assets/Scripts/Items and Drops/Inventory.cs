@@ -26,7 +26,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
     private Transform statSlotParent;
 
     [Header("Database")] 
-    private List<ItemDataSO> itemDatabase;
+    public List<ItemDataSO> itemDatabase;
     public List<InventoryItem> loadedItems;
     private List<EquipmentDataSO> equipmentDatabase;
     public List<InventoryItem> loadedEquipments;
@@ -35,6 +35,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
     public bool firstTimeUsed = true;
     private float lastTimeUsedPotion;
     private float lastTimeUsedArmor;
+    private float lastTimeUsedWeapon;
 
     private ItemSlot[] stashItemSlots;
     private ItemSlot[] inventoryItemSlots;
@@ -245,7 +246,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
     {
         foreach (KeyValuePair<string, int> pair in data.stash)
         {
-            foreach (var item in GetItemDatabase())
+            foreach (var item in itemDatabase)
             {
                 if (item != null && item.itemID == pair.Key)
                 {
@@ -261,7 +262,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         
         foreach (KeyValuePair<string, int> pair in data.equipment)
         {
-            foreach (var equipment in GetEquipmentDatabase())
+            foreach (var equipment in itemDatabase)
             {
                 if (equipment != null && equipment.itemID == pair.Key)
                 {
@@ -291,7 +292,11 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
             data.equipment.Add(pair.Key.itemID, pair.Value.stackSize);
         }
     }
-
+    
+#if UNITY_EDITOR
+    [ContextMenu("Fill Up Equipment Database")]
+    private void FillUpEquipmentDatabase() => equipmentDatabase = new List<EquipmentDataSO>(GetEquipmentDatabase());
+    
     private List<EquipmentDataSO> GetEquipmentDatabase()
     {
         equipmentDatabase = new List<EquipmentDataSO>();
@@ -308,6 +313,9 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         return equipmentDatabase;
     }
     
+    [ContextMenu("Fill Up Item Database")]
+    private void FillUpItemDatabase() => itemDatabase = new List<ItemDataSO>(GetItemDatabase());
+    
     private List<ItemDataSO> GetItemDatabase()
     {
         itemDatabase = new List<ItemDataSO>();
@@ -323,6 +331,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         
         return itemDatabase;
     }
+#endif
 
     public EquipmentDataSO GetEquipment(EquipmentType type)
     {
@@ -354,7 +363,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         return itemToGet;
     }
 
-    private int GetStackValue(string name)
+    public int GetStackValue(string name)
     {
         int stackValue = 0;
         
@@ -411,6 +420,20 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         }
         
         Debug.Log("Armor on Cooldown");
+        return false;
+    }
+    
+    public bool UseWeapon()
+    {
+        EquipmentDataSO currentWeapon = GetEquipment(EquipmentType.WEAPON);
+
+        if (Time.time > lastTimeUsedWeapon + currentWeapon.itemCooldown)
+        {
+            lastTimeUsedWeapon = Time.time;
+            return true;
+        }
+        
+        Debug.Log("Weapon on Cooldown");
         return false;
     }
 

@@ -22,7 +22,7 @@ public enum StatType
 public class EntityStats : MonoBehaviour
 {
     [SerializeField] 
-    private float statusEffectsDuration = 4;
+    private float statusEffectsDuration = 5;
     
     [Header("Main Stats")]
     public Stats strength; //1 point increase damage by 1 and crit damage by 1%
@@ -65,6 +65,7 @@ public class EntityStats : MonoBehaviour
     private EntityFx entityFx;
     private bool isVulnerable;
     public int TotalDamage { get; private set; }
+    public bool isInvincible { get; internal set; }
 
     protected virtual void Start()
     {
@@ -160,6 +161,11 @@ public class EntityStats : MonoBehaviour
 
     public virtual void TakeDamage(int _damage, GameObject sender)
     {
+        if (isInvincible)
+        {
+            return;
+        }
+        
         DecreaseHealthBy(_damage);
         
         if (currentHealth <= 0 && !isDead)
@@ -220,6 +226,11 @@ public class EntityStats : MonoBehaviour
 
     public virtual void StatusAilments(EntityStats target, GameObject sender)
     {
+        if (isInvincible)
+        {
+            return;
+        }
+        
         int fireDamage = burnDamage.GetValue();
         int iceDamage = freezeDamage.GetValue();
         int electricDamage = shockDamage.GetValue();
@@ -290,10 +301,10 @@ public class EntityStats : MonoBehaviour
 
     public void MakeVulnerable(float duration)
     {
-        StartCoroutine(VulnerableTimeCoroutine(duration));
+        StartCoroutine(VulnerableTimeDelay(duration));
     }
 
-    private IEnumerator VulnerableTimeCoroutine(float duration)
+    private IEnumerator VulnerableTimeDelay(float duration)
     {
         isVulnerable = true;
 
@@ -315,6 +326,21 @@ public class EntityStats : MonoBehaviour
     protected virtual void EntityDeath()
     {
         isDead = true;
+    }
+
+    public void MakeInvincible(float seconds)
+    {
+        if (!isDead)
+        {
+            StartCoroutine(InvincibleDelay(seconds));
+        }
+    }
+
+    private IEnumerator InvincibleDelay(float seconds)
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(seconds);
+        isInvincible = false;
     }
 
     public Stats StatToGet(StatType statType)

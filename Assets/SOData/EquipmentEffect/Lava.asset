@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 441ca13d8c3f45c44889fd8ca3bf72ab, type: 3}
+  m_Name: Lava
+  m_EditorClassIdentifier: 
+  lavaPrefab: {fileID: 7148951064507675392, guid: 9db135feb1115c941bea38979bb6ef2a, type: 3}

@@ -6,7 +6,7 @@ public class ItemTrigger : MonoBehaviour
     private Player player;
 
     private bool canEquip;
-
+    
     private void Start()
     {
         itemObject = GetComponentInParent<ItemObject>();

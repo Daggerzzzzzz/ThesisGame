@@ -44,6 +44,8 @@ public class PlayerManager : SingletonMonoBehavior<PlayerManager>, ISaveManager
    private void Update()
    {
       UpdateExpUI();
+
+      UpdateSouls();
       
       if (currentExp > requiredExp)
       {
@@ -51,17 +53,23 @@ public class PlayerManager : SingletonMonoBehavior<PlayerManager>, ISaveManager
       }
    }
 
+   private void UpdateSouls()
+   {
+      int numberOfSouls = Inventory.Instance.GetStackValue("Souls");
+      soulCurrency = numberOfSouls;
+   }
+
    public bool HaveEnoughCurrency(int price)
    {
       if (price > soulCurrency)
       {
-         SoundManager.Instance.PlaySoundEffects(19, null, false);
+         SoundManager.Instance.PlaySoundEffects(32, null, false);
          return false;
       }
 
       soulCurrency -= price;
 
-      SoundManager.Instance.PlaySoundEffects(32, null, false);
+      SoundManager.Instance.PlaySoundEffects(19, null, false);
       return true;
    }
    

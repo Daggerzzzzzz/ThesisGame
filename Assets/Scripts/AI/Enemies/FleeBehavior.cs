@@ -14,14 +14,20 @@ public class FleeBehavior : SteeringBehavior
 
     private Vector2 targetPositionCached;
     private float[] interestsTemp;
-
+    
+    [SerializeField]
     private Vector2 roomCenterPosition;
+    [SerializeField]
     private RoomCenter roomCenter;
 
     private void Start()
     {
         roomCenter = GetComponentInParent<RoomCenter>();
         roomCenterPosition = roomCenter.roomCenterPos;
+        if (roomCenter != null)
+        {
+            roomCenterPosition = roomCenter.roomCenterPos;
+        }
     }
 
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)

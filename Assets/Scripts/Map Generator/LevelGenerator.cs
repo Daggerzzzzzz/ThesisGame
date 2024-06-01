@@ -49,7 +49,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
     [SerializeField] 
     private GameObject slime;
     [SerializeField] 
-    private GameObject skeleton;
+    private GameObject wizard;
     [SerializeField] 
     private GameObject zombie;
     [SerializeField] 
@@ -449,7 +449,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
         });
         levelDangerProfiles.Add(2, new HashSet<string[]>
         {
-            new[] { "skeletons" },
+            new[] { "wizards" },
             new[] { "zombies" },
             new[] { "zombies" }
         });
@@ -461,13 +461,13 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
         });
         levelDangerProfiles.Add(4, new HashSet<string[]>
         {
-            new[] { "skeletons" },
-            new[] { "skeletons" },
+            new[] { "wizards" },
+            new[] { "wizards" },
             new[] { "zombies" }
         });
         levelDangerProfiles.Add(5, new HashSet<string[]>
         {
-            new[] { "skeletons" },
+            new[] { "wizards" },
             new[] { "slimes" },
             new[] { "zombies" }
         });
@@ -479,19 +479,19 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
         });
         levelDangerProfiles.Add(7, new HashSet<string[]>
         {
-            new[] { "skeletons" },
-            new[] { "skeletons" },
-            new[] { "skeletons" }
+            new[] { "wizards" },
+            new[] { "wizards" },
+            new[] { "wizards" }
         });
         levelDangerProfiles.Add(8, new HashSet<string[]>
         {
-            new[] { "skeletons" },
-            new[] { "skeletons" },
+            new[] { "wizards" },
+            new[] { "wizards" },
             new[] { "slimes" }
         });
         levelDangerProfiles.Add(9, new HashSet<string[]>
         {
-            new[] { "skeletons" },
+            new[] { "wizards" },
             new[] { "slimes" },
             new[] { "slimes" }
         });
@@ -505,9 +505,9 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
     
     private void PopulateEnemyDifficulties()
     {
-        enemyDifficulties.Add("slimes", 0.25f);
-        enemyDifficulties.Add("skeletons", 0.50f);
-        enemyDifficulties.Add("zombies", 0.75f);
+        enemyDifficulties.Add("slimes", 0.75f);
+        enemyDifficulties.Add("wizards", 0.50f);
+        enemyDifficulties.Add("zombies", 0.25f);
     }
 
     private List<string[]> InitializeGeneticAlgorithm(int distance, int monsterLevel, out float passMonsterBatchDangerLevel)
@@ -609,8 +609,8 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
         {
             case "slimes":
                 return slime;
-            case "skeletons":
-                return skeleton;
+            case "wizards":
+                return wizard;
             case "zombies":
                 return zombie;
             default:

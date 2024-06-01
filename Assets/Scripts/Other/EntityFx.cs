@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class EntityFx : MonoBehaviour
 {
+    [SerializeField]
     private SpriteRenderer sr;
+    [SerializeField]
+    private Color color;
     
     [Header("Flash Effects")] 
     [SerializeField]
@@ -18,10 +22,14 @@ public class EntityFx : MonoBehaviour
     private Color[] burnColor;
     [SerializeField] 
     private Color[] shockColor;
+    
+    private const float tolerance = 0.0001f;
+    private HealthBar healthBar;
 
     private void Start()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
+        healthBar = GetComponentInChildren<HealthBar>();
     }
 
     private IEnumerator FlashEffects()
@@ -32,14 +40,33 @@ public class EntityFx : MonoBehaviour
         sr.color = Color.white;
         
         yield return new WaitForSeconds(.2f);
-        sr.color = currentColor;
+        color = currentColor;
         sr.material = spriteLitDefault;
     }
 
-    private void CancelColorChange()
+    public void CancelColorChange()
     {
         CancelInvoke();
-        sr.color = Color.white;
+        color = Color.white;
+    }
+
+    private void CancelAlphaChange()
+    {
+        CancelColorChange();
+        color.a = 1f;
+        sr.color = color;
+    }
+
+    private void InvincibleState()
+    {
+        color.a = Math.Abs(color.a - 0.5f) > tolerance ?  color.a = 0.5f :  color.a = 1f;
+        sr.color = color;
+    }
+
+    public void InvincibleEffect(float seconds)
+    {
+        InvokeRepeating(nameof(InvincibleState), 0, .1f);
+        Invoke(nameof(CancelAlphaChange), seconds);
     }
 
     public void BurnFx(float seconds)
@@ -62,16 +89,30 @@ public class EntityFx : MonoBehaviour
 
     private void BurnColorFx()
     {
-        sr.color = sr.color != burnColor[0] ? burnColor[0] : burnColor[1];
+        color = color != burnColor[0] ? burnColor[0] : burnColor[1];
     }
 
     private void FreezeColorFx()
     {
-        sr.color = sr.color != freezeColor[0] ? freezeColor[0] : freezeColor[1];
+        color = color != freezeColor[0] ? freezeColor[0] : freezeColor[1];
     }
     
     private void ShockColorFx()
     {
-        sr.color = sr.color != shockColor[0] ? shockColor[0] : shockColor[1];
+        color = color != shockColor[0] ? shockColor[0] : shockColor[1];
+    }
+
+    public void MakeTransparent(bool transparent)
+    {
+        if (transparent)
+        {
+            healthBar.DisableSpriteRenderer();
+            sr.color = Color.clear;
+        }
+        else
+        {
+            healthBar.EnableSpriteRenderer();
+            sr.color = Color.white;
+        }
     }
 }

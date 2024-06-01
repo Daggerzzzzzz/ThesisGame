@@ -1,6 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(CapsuleCollider2D))]
+[RequireComponent(typeof(EntityFx))]
+[RequireComponent(typeof(EnemyStats))]
+[RequireComponent(typeof(EnemyAI))]
+[RequireComponent(typeof(AIData))]
+[RequireComponent(typeof(MaterializeEffect))]
+[RequireComponent(typeof(ItemDrop))]
+
 public class Enemy : Entity
 {
     [Header("Movement Inputs")]

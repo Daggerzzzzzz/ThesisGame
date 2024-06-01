@@ -1,12 +1,7 @@
-using System;
-using System.Collections;
 using UnityEngine;
 
 public class GetsugaController : MonoBehaviour
 {
-    [SerializeField] 
-    private int damage;
-    
     private Animator anim;
     private EntityStats entityStats;
 

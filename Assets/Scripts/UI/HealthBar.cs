@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class HealthBar : MonoBehaviour
@@ -40,5 +39,10 @@ public class HealthBar : MonoBehaviour
     public void DisableSpriteRenderer()
     {
         sr.enabled = false;
+    }
+    
+    public void EnableSpriteRenderer()
+    {
+        sr.enabled = true;
     }
 }

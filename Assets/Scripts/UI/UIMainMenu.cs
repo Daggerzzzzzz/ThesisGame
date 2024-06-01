@@ -1,16 +1,17 @@
-using System;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class UIMainMenu : MonoBehaviour
 {
    [SerializeField] 
-   private int sceneGameNum = 1;
-   [SerializeField] 
    private UiFadeScreen fadeScreen;
    [SerializeField] 
+   private GameObject creditScreen;
+   [SerializeField] 
    private GameObject continueButton;
+   [SerializeField] 
+   private GameObject loadingScreen;
+   [SerializeField] 
+   private GameObject mainMenu;
 
    private void Start()
    {
@@ -18,29 +19,38 @@ public class UIMainMenu : MonoBehaviour
       {
          continueButton.SetActive(false);
       }
-   }
-
-   public void ContinueGame()
-   {
-      StartCoroutine(LoadSceneWithEffect(1f));
+      
+      SoundManager.Instance.PlayBackgroundMusic(4);
    }
    
    public void StartGame()
    {
       SaveManager.Instance.DeleteSavedData();
-      StartCoroutine(LoadSceneWithEffect(1f));
    }
 
    public void ExitGame()
    {
-      Debug.Log("Exit Game");
-      //Application.Quit();
+      Application.Quit();
+   }
+   
+   public void CreditsOpen()
+   {
+      creditScreen.SetActive(true);
+   }
+   
+   public void CloseButton()
+   {
+      creditScreen.SetActive(false);
    }
 
-   private IEnumerator LoadSceneWithEffect(float delay)
+   public void PlayHoverSoundEffects()
    {
-      fadeScreen.FadeOut();
-      yield return new WaitForSeconds(delay);
-      SceneManager.LoadScene(sceneGameNum);
+      SoundManager.Instance.PlaySoundEffects(23, null, false);
+   }
+   
+   public void PlayClickSoundEffects()
+   {
+      SoundManager.Instance.StopSoundEffects(23);
+      SoundManager.Instance.PlaySoundEffects(21, null, false);
    }
 }

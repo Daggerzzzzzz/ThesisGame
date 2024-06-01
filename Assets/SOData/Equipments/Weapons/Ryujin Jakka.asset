@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446c3cff0661e97438fc1093d7a40619, type: 3}
   m_Name: Ryujin Jakka
   m_EditorClassIdentifier: 
+  itemEffectDesc: 'Summon a lava zone each 3 basic attacks.
+
+    Cooldown 0 secs'
   itemType: 1
   icon: {fileID: 21300000, guid: 51523486b62f8ae4681be1b5d331525b, type: 3}
   itemName: Ryujin Jakka
   itemID: ec516bb3df4ac844e8687d61c3739a88
-  itemCooldown: 0
+  itemCooldown: 5
   dropChance: 0
-  itemEffects: []
+  itemEffects:
+  - {fileID: 11400000, guid: 0ce11f2e54b4f314aae1d778e0792f56, type: 2}
   equipmentType: 1
   position: {x: -1, y: -2.2}
-  itemEffectDesc: 'Summon a lava zone each 3 basic attacks.
-
-    Cooldown 0 secs'
   strength: 0
   agility: 0
   intelligence: 5
