@@ -63,13 +63,10 @@ public class PlayerManager : SingletonMonoBehavior<PlayerManager>, ISaveManager
    {
       if (price > soulCurrency)
       {
-         SoundManager.Instance.PlaySoundEffects(32, null, false);
          return false;
       }
-
+      
       soulCurrency -= price;
-
-      SoundManager.Instance.PlaySoundEffects(19, null, false);
       return true;
    }
    

@@ -4,18 +4,18 @@ using UnityEngine.SceneManagement;
 
 public class UISplashScreen : MonoBehaviour
 {
-    [SerializeField] 
-    private float waitTime;
+    private string movie = "Assets/Sprites/UI/LastUI/Figsa.mp4";
 
     private void Start()
     {
-        StartCoroutine(WaitForIntro());
+        StartCoroutine(WaitForIntro(movie));
     }
 
-    private IEnumerator WaitForIntro()
+    private IEnumerator WaitForIntro(string video)
     {
-        yield return new WaitForSeconds(waitTime);
-
+        Handheld.PlayFullScreenMovie(video, Color.black, FullScreenMovieControlMode.Hidden,
+            FullScreenMovieScalingMode.Fill);
+        yield return new WaitForEndOfFrame();
         SceneManager.LoadScene(1);
     }
 }

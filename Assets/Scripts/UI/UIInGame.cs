@@ -26,6 +26,10 @@ public class UIInGame : MonoBehaviour
     [SerializeField] 
     private Image ultimateImage;
     
+    [Header("Skill Holders")]
+    public GameObject skillHolder;
+    public GameObject inventoryHolder;
+    
     [Header("Inventory")]
     [SerializeField] 
     private Image potionImageCooldown;

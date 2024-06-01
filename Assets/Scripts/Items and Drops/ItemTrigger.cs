@@ -48,12 +48,16 @@ public class ItemTrigger : MonoBehaviour
             SoundManager.Instance.StopSoundEffects(28);
             canEquip = true;
             player = other.GetComponent<Player>();
+            
             player.eKey.SetActive(true);
             player.equipmentInfo.SetActive(true);
+            
             EquipmentDataSO equipmentDataSo = itemObject.ItemDataSo as EquipmentDataSO;
 
             if (equipmentDataSo.equipmentType == EquipmentType.WEAPON)
             {
+                player.uiInGame.skillHolder.SetActive(false);
+                player.uiInGame.inventoryHolder.SetActive(false);
                 WeaponDataSO weaponDataSo = itemObject.ItemDataSo as WeaponDataSO;
                 player.itemTooltip.ShowWeaponTooltip(weaponDataSo);
             }
@@ -74,13 +78,13 @@ public class ItemTrigger : MonoBehaviour
             {
                 SoundManager.Instance.PlaySoundEffects(28, null, true);
             }
-
             canEquip = false;
             player = other.GetComponent<Player>();
 
+            player.uiInGame.skillHolder.SetActive(true);
+            player.uiInGame.inventoryHolder.SetActive(true);
             player.eKey.SetActive(false);
             player.equipmentInfo.SetActive(false);
-
         }
     }
 }

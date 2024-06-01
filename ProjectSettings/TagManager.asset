@@ -76,3 +76,6 @@ TagManager:
   - name: CameraSortingLayer
     uniqueID: 4133994073
     locked: 0
+  - name: Effects
+    uniqueID: 27363995
+    locked: 0

@@ -30,7 +30,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _BorderSize: 0.2
-    - _Health: 0.22772278
+    - _Health: 1
     - _PixelHeight: 16
     - _PixelWidth: 16
     - _Pixels: 1920

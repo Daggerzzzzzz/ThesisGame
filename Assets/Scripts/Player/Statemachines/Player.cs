@@ -3,40 +3,36 @@ using UnityEngine;
 
 public class Player : Entity
 {
-    [Header("Dash Inputs")] 
-    [HideInInspector]
+    [Header("Dash Inputs")] [HideInInspector]
     public Vector2 dashDirection;
+
     public float dashSpeed;
     public float dashDuration;
     private float normalDashSpeed;
-    
-    [Header("Movement Inputs")]
-    public float moveSpeed = 10f;
+
+    [Header("Movement Inputs")] public float moveSpeed = 10f;
     private float normalMoveSpeed;
     private float defaultMovementSpeed;
 
-    [Header("Equipment Tooltip")] 
-    public GameObject eKey;
+    [Header("Equipment Tooltip")] public GameObject eKey;
     public GameObject equipmentInfo;
     public ItemTooltip itemTooltip;
-    
-    [Header("Hit Stop Effect")] 
-    [SerializeField] 
+
+    [Header("Hit Stop Effect")] [SerializeField]
     private float shakeForce;
-    [SerializeField] 
-    private float changeTime;
-    [SerializeField] 
-    private int restoreSpeed;
-    [SerializeField] 
-    private float delay;
-    
+
+    [SerializeField] private float changeTime;
+    [SerializeField] private int restoreSpeed;
+    [SerializeField] private float delay;
+
     public SkillManager OnSkill { get; private set; }
     public GameObject OnSword { get; private set; }
 
     public GameObject guardianAngel;
 
     #region States
-    public PlayerStateMachine OnStateMachine { get; private set; } 
+
+    public PlayerStateMachine OnStateMachine { get; private set; }
     public PlayerIdleState OnIdleState { get; private set; }
     public PlayerMoveState OnMoveState { get; private set; }
     public PlayerDashState OnDashState { get; private set; }
@@ -48,16 +44,17 @@ public class Player : Entity
     public PlayerRessurrectState OnPlayerRessurrectState { get; private set; }
 
     #endregion
-    
-    [HideInInspector]
-    public float lastImageXpos;
-    [HideInInspector]
-    public float lastImageYpos;
-    public bool OnIsBusy { get; private set; }
-    public PlayerInputs OnPlayerInputs { get; private set; }
 
-    private HitStopEffect hitStopEffect;
+    [HideInInspector] public float lastImageXpos;
+    [HideInInspector] public float lastImageYpos;
     
+    public bool OnIsBusy { get; private set; }
+
+
+    public PlayerInputs OnPlayerInputs { get; private set; }
+    public UIInGame uiInGame;
+    private HitStopEffect hitStopEffect;
+
     protected override void Awake()
     {
         base.Awake();
@@ -73,15 +70,15 @@ public class Player : Entity
         OnDeathState = new PlayerDeathState(this, OnStateMachine, "death");
         OnPlayerRessurrectState = new PlayerRessurrectState(this, OnStateMachine, "resurrection");
     }
-    
+
     protected override void Start()
     {
         base.Start();
         hitStopEffect = GetComponent<HitStopEffect>();
-        
+
         OnSkill = SkillManager.Instance;
         OnStateMachine.Initialize(OnIdleState);
-        
+
         normalMoveSpeed = moveSpeed;
         normalDashSpeed = dashSpeed;
         defaultMovementSpeed = moveSpeed;
@@ -93,13 +90,13 @@ public class Player : Entity
         {
             return;
         }
-        
+
         base.Update();
-        
+
         OnStateMachine.OnCurrentState.Update();
-        
+
         CheckForDashInput();
-        
+
         if (OnPlayerInputs.Player.Teleport.WasPressedThisFrame() && OnSkill.Kunai.KunaiUnlocked)
         {
             if (!OnSkill.Kunai.CanUseSkill())
@@ -107,6 +104,7 @@ public class Player : Entity
                 SoundManager.Instance.PlaySoundEffects(32, null, false);
             }
         }
+
         if (OnPlayerInputs.Player.Teleport.WasPressedThisFrame() && !OnSkill.Kunai.KunaiUnlocked)
         {
             SoundManager.Instance.PlaySoundEffects(32, null, false);
@@ -141,7 +139,8 @@ public class Player : Entity
 
     private void CheckForDashInput()
     {
-        if (OnPlayerInputs.Player.Dash.WasPressedThisFrame() && SkillManager.Instance.Dash.CanUseSkill() && OnSkill.Dash.DashUnlocked)
+        if (OnPlayerInputs.Player.Dash.WasPressedThisFrame() && SkillManager.Instance.Dash.CanUseSkill() &&
+            OnSkill.Dash.DashUnlocked)
         {
             if (transform != null)
             {
@@ -161,7 +160,7 @@ public class Player : Entity
             SoundManager.Instance.PlaySoundEffects(32, null, false);
         }
     }
-    
+
     public IEnumerator BusyFor(float seconds)
     {
         OnIsBusy = true;
@@ -185,7 +184,7 @@ public class Player : Entity
         moveSpeed *= (1 - slowPercent);
         dashSpeed *= (1 - slowPercent);
         OnAnim.speed *= (1 - slowPercent);
-        
+
         Invoke(nameof(ReturnToNormalSpeed), slowDuration);
     }
 
@@ -196,11 +195,12 @@ public class Player : Entity
             OnEntityFx.InvincibleEffect(2f);
             return;
         }
+
         base.DamageEffect(sender);
         hitStopEffect.Shake(sender.transform.position, shakeForce);
         hitStopEffect.StopTime(changeTime, restoreSpeed, delay);
     }
-    
+
     protected override void ReturnToNormalSpeed()
     {
         base.ReturnToNormalSpeed();

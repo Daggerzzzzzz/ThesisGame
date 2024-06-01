@@ -23,6 +23,14 @@ public class EntityFx : MonoBehaviour
     [SerializeField] 
     private Color[] shockColor;
     
+    [Header("Ailments Particles")] 
+    [SerializeField]
+    private ParticleSystem burnEffect;
+    [SerializeField]
+    private ParticleSystem freezeEffect;
+    [SerializeField]
+    private ParticleSystem shockEffect;
+    
     private const float tolerance = 0.0001f;
     private HealthBar healthBar;
 
@@ -48,6 +56,10 @@ public class EntityFx : MonoBehaviour
     {
         CancelInvoke();
         color = Color.white;
+        
+        burnEffect.Stop();
+        freezeEffect.Stop();
+        shockEffect.Stop();
     }
 
     private void CancelAlphaChange()
@@ -71,18 +83,24 @@ public class EntityFx : MonoBehaviour
 
     public void BurnFx(float seconds)
     {
+        burnEffect.Play();
+        
         InvokeRepeating(nameof(BurnColorFx), 0, .2f);
         Invoke(nameof(CancelColorChange), seconds);
     }
     
     public void FreezeFx(float seconds)
     {
+        freezeEffect.Play();
+        
         InvokeRepeating(nameof(FreezeColorFx), 0, .2f);
         Invoke(nameof(CancelColorChange), seconds);
     }
     
     public void ShockFx(float seconds)
     {
+        shockEffect.Play();
+        
         InvokeRepeating(nameof(ShockColorFx), 0, .2f);
         Invoke(nameof(CancelColorChange), seconds);
     }

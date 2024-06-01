@@ -48,6 +48,7 @@ public class SkillTreeSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (!PlayerManager.Instance.HaveEnoughCurrency(skillCost))
         {
+            SoundManager.Instance.PlaySoundEffects(32, null, false);
             return;
         }
         
@@ -55,6 +56,7 @@ public class SkillTreeSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             if (!skillTreeSlotUnlocked[i].unlocked)
             {
+                SoundManager.Instance.PlaySoundEffects(32, null, false);
                 Debug.Log("Cannot Unlock Skill");
                 return;
             }
@@ -64,11 +66,13 @@ public class SkillTreeSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             if (skillTreeSlotLocked[i].unlocked)
             {
+                SoundManager.Instance.PlaySoundEffects(32, null, false);
                 Debug.Log("Cannot Unlock Skill");
                 return;
             }
         }
 
+        SoundManager.Instance.PlaySoundEffects(19, null, false);
         unlocked = true;
         skillImage.color = Color.white;
     }
