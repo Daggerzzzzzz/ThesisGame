@@ -39,8 +39,6 @@ public class SoundManager : SingletonMonoBehavior<SoundManager>
 
     public void PlaySoundEffects(int _soundEffectsIndex, Transform _source, bool changePitch)
     {
-        Debug.Log(_soundEffectsIndex);
-        
         if (canPlaySoundEffects == false)
         {
             return;
@@ -115,5 +113,10 @@ public class SoundManager : SingletonMonoBehavior<SoundManager>
                 break;
             }
         }
+    }
+
+    public float GetLengthSoundEffects(int _soundEffectsIndex)
+    {
+        return soundEffects[_soundEffectsIndex].clip.length;
     }
 }

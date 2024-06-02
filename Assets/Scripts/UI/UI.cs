@@ -23,6 +23,8 @@ public class UI : MonoBehaviour, ISaveManager
     [SerializeField] 
     private GameObject inGameUI;
     [SerializeField] 
+    private GameObject dialogueUI;
+    [SerializeField] 
     private Player player;
     
     [Header("Stats Button")]
@@ -59,12 +61,22 @@ public class UI : MonoBehaviour, ISaveManager
     
     private void Update()
     {
+        SetUpStatsButton(PlayerManager.Instance.statPoints != 0);
+            
         if (player == null)
         {
             return;
         }
 
-        SetUpStatsButton(PlayerManager.Instance.statPoints != 0);
+        if (DialogueManager.isActive)
+        {
+            SwitchMenus(dialogueUI);
+        }
+        else if(!DialogueManager.isActive)
+        {
+            dialogueUI.SetActive(false);
+            CheckInGameUI();
+        }
 
         if (player.OnPlayerInputs.Player.CharacterPanel.WasPressedThisFrame())
         {
@@ -89,6 +101,7 @@ public class UI : MonoBehaviour, ISaveManager
     }
 
     public void SwitchMenus(GameObject menu)
+    
     {
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -100,10 +113,12 @@ public class UI : MonoBehaviour, ISaveManager
         {
             menu.SetActive(true);
         }
+        
+        ControlCursor(menu);
 
         if (GameManager.Instance != null)
         {
-            if (menu == inGameUI)
+            if (menu == inGameUI || menu == dialogueUI)
             {
                 GameManager.Instance.PauseGame(false);
             }
@@ -136,6 +151,7 @@ public class UI : MonoBehaviour, ISaveManager
                 return;
             }
         }
+
         SwitchMenus(inGameUI);
     }
 
@@ -213,5 +229,19 @@ public class UI : MonoBehaviour, ISaveManager
     {
         SoundManager.Instance.StopSoundEffects(23);
         SoundManager.Instance.PlaySoundEffects(21, null, false);
+    }
+    
+    private void ControlCursor(GameObject menu)
+    {
+        if (menu == inGameUI || menu == dialogueUI)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else if (menu == settingsUI || menu == characterUI || menu == skillTreeUI)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 }

@@ -180,6 +180,11 @@ public class EntityStats : MonoBehaviour
         {
             _damage = Mathf.RoundToInt(_damage * 1.5f);
         }
+
+        if (_damage > 0)
+        {
+            entityFx.CreateInformationText(_damage.ToString());
+        }
         
         currentHealth -= _damage;
 

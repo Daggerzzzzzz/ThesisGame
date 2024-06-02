@@ -123,7 +123,7 @@ public class EnemyAI : MonoBehaviour
         
         float distance = Vector2.Distance(aiData.currentTarget.position, transform.position);
         
-        if (distance < fleeDistance)
+        if (distance > fleeDistance)
         {
             Debug.Log("not attacking");
             attackPlayer = false;
@@ -132,18 +132,17 @@ public class EnemyAI : MonoBehaviour
             yield return new WaitForSeconds(aiUpdateDelay);
             StartCoroutine(FleeAndAttack());
         }
-        else if (distance < attackDistance)
+        else 
         {
             //Attack logic
             Debug.Log("attacking");
             attackPlayer = true;
             movementInput = Vector2.zero;
+            yield return new WaitForSeconds(attackDelay);
+            StartCoroutine(FleeAndAttack());
         }
         
         onMagicPressed?.Invoke(attackPlayer);
-        
-        yield return new WaitForSeconds(attackDelay);
-        StartCoroutine(FleeAndAttack());
     }
 }
 

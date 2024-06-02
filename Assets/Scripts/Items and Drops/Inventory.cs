@@ -386,6 +386,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         if (currentPotion == null)
         {
             SoundManager.Instance.PlaySoundEffects(32, null, false);
+            PlayerManager.Instance.player.OnEntityFx.CreateInformationText("No Potions");
             return;
         }
         
@@ -403,6 +404,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         }
         else
         {
+            PlayerManager.Instance.player.OnEntityFx.CreateInformationText("In Cooldown");
             SoundManager.Instance.PlaySoundEffects(32, null, false);
             Debug.Log("Potion is on Cooldown");
         }

@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class GameManager : SingletonMonoBehavior<GameManager>
@@ -13,7 +12,7 @@ public class GameManager : SingletonMonoBehavior<GameManager>
    
    public void ReturnToMainMenu()
    {
-      uiLoadingScreen.LoadLevel(1);
+      uiLoadingScreen.LoadLevel(0);
    }
    
    public void PauseGame(bool pause)

@@ -10,7 +10,7 @@ public class VastoLordeDeathState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        enemy.portal.SetActive(true);
+        enemy.NPC.SetActive(true);
     }
 
     public override void Update()

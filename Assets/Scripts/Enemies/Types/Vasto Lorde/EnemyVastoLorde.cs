@@ -15,7 +15,7 @@ public class EnemyVastoLorde : Enemy
     private RoomCenter roomEnd;
     [SerializeField] 
     private BoxCollider2D endRoomCollider;
-    public GameObject portal;
+    public GameObject NPC;
 
     public float chanceToTeleport;
     public float defaultChanceToTeleport = 25;
@@ -127,8 +127,9 @@ public class EnemyVastoLorde : Enemy
 
     public void CastCero()
     {
-        GameObject newCero = Instantiate(ceroPrefab, new Vector3(transform.position.x, transform.position.y + 1), quaternion.identity);
+        GameObject newCero = Instantiate(ceroPrefab, new Vector3(transform.position.x + 1, transform.position.y + 1), quaternion.identity);
         newCero.GetComponent<LaserController>().SetupLaser(animatorDirection.x, animatorDirection.y, OnEntityStats, gameObject);
+        SoundManager.Instance.PlaySoundEffects(35, null, false);
     }
 
     public override void DamageEffect(GameObject sender)

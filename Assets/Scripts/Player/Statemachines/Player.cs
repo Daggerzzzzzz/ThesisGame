@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class Player : Entity
 {
-    [Header("Dash Inputs")] [HideInInspector]
+    [Header("Dash Inputs")]
+    [HideInInspector]
     public Vector2 dashDirection;
 
     public float dashSpeed;
@@ -12,8 +13,7 @@ public class Player : Entity
 
     [Header("Movement Inputs")] public float moveSpeed = 10f;
     private float normalMoveSpeed;
-    private float defaultMovementSpeed;
-
+   
     [Header("Equipment Tooltip")] public GameObject eKey;
     public GameObject equipmentInfo;
     public ItemTooltip itemTooltip;
@@ -66,7 +66,7 @@ public class Player : Entity
         OnPrimaryAttackState = new PlayerPrimaryAttackState(this, OnStateMachine, "attack");
         OnPlayerAimState = new PlayerAimState(this, OnStateMachine, "aimSword");
         OnPlayerCatchState = new PlayerCatchState(this, OnStateMachine, "catchSword");
-        OnPlayerBlackholeState = new PlayerBlackholeState(this, OnStateMachine, "idle");
+        OnPlayerBlackholeState = new PlayerBlackholeState(this, OnStateMachine, "ultimate");
         OnDeathState = new PlayerDeathState(this, OnStateMachine, "death");
         OnPlayerRessurrectState = new PlayerRessurrectState(this, OnStateMachine, "resurrection");
     }
@@ -81,16 +81,17 @@ public class Player : Entity
 
         normalMoveSpeed = moveSpeed;
         normalDashSpeed = dashSpeed;
-        defaultMovementSpeed = moveSpeed;
     }
 
     protected override void Update()
     {
-        if (Time.timeScale == 0)
+        if (Time.timeScale == 0 || DialogueManager.isActive)
         {
+            SetZeroVelocity();
+            OnStateMachine.ChangeState(OnIdleState);
             return;
         }
-
+        
         base.Update();
 
         OnStateMachine.OnCurrentState.Update();
@@ -102,12 +103,14 @@ public class Player : Entity
             if (!OnSkill.Kunai.CanUseSkill())
             {
                 SoundManager.Instance.PlaySoundEffects(32, null, false);
+                OnEntityFx.CreateInformationText("In Cooldown");
             }
         }
 
         if (OnPlayerInputs.Player.Teleport.WasPressedThisFrame() && !OnSkill.Kunai.KunaiUnlocked)
         {
             SoundManager.Instance.PlaySoundEffects(32, null, false);
+            OnEntityFx.CreateInformationText("Not Unlocked");
         }
 
         if (OnPlayerInputs.Player.UsePotion.WasPressedThisFrame())
@@ -155,9 +158,19 @@ public class Player : Entity
                 }
             }
         }
-        else if (OnPlayerInputs.Player.Dash.WasPressedThisFrame() && !SkillManager.Instance.Dash.CanUseSkill())
+        else if (OnPlayerInputs.Player.Dash.WasPressedThisFrame() && (!SkillManager.Instance.Dash.CanUseSkill() || !OnSkill.Dash.DashUnlocked))
         {
             SoundManager.Instance.PlaySoundEffects(32, null, false);
+            
+            if (!OnSkill.Dash.DashUnlocked)
+            {
+                OnEntityFx.CreateInformationText("Not Unlocked");
+            }
+            else 
+            {
+                OnEntityFx.CreateInformationText("In Cooldown");
+            }
+            
         }
     }
 

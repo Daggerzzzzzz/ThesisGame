@@ -12,7 +12,7 @@ public class PlayerBlackholeState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        player.OnRb.constraints = RigidbodyConstraints2D.FreezePosition;
+        player.OnRb.constraints = RigidbodyConstraints2D.FreezeAll;
         playerInputs.Player.Disable();
         skillUsed = false;
     }
@@ -20,7 +20,7 @@ public class PlayerBlackholeState : PlayerState
     public override void Update()
     {
         base.Update();
-        player.OnRb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        player.OnRb.constraints = RigidbodyConstraints2D.FreezeAll;
         if (!skillUsed)
         {
             if (player.OnSkill.Blackhole.CanUseSkill())
@@ -41,10 +41,5 @@ public class PlayerBlackholeState : PlayerState
         playerInputs.Player.Enable();
         player.OnRb.constraints = RigidbodyConstraints2D.None;
         player.OnRb.constraints = RigidbodyConstraints2D.FreezeRotation;
-    }
-
-    public override void PlayerAnimationFinishTrigger()
-    {
-        base.PlayerAnimationFinishTrigger();
     }
 }

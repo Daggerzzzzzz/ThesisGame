@@ -134,6 +134,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextMessage"",
+                    ""type"": ""Button"",
+                    ""id"": ""47e957a5-a777-42fe-9e53-a339039dc087"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -354,6 +363,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""UsePotion"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf845e62-2c84-4c7a-bf8f-b49daa377aa3"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""NextMessage"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -953,6 +973,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_SkillTreePanel = m_Player.FindAction("SkillTreePanel", throwIfNotFound: true);
         m_Player_SettingsPanel = m_Player.FindAction("SettingsPanel", throwIfNotFound: true);
         m_Player_BigMapPanel = m_Player.FindAction("BigMapPanel", throwIfNotFound: true);
+        m_Player_NextMessage = m_Player.FindAction("NextMessage", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1038,6 +1059,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SkillTreePanel;
     private readonly InputAction m_Player_SettingsPanel;
     private readonly InputAction m_Player_BigMapPanel;
+    private readonly InputAction m_Player_NextMessage;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -1054,6 +1076,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @SkillTreePanel => m_Wrapper.m_Player_SkillTreePanel;
         public InputAction @SettingsPanel => m_Wrapper.m_Player_SettingsPanel;
         public InputAction @BigMapPanel => m_Wrapper.m_Player_BigMapPanel;
+        public InputAction @NextMessage => m_Wrapper.m_Player_NextMessage;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1099,6 +1122,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @BigMapPanel.started += instance.OnBigMapPanel;
             @BigMapPanel.performed += instance.OnBigMapPanel;
             @BigMapPanel.canceled += instance.OnBigMapPanel;
+            @NextMessage.started += instance.OnNextMessage;
+            @NextMessage.performed += instance.OnNextMessage;
+            @NextMessage.canceled += instance.OnNextMessage;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1139,6 +1165,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @BigMapPanel.started -= instance.OnBigMapPanel;
             @BigMapPanel.performed -= instance.OnBigMapPanel;
             @BigMapPanel.canceled -= instance.OnBigMapPanel;
+            @NextMessage.started -= instance.OnNextMessage;
+            @NextMessage.performed -= instance.OnNextMessage;
+            @NextMessage.canceled -= instance.OnNextMessage;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1333,6 +1362,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnSkillTreePanel(InputAction.CallbackContext context);
         void OnSettingsPanel(InputAction.CallbackContext context);
         void OnBigMapPanel(InputAction.CallbackContext context);
+        void OnNextMessage(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

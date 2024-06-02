@@ -16,6 +16,7 @@ public class PlayerIdleState : PlayerState
     public override void Update()
     {
         base.Update();
+        
         if (movementInput != Vector2.zero && !player.OnIsBusy)
         {
             stateMachine.ChangeState(player.OnMoveState);

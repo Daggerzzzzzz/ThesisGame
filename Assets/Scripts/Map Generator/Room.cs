@@ -73,7 +73,8 @@ public class Room : MonoBehaviour
             }
             else if ((roomCenterName == "Room End" || roomCenterName == "End Center") && ifPressedOk)
             {
-                SoundManager.Instance.PlayBackgroundMusic(1);
+                SoundManager.Instance.PlaySoundEffects(0, null, false);
+                StartCoroutine(BGMDelay());
                 
                 if(closeWhenEntered)
                 {
@@ -122,6 +123,12 @@ public class Room : MonoBehaviour
                 uiInGame.noKeyUI.SetActive(false); 
             }
         }
+    }
+
+    private IEnumerator BGMDelay()
+    {
+        yield return new WaitForSeconds(SoundManager.Instance.GetLengthSoundEffects(0));
+        SoundManager.Instance.PlayBackgroundMusic(1);
     }
 
     public void OpenDoors()

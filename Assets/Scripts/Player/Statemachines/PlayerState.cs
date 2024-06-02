@@ -52,15 +52,25 @@ public class PlayerState
       else if (playerInputs.Player.ThrowSword.WasPressedThisFrame() && HasNoSword() && !player.OnSkill.Sword.swordFlyingUnlocked)
       {
          SoundManager.Instance.PlaySoundEffects(32, null, false);
+         player.OnEntityFx.CreateInformationText("Not Unlocked");
       }
 
       if (playerInputs.Player.Ultimate.WasPressedThisFrame() && player.OnSkill.Blackhole.BaseUpgradeUnlock && player.OnSkill.Blackhole.CanUseSkill())
       {
          stateMachine.ChangeState(player.OnPlayerBlackholeState);
       }
-      else if (playerInputs.Player.Ultimate.WasPressedThisFrame() && player.OnSkill.Blackhole.BaseUpgradeUnlock && !player.OnSkill.Blackhole.CanUseSkill())
+      else if (playerInputs.Player.Ultimate.WasPressedThisFrame() && (!player.OnSkill.Blackhole.BaseUpgradeUnlock || !player.OnSkill.Blackhole.CanUseSkill()))
       {
          SoundManager.Instance.PlaySoundEffects(32, null, false);
+
+         if (!player.OnSkill.Blackhole.BaseUpgradeUnlock)
+         {
+            player.OnEntityFx.CreateInformationText("Not Unlocked");
+         }
+         else 
+         {
+            player.OnEntityFx.CreateInformationText("In Cooldown");
+         }
       }
       
       stateTimer -= Time.deltaTime;
