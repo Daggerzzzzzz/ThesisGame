@@ -6,8 +6,6 @@ public class PlayerPrimaryAttackState : PlayerState
     
     private float lastTimeAttack;
     private float comboWindow = 2;
-
-    private PlayerInputs playerNewInputs;
     
     private static readonly int ComboCounter = Animator.StringToHash("comboCounter");
 
@@ -24,8 +22,7 @@ public class PlayerPrimaryAttackState : PlayerState
             comboCounter = 0;
         }
         
-        playerNewInputs = player.OnPlayerInputs;
-        playerNewInputs.Player.Fire.Disable();
+        player.OnPlayerInputs.Player.Fire.Disable();
         player.OnAnim.SetInteger(ComboCounter, comboCounter);
     }
 
@@ -47,7 +44,7 @@ public class PlayerPrimaryAttackState : PlayerState
         base.Exit();
         
         
-        playerNewInputs.Player.Fire.Enable();
+        player.OnPlayerInputs.Player.Fire.Enable();
 
         comboCounter++;
         lastTimeAttack = Time.time;

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class EntityFx : MonoBehaviour
 {
@@ -143,8 +142,8 @@ public class EntityFx : MonoBehaviour
 
     public void CreateInformationText(string _text)
     {
-        float randomX = Random.Range(-1, 1);
-        float randomY = Random.Range(1, 1);
+        float randomX = UnityEngine.Random.Range(-1, 1);
+        float randomY = UnityEngine.Random.Range(1, 1);
 
         Vector3 positionOffset = new Vector3(randomX, randomY, 0);
         

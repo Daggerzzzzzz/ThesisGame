@@ -13,7 +13,7 @@ public class PlayerBlackholeState : PlayerState
     {
         base.Enter();
         player.OnRb.constraints = RigidbodyConstraints2D.FreezeAll;
-        playerInputs.Player.Disable();
+        player.OnPlayerInputs.Player.Disable();
         skillUsed = false;
     }
 
@@ -38,7 +38,7 @@ public class PlayerBlackholeState : PlayerState
     public override void Exit()
     {
         base.Exit();
-        playerInputs.Player.Enable();
+        player.OnPlayerInputs.Player.Enable();
         player.OnRb.constraints = RigidbodyConstraints2D.None;
         player.OnRb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }

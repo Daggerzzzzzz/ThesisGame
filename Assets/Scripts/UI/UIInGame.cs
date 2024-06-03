@@ -37,13 +37,6 @@ public class UIInGame : MonoBehaviour
     private Image potionImage;
     [SerializeField] 
     private Image armorImageCooldown;
-    
-    [Header("Warning UI")]
-    public GameObject noKeyUI;
-    public GameObject aboutToEnterBossUI;
-    public Button okNoKeyButton;
-    public Button okBossWarningButton;
-    public Button cancelBossWarningButton;
 
     [SerializeField] private TextMeshProUGUI currentSouls;
     

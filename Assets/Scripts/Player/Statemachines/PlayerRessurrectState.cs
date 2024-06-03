@@ -37,6 +37,7 @@ public class PlayerRessurrectState : PlayerState
         base.Exit();
         SoundManager.Instance.StopSoundEffects(11);
         player.guardianAngel.SetActive(false);
+        player.OnPlayerInputs.Enable();
         player.OnCapsuleCollider2D.enabled = true;
         player.OnBoxCollider2D.enabled = true;
     }

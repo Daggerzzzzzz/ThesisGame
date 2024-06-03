@@ -25,7 +25,8 @@ public class PlayerDeathState : PlayerState
         
         if (player.OnEntityStats.currentHealth < 0)
         { 
-            GameObject.Find("Pause").GetComponent<UI>().EnableEndScreen();
+            UI ui = GameObject.Find("Pause").GetComponent<UI>();
+            ui.SwitchMenus(ui.gameOver);
             SoundManager.Instance.PlaySoundEffects(33, null, false);
         }
     }

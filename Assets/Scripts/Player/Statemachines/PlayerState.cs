@@ -21,8 +21,6 @@ public class PlayerState
    protected float exitResurrectionTimer;
    protected float exitRessurectionTimerDelay = 1f;
    
-   protected PlayerInputs playerInputs;
-   
    protected PlayerState(Player playerState, PlayerStateMachine stateMachineState, string animationNameState)
    {
       player = playerState;
@@ -32,7 +30,6 @@ public class PlayerState
 
    public virtual void Enter()
    {
-      playerInputs = player.OnPlayerInputs;
       player.OnAnim.SetBool(animationName, true);
       rb = player.OnRb;
       triggerCalled = false;
@@ -40,26 +37,26 @@ public class PlayerState
 
    public virtual void Update()
    {
-      if (playerInputs.Player.Fire.IsPressed())
+      if ( player.OnPlayerInputs.Player.Fire.IsPressed())
       {
          stateMachine.ChangeState(player.OnPrimaryAttackState);
       }
 
-      if (playerInputs.Player.ThrowSword.WasPressedThisFrame() && HasNoSword() && player.OnSkill.Sword.swordFlyingUnlocked)
+      if ( player.OnPlayerInputs.Player.ThrowSword.WasPressedThisFrame() && HasNoSword() && player.OnSkill.Sword.swordFlyingUnlocked)
       {
          stateMachine.ChangeState(player.OnPlayerAimState);
       }
-      else if (playerInputs.Player.ThrowSword.WasPressedThisFrame() && HasNoSword() && !player.OnSkill.Sword.swordFlyingUnlocked)
+      else if ( player.OnPlayerInputs.Player.ThrowSword.WasPressedThisFrame() && HasNoSword() && !player.OnSkill.Sword.swordFlyingUnlocked)
       {
          SoundManager.Instance.PlaySoundEffects(32, null, false);
          player.OnEntityFx.CreateInformationText("Not Unlocked");
       }
 
-      if (playerInputs.Player.Ultimate.WasPressedThisFrame() && player.OnSkill.Blackhole.BaseUpgradeUnlock && player.OnSkill.Blackhole.CanUseSkill())
+      if ( player.OnPlayerInputs.Player.Ultimate.WasPressedThisFrame() && player.OnSkill.Blackhole.BaseUpgradeUnlock && player.OnSkill.Blackhole.CanUseSkill())
       {
          stateMachine.ChangeState(player.OnPlayerBlackholeState);
       }
-      else if (playerInputs.Player.Ultimate.WasPressedThisFrame() && (!player.OnSkill.Blackhole.BaseUpgradeUnlock || !player.OnSkill.Blackhole.CanUseSkill()))
+      else if ( player.OnPlayerInputs.Player.Ultimate.WasPressedThisFrame() && (!player.OnSkill.Blackhole.BaseUpgradeUnlock || !player.OnSkill.Blackhole.CanUseSkill()))
       {
          SoundManager.Instance.PlaySoundEffects(32, null, false);
 

@@ -3273,7 +3273,7 @@ MonoBehaviour:
     baseValue: 1
     modifiers: 
   maxHealth:
-    baseValue: 1000
+    baseValue: 1
     modifiers: 
   armor:
     baseValue: 20

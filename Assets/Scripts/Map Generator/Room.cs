@@ -10,8 +10,8 @@ public class Room : MonoBehaviour
     [SerializeField]
     private bool ifPressedOk;
     
-    private GameObject uiInGameObject;
-    private UIInGame uiInGame;
+    private GameObject uiGameObject;
+    private UI ui;
     private BoxCollider2D boxCollider2D;
 
     public string roomCenterName;
@@ -24,9 +24,9 @@ public class Room : MonoBehaviour
 
     private void Start()
     {
-        uiInGameObject = GameObject.FindGameObjectWithTag("UIInGame");
+        uiGameObject = GameObject.FindGameObjectWithTag("Pause");
         boxCollider2D = GetComponentInChildren<BoxCollider2D>();
-        uiInGame = uiInGameObject.GetComponent<UIInGame>();
+        ui = uiGameObject.GetComponent<UI>();
         
         if (roomCenterName == "Room End" || roomCenterName == "End Center")
         {
@@ -51,24 +51,23 @@ public class Room : MonoBehaviour
             if ((roomCenterName == "Room End" || roomCenterName == "End Center") && !ifPressedOk)
             {
                 bool hasKey = Inventory.Instance.CheckForKey();
-                GameManager.Instance.PauseGame(true);
 
                 if (hasKey)
                 {
-                    if (uiInGame.aboutToEnterBossUI != null)
+                    if (ui.aboutToEnterBossUI != null)
                     {
-                        uiInGame.aboutToEnterBossUI.SetActive(true);
+                        ui.SwitchMenus(ui.aboutToEnterBossUI);
                     }
-                    uiInGame.okBossWarningButton.onClick.AddListener(PressedOkInBossWarning);
-                    uiInGame.cancelBossWarningButton.onClick.AddListener(PressedCancelInBossWarning);
+                    ui.okBossWarningButton.onClick.AddListener(PressedOkInBossWarning);
+                    ui.cancelBossWarningButton.onClick.AddListener(PressedCancelInBossWarning);
                 }
                 else if (!hasKey)
                 {
-                    if (uiInGame.noKeyUI != null)
+                    if (ui.noKeyUI != null)
                     {
-                        uiInGame.noKeyUI.SetActive(true);
+                        ui.SwitchMenus(ui.noKeyUI);
                     }
-                    uiInGame.okNoKeyButton.onClick.AddListener(PressedOkInNoKey);
+                    ui.okNoKeyButton.onClick.AddListener(PressedOkInNoKey);
                 }
             }
             else if ((roomCenterName == "Room End" || roomCenterName == "End Center") && ifPressedOk)
@@ -113,15 +112,6 @@ public class Room : MonoBehaviour
         {
             CameraSwitch.Instance.PlayerExit();
             roomActive = false;
-            if (uiInGame.aboutToEnterBossUI != null)
-            {
-                uiInGame.aboutToEnterBossUI.SetActive(false);
-            }
-            
-            if (uiInGame.noKeyUI != null)
-            {
-                uiInGame.noKeyUI.SetActive(false); 
-            }
         }
     }
 
@@ -174,15 +164,13 @@ public class Room : MonoBehaviour
 
     private void PressedOkInNoKey()
     {
-        uiInGame.noKeyUI.SetActive(false);
-        GameManager.Instance.PauseGame(false);
+        ui.SwitchMenus(ui.inGameUI);
         SoundManager.Instance.PlaySoundEffects(20, null, false);
     }
     
     private void PressedOkInBossWarning()
     {
-        uiInGame.aboutToEnterBossUI.SetActive(false);
-        GameManager.Instance.PauseGame(false);
+        ui.SwitchMenus(ui.inGameUI);
         SoundManager.Instance.PlaySoundEffects(21, null, false);
         OpenDoors();
         ifPressedOk = true;
@@ -192,8 +180,7 @@ public class Room : MonoBehaviour
     
     private void PressedCancelInBossWarning()
     {
-        uiInGame.aboutToEnterBossUI.SetActive(false);
-        GameManager.Instance.PauseGame(false);
+        ui.SwitchMenus(ui.inGameUI);
         SoundManager.Instance.PlaySoundEffects(20, null, false);
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class PortalController : MonoBehaviour
@@ -21,21 +20,11 @@ public class PortalController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
             ui.text.text = "YOU WIN";
             anim.SetTrigger(Exit);
-            StartCoroutine(WinScreenDelay());
+            ui.SwitchMenus(ui.gameOver);
         }
-    }
-
-    private IEnumerator WinScreenDelay()
-    {
-        ui.fadeScreen.FadeOut();
-        yield return new WaitForSeconds(1f);
-        ui.endText.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        ui.restartButton.SetActive(true);
-        ui.mainMenuButton.SetActive(true);
-        GameManager.Instance.PauseGame(true);
-        SaveManager.Instance.DeleteSavedData();
     }
 }

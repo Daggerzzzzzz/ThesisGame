@@ -9,8 +9,8 @@ public class PlayerAimState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        playerInputs.Player.Fire.Disable();
-        playerInputs.Player.Dash.Disable();
+        player.OnPlayerInputs.Player.Fire.Disable();
+        player.OnPlayerInputs.Player.Dash.Disable();
     }
 
     public override void Update()
@@ -21,7 +21,7 @@ public class PlayerAimState : PlayerState
         {
             player.SetAnimator(movementInput);
         }
-        if (playerInputs.Player.ThrowSword.WasReleasedThisFrame())
+        if ( player.OnPlayerInputs.Player.ThrowSword.WasReleasedThisFrame())
         {
             stateMachine.ChangeState(player.OnIdleState);
         }
@@ -30,7 +30,7 @@ public class PlayerAimState : PlayerState
     public override void Exit()
     {
         base.Exit();
-        playerInputs.Player.Fire.Enable();
-        playerInputs.Player.Dash.Enable();
+        player.OnPlayerInputs.Player.Fire.Enable();
+        player.OnPlayerInputs.Player.Dash.Enable();
     }
 }

@@ -19,8 +19,6 @@ public class UILoadingScreen : MonoBehaviour
 
     private IEnumerator LoadLevelAsync(int loadLevel)
     { 
-        yield return new WaitForSeconds(1f);
-        
         AsyncOperation loadOperation = SceneManager.LoadSceneAsync(loadLevel);
 
         while (!loadOperation.isDone)

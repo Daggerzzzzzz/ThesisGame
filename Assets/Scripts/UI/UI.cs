@@ -1,16 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI : MonoBehaviour, ISaveManager
 {
     [Header("End Screen")]
-    public UiFadeScreen fadeScreen;
     public TextMeshProUGUI text;
     public GameObject endText;
-    public GameObject restartButton;
-    public GameObject mainMenuButton;
     [Space]
     
     [Header("Navigation")]
@@ -21,11 +18,11 @@ public class UI : MonoBehaviour, ISaveManager
     [SerializeField] 
     private GameObject settingsUI;
     [SerializeField] 
-    private GameObject inGameUI;
-    [SerializeField] 
     private GameObject dialogueUI;
     [SerializeField] 
     private Player player;
+    public GameObject inGameUI;
+    public GameObject gameOver;
     
     [Header("Stats Button")]
     [SerializeField]
@@ -43,7 +40,15 @@ public class UI : MonoBehaviour, ISaveManager
     public SkillTooltip skillTooltip;
 
     [Header("Sliders")] 
-    [SerializeField] private UIVolumeSlider[] volumeSettings;
+    [SerializeField] 
+    private UIVolumeSlider[] volumeSettings;
+    
+    [Header("Warning UI")]
+    public GameObject noKeyUI;
+    public GameObject aboutToEnterBossUI;
+    public Button okNoKeyButton;
+    public Button okBossWarningButton;
+    public Button cancelBossWarningButton;
 
     private void Awake()
     {
@@ -115,6 +120,8 @@ public class UI : MonoBehaviour, ISaveManager
         }
         
         ControlCursor(menu);
+        
+        Debug.Log(menu);
 
         if (GameManager.Instance != null)
         {
@@ -122,7 +129,7 @@ public class UI : MonoBehaviour, ISaveManager
             {
                 GameManager.Instance.PauseGame(false);
             }
-            else
+            else 
             {
                 GameManager.Instance.PauseGame(true);
             }
@@ -164,13 +171,6 @@ public class UI : MonoBehaviour, ISaveManager
     {
         GameManager.Instance.ReturnToMainMenu();
     }
-
-    public void EnableEndScreen()
-    {
-        SwitchMenus(null);
-        fadeScreen.FadeOut();
-        StartCoroutine(EndScreenDelay());
-    }
     
     private void DisableTooltips()
     {
@@ -185,15 +185,6 @@ public class UI : MonoBehaviour, ISaveManager
         agilityButton.SetActive(check);
         intelligenceButton.SetActive(check);
         vitalityButton.SetActive(check);
-    }
-
-    private IEnumerator EndScreenDelay()
-    {
-        yield return new WaitForSeconds(1);
-        endText.SetActive(true);
-        yield return new WaitForSeconds(1);
-        restartButton.SetActive(true);
-        mainMenuButton.SetActive(true);
     }
     
     public void LoadData(GameData data)
@@ -238,7 +229,7 @@ public class UI : MonoBehaviour, ISaveManager
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
-        else if (menu == settingsUI || menu == characterUI || menu == skillTreeUI)
+        else 
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
