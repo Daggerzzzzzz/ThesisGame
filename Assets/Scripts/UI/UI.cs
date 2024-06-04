@@ -1,13 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+    
 public class UI : MonoBehaviour, ISaveManager
 {
     [Header("End Screen")]
-    public TextMeshProUGUI text;
-    public GameObject endText;
+    public GameObject youWin;
+    public GameObject youLose;
     [Space]
     
     [Header("Navigation")]
@@ -48,7 +49,7 @@ public class UI : MonoBehaviour, ISaveManager
     public GameObject aboutToEnterBossUI;
     public Button okNoKeyButton;
     public Button okBossWarningButton;
-    public Button cancelBossWarningButton;
+    public Button cancelBossWarningButton;  
 
     private void Awake()
     {
@@ -57,9 +58,6 @@ public class UI : MonoBehaviour, ISaveManager
 
     private void Start()
     {
-        text = endText.GetComponent<TextMeshProUGUI>();
-        text.text = "YOU DIED";
-        
         SwitchMenus(inGameUI);
         DisableTooltips();
     }
@@ -121,8 +119,6 @@ public class UI : MonoBehaviour, ISaveManager
         
         ControlCursor(menu);
         
-        Debug.Log(menu);
-
         if (GameManager.Instance != null)
         {
             if (menu == inGameUI || menu == dialogueUI)
@@ -172,6 +168,11 @@ public class UI : MonoBehaviour, ISaveManager
         GameManager.Instance.ReturnToMainMenu();
     }
     
+    public void ExitGame()
+    {
+        GameManager.Instance.ExitGame();
+    }
+
     private void DisableTooltips()
     {
         itemTooltip.gameObject.SetActive(false);
@@ -234,5 +235,16 @@ public class UI : MonoBehaviour, ISaveManager
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
+    }
+
+    public void EndScreen()
+    {
+        StartCoroutine(DisplayDelay());
+    }
+    
+    private IEnumerator DisplayDelay()
+    {
+        yield return new WaitForSeconds(2f);
+        SwitchMenus(gameOver);
     }
 }

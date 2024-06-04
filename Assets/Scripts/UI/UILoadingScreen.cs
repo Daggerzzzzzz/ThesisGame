@@ -25,7 +25,5 @@ public class UILoadingScreen : MonoBehaviour
         {
             yield return null;
         }
-        
-        loadingScreen.SetActive(false);
     }
 }

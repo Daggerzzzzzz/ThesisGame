@@ -82,13 +82,16 @@ public class DashSkill : Skill
       {
          EquipmentDataSO currentWeapon;
          currentWeapon = Inventory.Instance.GetEquipment(EquipmentType.WEAPON);
-         if (currentWeapon.itemName == "Zangetsu")
+         if (currentWeapon != null)
          {
-            Inventory.Instance.GetEquipment(EquipmentType.WEAPON).UseEffect(-player.dashDirection, player.GetComponent<PlayerStats>());
-         }
-         else
-         {
-            SkillManager.Instance.Clone.CreateClone(player.transform.position, -player.dashDirection, -player.OnAttackDirection);
+            if (currentWeapon.itemName == "Zangetsu")
+            {
+               Inventory.Instance.GetEquipment(EquipmentType.WEAPON).UseEffect(-player.dashDirection, player.GetComponent<PlayerStats>());
+            }
+            else
+            {
+               SkillManager.Instance.Clone.CreateClone(player.transform.position, -player.dashDirection, -player.OnAttackDirection);
+            }
          }
       }
    }

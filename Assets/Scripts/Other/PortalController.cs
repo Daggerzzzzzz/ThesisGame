@@ -20,11 +20,10 @@ public class PortalController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            ui.text.text = "YOU WIN";
+            ui.youWin.SetActive(true);
+            ui.youLose.SetActive(false);
             anim.SetTrigger(Exit);
-            ui.SwitchMenus(ui.gameOver);
+            ui.EndScreen();
         }
     }
 }

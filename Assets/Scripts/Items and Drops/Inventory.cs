@@ -46,6 +46,7 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
     public UnityEvent<int> onPotionUsed;
     public UnityEvent<int> numberOfPotionInStack;
     public UnityEvent<int> guardianAngelUsed;
+    public UnityEvent pickUpSouls;
     public UnityEvent keyCheck;
     private int potionCount;
 
@@ -177,6 +178,11 @@ public class Inventory : SingletonMonoBehavior<Inventory>, ISaveManager
         }
         
         potionCount = GetStackValue("Potion");
+        if (item.itemName == "Souls")
+        {
+            pickUpSouls?.Invoke();
+            Debug.Log("Pumunta Dito");
+        }
         numberOfPotionInStack?.Invoke(potionCount);
     }
 

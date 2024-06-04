@@ -33,7 +33,7 @@ public class Enemy : Entity
     public Vector2 EnemyDirection { get; private set; }
     
     public int enemyExperienceDrop;
-    private bool isTimeFrozen;
+    public bool isTimeFrozen;
 
     protected override void Awake()
     {

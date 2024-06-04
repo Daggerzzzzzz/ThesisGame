@@ -49,16 +49,17 @@ public class Player : Entity
     [HideInInspector] public float lastImageYpos;
     
     public bool OnIsBusy { get; private set; }
-
-
+    
     public PlayerInputs OnPlayerInputs { get; private set; }
     public UIInGame uiInGame;
+    public UI uI;
     private HitStopEffect hitStopEffect;
 
     protected override void Awake()
     {
         base.Awake();
         OnPlayerInputs = new PlayerInputs();
+        OnPlayerInputs.Player.Enable();
         OnStateMachine = new PlayerStateMachine();
         OnIdleState = new PlayerIdleState(this, OnStateMachine, "idle");
         OnMoveState = new PlayerMoveState(this, OnStateMachine, "walk");
@@ -123,12 +124,7 @@ public class Player : Entity
             Inventory.Instance.keyCheck?.Invoke();
         }
     }
-
-    private void OnEnable()
-    {
-        OnPlayerInputs.Player.Enable();
-    }
-
+    
     public void NewSwordAssignment(GameObject newSword)
     {
         OnSword = newSword;

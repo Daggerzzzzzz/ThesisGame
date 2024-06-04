@@ -3264,7 +3264,7 @@ MonoBehaviour:
     baseValue: 20
     modifiers: 
   damage:
-    baseValue: 13
+    baseValue: 50
     modifiers: 
   criticalChance:
     baseValue: 30
@@ -3273,13 +3273,13 @@ MonoBehaviour:
     baseValue: 1
     modifiers: 
   maxHealth:
-    baseValue: 1
+    baseValue: 5000
     modifiers: 
   armor:
     baseValue: 20
     modifiers: 
   dodge:
-    baseValue: 0
+    baseValue: 10
     modifiers: 
   burnDamage:
     baseValue: 1
@@ -3639,7 +3639,7 @@ Transform:
   m_GameObject: {fileID: 4792599393644301924}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: -3, z: 0}
+  m_LocalPosition: {x: -0.6, y: 2, z: 0}
   m_LocalScale: {x: 2, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

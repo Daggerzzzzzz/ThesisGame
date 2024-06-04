@@ -44,8 +44,6 @@ public class PlayerManager : SingletonMonoBehavior<PlayerManager>, ISaveManager
    private void Update()
    {
       UpdateExpUI();
-
-      UpdateSouls();
       
       if (currentExp > requiredExp)
       {
@@ -53,21 +51,22 @@ public class PlayerManager : SingletonMonoBehavior<PlayerManager>, ISaveManager
       }
    }
 
-   private void UpdateSouls()
+   public void UpdateSouls()
    {
-      int numberOfSouls = Inventory.Instance.GetStackValue("Souls");
-      soulCurrency = numberOfSouls;
+      soulCurrency++;
    }
 
    public bool HaveEnoughCurrency(int price)
    {
-      if (price > soulCurrency)
+      bool result = false;
+      
+      if (price < soulCurrency)
       {
-         return false;
+         soulCurrency -= price;
+         result = true;
       }
       
-      soulCurrency -= price;
-      return true;
+      return result;
    }
    
    public int CurrentSouls()

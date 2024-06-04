@@ -978,7 +978,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 770717077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.3468578}
+  m_AnchorMin: {x: 0, y: 0.4693215}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -1316,6 +1316,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sound Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 8857784376190583829, guid: 6de8e72d1711d7e458b96d8d8fbbdd37, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1482,7 +1486,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 937764368}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.6531422
+  m_Size: 0.5306785
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1652,7 +1656,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 265.53003}
+  m_SizeDelta: {x: 0, y: 442.19}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1604419788
 MonoBehaviour:
@@ -1691,7 +1695,7 @@ MonoBehaviour:
   m_text: "PROJECT HEAD: Jaymark S. Dagohoy\n\nPROGRAMMERS: Jaymark S. Dagohoy\n\t  
     Charles Brian B. Partosa\n\t   Lloyd Aaron R. Guevarra\n\t   Gerald A. Semblante\n\nVISUAL
     DESIGN: Charles Brian B. Partosa\n\t    Lloyd Aaron R. Guevarra\n\t    Gerald
-    A. Semblante\n\n\nSOUND EFFECTS\n"
+    A. Semblante\n\nSOUND EFFECTS: Leopaz\n\t    Pixabay\n\nBACKGROUND MUSIC: evilduckk\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f72f97ce336c99547a657cf93f5712a5, type: 2}
   m_sharedMaterial: {fileID: -8733751818608468443, guid: f72f97ce336c99547a657cf93f5712a5, type: 2}

@@ -39,6 +39,7 @@ public class SoundManager : SingletonMonoBehavior<SoundManager>
 
     public void PlaySoundEffects(int _soundEffectsIndex, Transform _source, bool changePitch)
     {
+        Debug.Log("Play Sounds: " + _soundEffectsIndex);
         if (canPlaySoundEffects == false)
         {
             return;

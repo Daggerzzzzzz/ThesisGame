@@ -105,7 +105,7 @@ public class SwordSkillController : MonoBehaviour
         SwordStuck(other);
     }
     
-    public void InitializeSword(Vector2 movementDirection, float throwForce, float returnSpeed, Player player, float freezeTimeDuration)
+    public void InitializeSword(Vector2 movementDirection, float throwForce, float returnSpeed, Player player, float freezeTimeDuration, Transform newSword)
     {
         this.player = player;
         this.freezeTimeDuration = freezeTimeDuration;
@@ -115,7 +115,7 @@ public class SwordSkillController : MonoBehaviour
         rb.velocity = movementDirection;
         anim.SetBool(Rotation, true);
         targetPosition = playerFacingDirection * 20f;
-        SoundManager.Instance.PlaySoundEffects(9, null, false);
+        SoundManager.Instance.PlaySoundEffects(9, newSword, false);
         Invoke(nameof(DestroySword), 5f);
     }
 

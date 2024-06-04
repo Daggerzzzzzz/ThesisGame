@@ -10,24 +10,30 @@ public class ArmorDataSO : EquipmentDataSO
     
     public void AddModifiers()
     {
-        PlayerStats playerStats = PlayerManager.Instance.player.GetComponent<PlayerStats>();
+        if (PlayerManager.Instance.player != null)
+        {
+            PlayerStats playerStats = PlayerManager.Instance.player.GetComponent<PlayerStats>();
         
-        playerStats.vitality.AddModifiers(vitality);
-        playerStats.maxHealth.AddModifiers(vitality * 5);
-        playerStats.armor.AddModifiers(armor);
+            playerStats.vitality.AddModifiers(vitality);
+            playerStats.maxHealth.AddModifiers(vitality * 5);
+            playerStats.armor.AddModifiers(armor);
         
-        playerStats.CalculateMaxHealthValue();
+            playerStats.CalculateMaxHealthValue();
+        }
     }
     
     public void RemoveModifiers()
     {
-        PlayerStats playerStats = PlayerManager.Instance.player.GetComponent<PlayerStats>();
-        
-        playerStats.vitality.RemoveModifiers(vitality);
-        playerStats.maxHealth.RemoveModifiers(vitality * 5);
-        playerStats.armor.RemoveModifiers(armor);
-        
-        playerStats.CalculateMaxHealthValue();
+        if (PlayerManager.Instance.player != null)
+        {
+            PlayerStats playerStats = PlayerManager.Instance.player.GetComponent<PlayerStats>();
+
+            playerStats.vitality.RemoveModifiers(vitality);
+            playerStats.maxHealth.RemoveModifiers(vitality * 5);
+            playerStats.armor.RemoveModifiers(armor);
+
+            playerStats.CalculateMaxHealthValue();
+        }
     }
     
     public override string GetDescription()

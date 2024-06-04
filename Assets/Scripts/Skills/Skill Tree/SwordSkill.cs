@@ -92,7 +92,7 @@ public class SwordSkill : Skill
         
         player.NewSwordAssignment(chosenSword);
         
-        newSwordSkillController.InitializeSword(player.animatorDirection, throwForce, returnSpeed, player, freezeTimeDuration);
+        newSwordSkillController.InitializeSword(player.animatorDirection, throwForce, returnSpeed, player, freezeTimeDuration, newSword.transform);
     }
     
     private void DestroyAllObjects()

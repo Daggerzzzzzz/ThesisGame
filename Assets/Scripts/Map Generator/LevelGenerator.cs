@@ -587,7 +587,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
 
                         GameObject monsterInstance = Instantiate(monsterPrefab, room.individualRoomCenter.roomCenter.transform);
                         monsterInstance.GetComponent<EnemyStats>().level = room.monsterLevel;
-                        monsterInstance.GetComponent<Enemy>().enemyExperienceDrop = room.monsterExperienceDrop;
+                        monsterInstance.GetComponent<Enemy>().enemyExperienceDrop = room.monsterExperienceDrop * 5;
                         monsterInstance.transform.localPosition = randomPosition;
                         monsterInstance.tag = "Enemy";
                         monsterInstance.name = monsterName;
@@ -763,7 +763,7 @@ public class LevelGenerator : SingletonMonoBehavior<LevelGenerator>, ISaveManage
                         
                         GameObject monsterObject = Instantiate(GetMonsterByName(name), room.individualRoomCenter.roomCenter.transform);
                         monsterObject.GetComponent<EnemyStats>().level = room.monsterLevel;
-                        monsterObject.GetComponent<Enemy>().enemyExperienceDrop = room.monsterExperienceDrop;
+                        monsterObject.GetComponent<Enemy>().enemyExperienceDrop = room.monsterExperienceDrop * 5;
                         monsterObject.transform.localPosition = randomPosition;
                         monsterObject.tag = "Enemy";
                         monsterObject.name = name;

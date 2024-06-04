@@ -13,6 +13,7 @@ public class PlayerState
    protected Vector2 movementInput;
    protected float stateTimer;
    protected bool triggerCalled;
+   protected bool soundAlreadyPlayed;
    protected float distanceBetweenImages = 0.025f;
    
    protected float resurrectionTimer;

@@ -3,15 +3,9 @@ using UnityEngine;
 public class UIMainMenu : MonoBehaviour
 {
    [SerializeField] 
-   private UiFadeScreen fadeScreen;
-   [SerializeField] 
    private GameObject creditScreen;
    [SerializeField] 
    private GameObject continueButton;
-   [SerializeField] 
-   private GameObject loadingScreen;
-   [SerializeField] 
-   private GameObject mainMenu;
 
    private void Start()
    {
@@ -27,11 +21,6 @@ public class UIMainMenu : MonoBehaviour
    {
       SaveManager.Instance.DeleteSavedData();
    }
-
-   public void ExitGame()
-   {
-      Application.Quit();
-   }
    
    public void CreditsOpen()
    {
@@ -41,6 +30,11 @@ public class UIMainMenu : MonoBehaviour
    public void CloseButton()
    {
       creditScreen.SetActive(false);
+   }
+
+   public void ExitGame()
+   {
+      Application.Quit();
    }
 
    public void PlayHoverSoundEffects()

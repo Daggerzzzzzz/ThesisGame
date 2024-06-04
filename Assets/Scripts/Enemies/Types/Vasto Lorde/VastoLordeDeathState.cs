@@ -11,6 +11,7 @@ public class VastoLordeDeathState : EnemyState
     {
         base.Enter();
         enemy.NPC.SetActive(true);
+        SoundManager.Instance.PlayBackgroundMusic(2);
     }
 
     public override void Update()

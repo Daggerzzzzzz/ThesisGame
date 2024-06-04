@@ -22,13 +22,6 @@ public class PlayerDeathState : PlayerState
             player.OnEntityStats.isDead = false;
             resurrectionTimer = resurrectionDelay;
         }
-        
-        if (player.OnEntityStats.currentHealth < 0)
-        { 
-            UI ui = GameObject.Find("Pause").GetComponent<UI>();
-            ui.SwitchMenus(ui.gameOver);
-            SoundManager.Instance.PlaySoundEffects(33, null, false);
-        }
     }
 
     public override void Update()
@@ -46,6 +39,19 @@ public class PlayerDeathState : PlayerState
                 }
             }
         }
+        else if (player.OnEntityStats.currentHealth < 0)
+        {
+            player.uI.youWin.SetActive(false);
+            player.uI.youWin.SetActive(false);
+            player.uI.youLose.SetActive(true);
+            player.uI.EndScreen();
+            if (!soundAlreadyPlayed)
+            {
+                SoundManager.Instance.PlaySoundEffects(33, null, false);
+                soundAlreadyPlayed = true;
+            }
+        }
+        
         player.SetZeroVelocity();
         player.OnCapsuleCollider2D.enabled = false;
         player.OnBoxCollider2D.enabled = false;

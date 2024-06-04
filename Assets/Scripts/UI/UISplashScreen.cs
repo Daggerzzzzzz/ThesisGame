@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class UISplashScreen : MonoBehaviour
 {
@@ -15,34 +14,40 @@ public class UISplashScreen : MonoBehaviour
     
     [SerializeField]
     private float delayBetweenStories = 2f;
+    [SerializeField]
+    private UILoadingScreen uiLoadingScreen;
 
     private void Start()
-    {
-        StartCoroutine(WaitForIntro());
-    }
-
-    private IEnumerator WaitForIntro()
     {
         story1.SetActive(false);
         story2.SetActive(false);
         story3.SetActive(false);
         story4.SetActive(false);
+        
+        StartCoroutine(WaitForIntro());
+    }
 
+    private IEnumerator WaitForIntro()
+    {
         story1.SetActive(true);
+        Debug.Log("1ststory");
         yield return new WaitForSeconds(delayBetweenStories);
 
         story1.SetActive(false);
         story2.SetActive(true);
+        Debug.Log("2ndstory");
         yield return new WaitForSeconds(delayBetweenStories);
 
         story2.SetActive(false);
         story3.SetActive(true);
+        Debug.Log("3rdstory");
         yield return new WaitForSeconds(delayBetweenStories);
 
         story3.SetActive(false);
         story4.SetActive(true);
+        Debug.Log("4thstory");
         yield return new WaitForSeconds(delayBetweenStories);
 
-        SceneManager.LoadScene(2);
+        uiLoadingScreen.LoadLevel(2);
     }
 }

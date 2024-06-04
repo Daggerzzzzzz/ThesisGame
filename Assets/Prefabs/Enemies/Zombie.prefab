@@ -247,7 +247,7 @@ MonoBehaviour:
   - {x: 0.05029416, y: -0.07057181, z: 0}
   m_ShapePathHash: 1973608341
   m_Mesh: {fileID: 0}
-  m_InstanceId: 102630
+  m_InstanceId: 98750
   m_LocalBounds:
     m_Center: {x: 0.00010201335, y: -0.010157958, z: 0}
     m_Extent: {x: 0.050192147, y: 0.060413852, z: 0}
@@ -665,7 +665,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statusEffectsDuration: 2
   strength:
-    baseValue: 10
+    baseValue: 20
     modifiers: 
   agility:
     baseValue: 1
@@ -677,7 +677,7 @@ MonoBehaviour:
     baseValue: 1
     modifiers: 
   damage:
-    baseValue: 20
+    baseValue: 50
     modifiers: 
   criticalChance:
     baseValue: 1
@@ -686,7 +686,7 @@ MonoBehaviour:
     baseValue: 1
     modifiers: 
   maxHealth:
-    baseValue: 1000
+    baseValue: 500
     modifiers: 
   armor:
     baseValue: 1

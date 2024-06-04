@@ -14,6 +14,11 @@ public class GameManager : SingletonMonoBehavior<GameManager>
    {
       uiLoadingScreen.LoadLevel(0);
    }
+
+   public void ExitGame()
+   {
+      Application.Quit();
+   }
    
    public void PauseGame(bool pause)
    {
