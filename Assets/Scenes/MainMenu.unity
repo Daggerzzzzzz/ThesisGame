@@ -930,17 +930,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &909217728 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1220223711001580678, guid: 5e106b3f18873ec458f25d1705d0c292, type: 3}
-  m_PrefabInstance: {fileID: 728673817056165703}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &909217734 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1865564656854436341, guid: 5e106b3f18873ec458f25d1705d0c292, type: 3}
   m_PrefabInstance: {fileID: 728673817056165703}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 909217728}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 594767cf45a30814fb480539db0a249c, type: 3}
@@ -1081,7 +1076,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fbc647b10dde607459260a7da1ebc6ce, type: 3}
+  m_Sprite: {fileID: -328345456, guid: fbc647b10dde607459260a7da1ebc6ce, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1609,17 +1604,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5443951619199884569, guid: fafef19a2fb0afd4c9b90cb13c426292, type: 3}
   m_PrefabInstance: {fileID: 8551917445610418247}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1601007897 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8832640291890083763, guid: fafef19a2fb0afd4c9b90cb13c426292, type: 3}
-  m_PrefabInstance: {fileID: 8551917445610418247}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 545c986b737d64e4f8b3099367167e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1604419786
 GameObject:
   m_ObjectHideFlags: 0
@@ -2306,11 +2290,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7458d67884909c64c8f2cd81446fadfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeScreen: {fileID: 1601007897}
   creditScreen: {fileID: 1085915890}
   continueButton: {fileID: 767745402}
-  loadingScreen: {fileID: 909217728}
-  mainMenu: {fileID: 1650123487}
 --- !u!1 &1903490179
 GameObject:
   m_ObjectHideFlags: 0

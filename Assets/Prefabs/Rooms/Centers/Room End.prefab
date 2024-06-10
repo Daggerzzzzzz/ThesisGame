@@ -3069,29 +3069,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   messages:
   - actorId: 1
-    actorMessage: Well done, Hiroshi. You have proven your strength and honor. The
-      dungeon's magic is fading, and soon, it will collapse entirely.
+    actorMessage: 'Magaling, Apo. Pinatunayan mo ang iyong lakas at dangal. Nawawala
+      na ang mahika ng piitan, at malapit na itong gumuho. '
   - actorId: 0
-    actorMessage: How do I return home, Takeda?
+    actorMessage: Paano ako makakabalik sa mundo ko, Datu?
   - actorId: 1
-    actorMessage: This portal will take you back to your village. Your courage and
-      determination also freed the countless souls trapped here.
+    actorMessage: Ang portal na ito ang magdadala sa iyo pabalik sa iyong nayon.
+      Dahil sa iyong tapang, lahat ng kaluluwang nandirito ay lalaya na.
   - actorId: 0
-    actorMessage: 'Thank you, Takeda. I will never forget your guidance and friendship.
-      Will you be free now? '
+    actorMessage: Salamat, Datu. Hindi ko malilimutan ang iyong paggabay sa akin.
+      Makakalaya ka na ba ngayon?
   - actorId: 1
-    actorMessage: Yes, Hiroshi. With Morgath defeated, the spirits of this realm
-      can finally find peace. You have not only saved yourself but also many others.
+    actorMessage: 'Oo, Apo. Sa pagkatalo kay Magellan, makakamit na ng mga espiritu
+      ang kapayapaan. Iniligtas mo ang marami, hindi lang ang sarili mo. '
   - actorId: 1
-    actorMessage: Go now, Hiroshi. Live with honor and remember the strength you
-      have shown here. Farewell, my friend.
+    actorMessage: Pumunta ka na riyan, Apo. Mabuhay ka nang may dangal at tandaan
+      ang lakas na ipinakita mo dito. Paalam, kaibigan ko.
   - actorId: 0
-    actorMessage: Farewell, Takeda. I will carry the lessons of this journey with
-      me always. May your spirit find the peace it deserves.
+    actorMessage: Paalam, Datu. Dadalhin ko ang mga aral na ito. Nawa'y makahanap
+      ng kapayapaan ang iyong espiritu.
   actors:
-  - name: Hiroshi
+  - name: Apo
     actorSprite: {fileID: 21300000, guid: 91042136b279e814eaf5aa1a4bac066d, type: 3}
-  - name: Takeda
+  - name: Datu
     actorSprite: {fileID: 21300000, guid: 21a35a94711cbc14482fe484bff6c308, type: 3}
 --- !u!114 &1736294802358572820
 MonoBehaviour:
@@ -3202,6 +3202,7 @@ MonoBehaviour:
   lastTimeAttacked: 0
   enemyDataSo: {fileID: 11400000, guid: e3238da208608f743a187e9cf6d43aef, type: 2}
   enemyExperienceDrop: 0
+  isTimeFrozen: 0
   ceroPrefab: {fileID: 2866523202310388358, guid: 5b7d3590a2e33c242be8aaffda4b9c86, type: 3}
   ceroCooldown: 10
   roomEnd: {fileID: 8117930989855263925}

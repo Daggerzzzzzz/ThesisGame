@@ -292,8 +292,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Now he has to fight the group of enemies, using his wits and martial prowess
-    to overcome the dungeon's challenges to find his way back home.
+  m_text: Nakipaglaban siya, gamit ang kanyang talino at galing sa labanan, para
+    malampasan ang mga pagsubok sa piitan at palayain ang Cordilleras mula sa mga
+    Kastilang mananakop.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f72f97ce336c99547a657cf93f5712a5, type: 2}
   m_sharedMaterial: {fileID: -8733751818608468443, guid: f72f97ce336c99547a657cf93f5712a5, type: 2}
@@ -427,8 +428,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: In the peaceful village of Edo, lived a young samurai named Hiroshi, renowned
-    for his skill with a sword.
+  m_text: Sa kabundukan ng Cordilleras, may namumunong si Apo, kilala sa kanyang
+    galing sa pamumuno sa mga Igorot at sa pakikipaglaban.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f72f97ce336c99547a657cf93f5712a5, type: 2}
   m_sharedMaterial: {fileID: -8733751818608468443, guid: f72f97ce336c99547a657cf93f5712a5, type: 2}
@@ -1213,8 +1214,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "One fateful afternoon, on his way home after training in the heart of
-    the forest, Hiroshi saw an ornate, dusty scroll underneath a big tree. \r\n"
+  m_text: Isang hapon, pauwi na si Apo mula sa pagsasanay sa kagubatan, nang makita
+    niya ang isang magarang at maalikabok na papel sa ilalim ng malaking puno.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f72f97ce336c99547a657cf93f5712a5, type: 2}
   m_sharedMaterial: {fileID: -8733751818608468443, guid: f72f97ce336c99547a657cf93f5712a5, type: 2}
@@ -1498,10 +1499,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'As he read the ancient characters inscribed upon it, a blinding light
-    enveloped him. Hiroshi quickly realized he was in an enchanted dungeon
-
-'
+  m_text: Habang binabasa niya ang sinaunang titik, isang nakakasilaw na liwanag
+    ang bumalot sa kanya. Napagtanto ni Apo na siya'y nasa mahiwagang piitan.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f72f97ce336c99547a657cf93f5712a5, type: 2}
   m_sharedMaterial: {fileID: -8733751818608468443, guid: f72f97ce336c99547a657cf93f5712a5, type: 2}

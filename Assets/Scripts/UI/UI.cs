@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
     
@@ -20,6 +19,8 @@ public class UI : MonoBehaviour, ISaveManager
     private GameObject settingsUI;
     [SerializeField] 
     private GameObject dialogueUI;
+    [SerializeField] 
+    private GameObject tutorial;
     [SerializeField] 
     private Player player;
     public GameObject inGameUI;
@@ -49,7 +50,15 @@ public class UI : MonoBehaviour, ISaveManager
     public GameObject aboutToEnterBossUI;
     public Button okNoKeyButton;
     public Button okBossWarningButton;
-    public Button cancelBossWarningButton;  
+    public Button cancelBossWarningButton; 
+    
+    [Header("Tutorial")]
+    [SerializeField] 
+    private GameObject movement;
+    [SerializeField] 
+    private GameObject dash;
+    [SerializeField] 
+    private GameObject potion;
 
     private void Awake()
     {
@@ -58,9 +67,10 @@ public class UI : MonoBehaviour, ISaveManager
 
     private void Start()
     {
-        SwitchMenus(inGameUI);
+        SwitchMenus(tutorial);
         DisableTooltips();
     }
+    
     
     private void Update()
     {
@@ -246,5 +256,48 @@ public class UI : MonoBehaviour, ISaveManager
     {
         yield return new WaitForSeconds(2f);
         SwitchMenus(gameOver);
+    }
+
+    public void SwitchRightTutorial()
+    {
+        if (movement.activeSelf)
+        {
+            movement.SetActive(false);
+            dash.SetActive(true);
+        }
+        else if (dash.activeSelf)
+        {
+            dash.SetActive(false);
+            potion.SetActive(true);
+        }
+        else
+        {
+            potion.SetActive(false);
+            movement.SetActive(true);
+        }
+    }
+    
+    public void SwitchLeftTutorial()
+    {
+        if (movement.activeSelf)
+        {
+            movement.SetActive(false);
+            potion.SetActive(true);
+        }
+        else if (potion.activeSelf)
+        {
+            potion.SetActive(false);
+            dash.SetActive(true);
+        }
+        else
+        {
+            dash.SetActive(false);
+            movement.SetActive(true);
+        }
+    }
+
+    public void DisableTutorial()
+    {
+        SwitchMenus(inGameUI);
     }
 }
