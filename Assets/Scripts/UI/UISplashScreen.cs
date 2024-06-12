@@ -17,6 +17,8 @@ public class UISplashScreen : MonoBehaviour
     [SerializeField]
     private UILoadingScreen uiLoadingScreen;
 
+    private Coroutine introCoroutine;
+
     private void Start()
     {
         story1.SetActive(false);
@@ -24,7 +26,19 @@ public class UISplashScreen : MonoBehaviour
         story3.SetActive(false);
         story4.SetActive(false);
         
-        StartCoroutine(WaitForIntro());
+        introCoroutine = StartCoroutine(WaitForIntro());
+    }
+    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (introCoroutine != null)
+            {
+                StopCoroutine(introCoroutine);
+            }
+            uiLoadingScreen.LoadLevel(2);
+        }
     }
 
     private IEnumerator WaitForIntro()
